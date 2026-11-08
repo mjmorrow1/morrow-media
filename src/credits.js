@@ -37,7 +37,7 @@ const list = [
     license: 'CC BY-SA 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
     source: 'https://commons.wikimedia.org/wiki/File:Babia_G%C3%B3ra,_20230304_0651_3162.jpg',
-    changes: 'Resized to 1400px on the long edge and converted to WebP',
+    changes: 'Cropped to the collage frame and encoded as WebP, 550×538',
     short: 'Photo: Jakub Hałun, CC BY-SA 4.0',
   },
   {
@@ -50,7 +50,7 @@ const list = [
     license: 'CC BY-SA 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
     source: 'https://commons.wikimedia.org/wiki/File:Still_life_with_strawberries_in_a_crystal_bowl.jpg',
-    changes: 'Resized to 1400px on the long edge and converted to WebP',
+    changes: 'Cropped to the collage frame and encoded as WebP, 292×270',
     short: 'Photo: W.carter, CC BY-SA 4.0',
   },
   {
@@ -63,7 +63,7 @@ const list = [
     license: 'CC BY-SA 4.0',
     licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
     source: 'https://commons.wikimedia.org/wiki/File:Yoga_in_Bryant_Park_(01194).jpg',
-    changes: 'Resized to 1400px on the long edge and converted to WebP',
+    changes: 'Cropped to the collage frame and encoded as WebP, 230×538',
     short: 'Photo: Rhododendrites, CC BY-SA 4.0',
   },
   {
@@ -76,7 +76,7 @@ const list = [
     license: 'CC BY-SA 2.0',
     licenseUrl: 'https://creativecommons.org/licenses/by-sa/2.0/',
     source: 'https://commons.wikimedia.org/wiki/File:Man_with_a_video_camera_in_Montmartre_(30920655692).jpg',
-    changes: 'Resized to 1400px on the long edge and converted to WebP',
+    changes: 'Cropped to the collage frame and encoded as WebP, 242×270',
     short: 'Photo: Maria Eklind, CC BY-SA 2.0',
   },
   {
@@ -89,7 +89,7 @@ const list = [
     license: 'CC BY-SA 2.0',
     licenseUrl: 'https://creativecommons.org/licenses/by-sa/2.0/',
     source: 'https://commons.wikimedia.org/wiki/File:Artist_-_Flickr_-_christian.senger.jpg',
-    changes: 'Resized to 1400px on the long edge and converted to WebP',
+    changes: 'Cropped to the collage frame and encoded as WebP, 230×270',
     short: 'Photo: Christian Senger, CC BY-SA 2.0',
   },
 ];

@@ -16,6 +16,6 @@ The Instagram, TikTok, and YouTube icons on that hero are the standard brand gly
 | `public/images/creators/collage/video.webp` | Camera operator in Montmartre | Creator Network hero, category Video | Maria Eklind | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) | https://commons.wikimedia.org/wiki/File:Man_with_a_video_camera_in_Montmartre_(30920655692).jpg |
 | `public/images/creators/collage/studio.webp` | Painter at an easel by the water | Creator Network hero, category Art | Christian Senger | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) | https://commons.wikimedia.org/wiki/File:Artist_-_Flickr_-_christian.senger.jpg |
 
-The St. Petersburg files were resized (2400px and 1280px long edge) and converted to WebP. Downloaded copies (3840px) are in `data-src/stock/`, with metadata in `data-src/stock/credits.json`. The Creator Network collage files were resized to 1400px on the long edge and converted to WebP.
+The St. Petersburg files were resized (2400px and 1280px long edge) and converted to WebP. Downloaded copies (3840px) are in `data-src/stock/`, with metadata in `data-src/stock/credits.json`. The Creator Network collage files were cropped to the size shown in the hero and encoded as WebP: travel 550×538, food 292×270, fitness 230×538, video 242×270, art 230×270.
 
 The St. Pete Marathon logo is the client's own mark (from stpetemarathon.com), taken from the client's own public site for their sponsorship campaign. Confirm the client approves this use of the logo.
