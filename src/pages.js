@@ -88,6 +88,51 @@ const ctaBand = (title, label, href) => `
 </section>`;
 
 
+const WEB_PLANS = {
+  essentials: 'Website pricing: Essentials. $99 to build, one-time, and $99 a month to host.',
+  premium: 'Website pricing: Premium. $99 setup, one-time, and $299 a month.',
+  custom: 'Website pricing: Custom. Contact us for pricing.',
+};
+function websitePricing() {
+  const card = (slug, name, prices, items, tone = '') => `
+    <article class="wp-card${tone ? ' ' + tone : ''}">
+      <h3 class="wp-name">${esc(name)}</h3>
+      ${prices}
+      <ul class="wp-list">${items.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>
+      <a class="btn ${tone === 'premium' ? 'btn-light' : 'btn-solid'}" href="/contact?type=brand&amp;plan=${slug}">Ask about ${esc(name)}</a>
+    </article>`;
+  const money = (label, amount, when) => `<p class="wp-price"><span>${label}</span><strong>${amount}</strong><small>${when}</small></p>`;
+  return `<section class="section web-pricing" id="website-pricing" aria-labelledby="website-pricing-title">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Website creation</p>
+      <h2 class="h2" id="website-pricing-title">Website pricing</h2>
+      <p class="muted">The one-time amount and the monthly amount are separate.</p>
+    </div>
+    <div class="wp-grid">
+      ${card('essentials', 'Essentials', `<div class="wp-prices">${money('Build', '$99', 'one-time')}${money('Host', '$99', 'per month')}</div>`, [
+        '1 Google Workspace email account',
+        'Hosting for the site',
+        'A lite dashboard where you submit your own change requests',
+        'You submit those requests yourself. This plan does not include full-service editing',
+      ])}
+      ${card('premium', 'Premium', `<div class="wp-prices">${money('Setup', '$99', 'one-time')}${money('Monthly', '$299', 'per month')}</div>`, [
+        'A dashboard for a business overview and access to the tools',
+        'Workspace calendar to view schedules and events in the dashboard',
+        'Contact management to organize people and follow-ups',
+        'Behind-the-scenes backend development to maintain and evolve the site',
+        'Full-service AI-assisted website editing for requested content and layout changes',
+      ], 'premium')}
+      ${card('custom', 'Custom', '<p class="wp-ask">Contact us for pricing</p>', [
+        'The number of Google Workspace accounts is scoped to what you need',
+        'Customer relationship management workflows',
+        'Inventory',
+        'Merchandise and ecommerce storefront needs',
+      ])}
+    </div>
+  </div>
+</section>`;
+}
 function photographyVertical() {
   return `<section class="section dark" id="photography-media">
   <div class="wrap two-col reveal">
@@ -238,6 +283,7 @@ ${websiteVertical()}
     ${webExamples}
   </div>
 </section>
+${websitePricing()}
 ${photographyVertical()}
 <section class="section examples-of-work">
   <div class="wrap">
@@ -646,10 +692,11 @@ ${ctaBand('Let\'s work together.', 'Work with us', '/contact')}`;
 }
 
 // ───────────── CONTACT ─────────────
-function contact(type = 'brand') {
+function contact(type = 'brand', plan = '') {
   if (!['brand', 'creator', 'event'].includes(type)) type = 'brand';
+  const planNote = WEB_PLANS[String(plan || '')] || '';
   const tabs = [
-    ['brand', "I'm a Brand", 'For businesses and companies.', brandForm()],
+    ['brand', "I'm a Brand", 'For businesses and companies.', brandForm(planNote)],
     ['creator', "I'm a Creator", 'For influencers and content creators.', creatorForm()],
     ['event', "I'm an Event Organizer", 'For events looking for sponsors or media.', eventForm()],
   ];

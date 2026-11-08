@@ -22,7 +22,7 @@ const routes = {
 if ((cfg.pages || {}).marketing !== false) routes['/marketing'] = pages.marketing;
 else app.get('/marketing', (req, res) => res.redirect(302, '/media'));
 for (const [p, fn] of Object.entries(routes)) app.get(p, (req, res) => res.send(fn()));
-app.get('/contact', (req, res) => res.send(pages.contact(req.query.type)));
+app.get('/contact', (req, res) => res.send(pages.contact(req.query.type, req.query.plan)));
 app.get('/sponsorships', (req, res) => res.send(pages.sponsorships(req.query.tier)));
 // friendly aliases
 const alias = { '/creator-network': '/creators', '/events': '/sponsorships', '/events-sponsorships': '/sponsorships', '/work': '/media', '/portfolio': '/media', '/legal-services': '/legal', '/real-estate': '/media#real-estate' };

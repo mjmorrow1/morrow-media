@@ -3,8 +3,8 @@ const { esc } = require('./layout');
 const f = {
   text: (name, label, { req, type = 'text', ph = '', half } = {}) =>
     `<label class="field${half ? ' half' : ''}"><span>${label}${req ? ' *' : ''}</span><input type="${type}" name="${name}" ${req ? 'required' : ''} placeholder="${esc(ph)}"></label>`,
-  area: (name, label, { req, ph = '' } = {}) =>
-    `<label class="field"><span>${label}${req ? ' *' : ''}</span><textarea name="${name}" rows="4" ${req ? 'required' : ''} placeholder="${esc(ph)}"></textarea></label>`,
+  area: (name, label, { req, ph = '', value = '' } = {}) =>
+    `<label class="field"><span>${label}${req ? ' *' : ''}</span><textarea name="${name}" rows="4" ${req ? 'required' : ''} placeholder="${esc(ph)}">${esc(value)}</textarea></label>`,
   select: (name, label, opts, { req, half } = {}) =>
     `<label class="field${half ? ' half' : ''}"><span>${label}${req ? ' *' : ''}</span><select name="${name}" ${req ? 'required' : ''}><option value="">Select…</option>${opts.map((o) => `<option>${esc(o)}</option>`).join('')}</select></label>`,
   chips: (name, label, opts) =>
@@ -41,7 +41,7 @@ const legalForm = () => wrap('legal', [
   f.area('details', 'What do you need help with?', { ph: 'A short, general description. Please don\'t include confidential details yet.' }),
 ].join(''), 'Request a consultation');
 
-const brandForm = () => wrap('brand', [
+const brandForm = (goals = '') => wrap('brand', [
   f.text('company', 'Company', { req: true, half: true }),
   f.text('contact_name', 'Your name', { req: true, half: true }),
   f.text('email', 'Email', { req: true, type: 'email', half: true }),
@@ -50,7 +50,7 @@ const brandForm = () => wrap('brand', [
   f.text('location', 'Location', { half: true, ph: 'City, State' }),
   f.text('website', 'Website or Instagram', { ph: 'https://' }),
   f.chips('interests', 'What are you looking for?', ['Content', 'Social media', 'Influencers / creators', 'Events', 'Sponsorship opportunities', 'Marketing campaign', 'Real estate media', 'Legal / contracts']),
-  f.area('goals', 'Marketing goals', { ph: 'Who do you want to reach, and what does success look like?' }),
+  f.area('goals', 'Marketing goals', { ph: 'Who do you want to reach, and what does success look like?', value: goals }),
   f.select('budget', 'Budget', ['Under $2.5k', '$2.5k–$5k', '$5k–$10k', '$10k–$25k', '$25k+', 'Not sure yet'], { half: true }),
   f.text('timeline', 'Timeline', { half: true, ph: 'e.g. Launching in March' }),
 ].join(''), 'Start a campaign');
