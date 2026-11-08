@@ -9,6 +9,7 @@
     "screenshots": "node scripts/screenshots.js",
     "smoke": "node scripts/smoke.js",
     "setup-guide-check": "node scripts/setup-guide-check.js",
+    "ai-image-check": "node scripts/ai-image-check.js",
     "ui-test": "node scripts/ui-test.js",
     "build:cf": "node scripts/build-cf.js",
     "dev:worker": "node scripts/build-cf.js && node scripts/worker-dev.js",
