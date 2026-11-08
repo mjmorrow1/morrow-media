@@ -614,8 +614,12 @@ body.lb-open{overflow:hidden}
   color:var(--muted);
 }
 #web-examples.section.pt-0{
-  padding-top:clamp(12px,2vw,28px);
+  position:relative;
+  padding-top:clamp(88px,11vw,140px);
   padding-bottom:clamp(56px,8vw,110px);
+  background:
+    linear-gradient(180deg, rgba(13,13,12,.16) 0, rgba(13,13,12,.05) 28px, rgba(13,13,12,0) 72px),
+    var(--paper);
 }
 #web-examples.section.soft .featured-head{border-bottom-color:rgba(13,13,12,.1)}
 
