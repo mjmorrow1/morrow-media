@@ -24,6 +24,22 @@ button{font:inherit;color:inherit;cursor:pointer}
 .wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
 .narrow{max-width:900px}
 .section{padding:clamp(72px,11vw,160px) 0}
+.web-pricing{background:var(--paper)}
+.web-pricing .section-head{max-width:36rem}
+.wp-grid{display:grid;gap:16px;align-items:stretch}
+@media (min-width:900px){.wp-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}}
+.wp-card{display:flex;flex-direction:column;min-width:0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:clamp(22px,2.4vw,32px)}
+.wp-name{margin:0 0 18px;font:500 12px/1 var(--sans);letter-spacing:.18em;text-transform:uppercase}
+.wp-prices{display:grid;gap:4px;margin:0 0 8px}
+.wp-price{margin:0;padding:12px 0;border-top:1px solid var(--line)}
+.wp-price span,.wp-price small{display:block;color:var(--muted)}
+.wp-price span{font:500 11px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.wp-price strong{display:block;margin:8px 0 4px;font:400 clamp(2.6rem,3.4vw,3.4rem)/.95 var(--serif);letter-spacing:-.03em}
+.wp-price small{font-size:.92rem}
+.wp-ask{margin:12px 0 18px;padding-top:12px;border-top:1px solid var(--line);font:400 clamp(1.7rem,2.2vw,2.15rem)/1.2 var(--serif);letter-spacing:-.02em}
+.wp-list{list-style:none;margin:0 0 28px;padding:0;flex:1}
+.wp-list li{padding:11px 0;border-top:1px solid var(--line);line-height:1.45}
+.wp-card .btn{margin-top:auto;align-self:flex-start}
 .pt-0{padding-top:0}
 .mt{margin-top:clamp(32px,5vw,64px)}
 .soft{background:var(--sand)}

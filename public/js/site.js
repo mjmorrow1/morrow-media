@@ -65,6 +65,9 @@
     setTimeout(() => apply.querySelector('input')?.focus({ preventScroll: true }), 650);
   };
   document.querySelectorAll('[data-open-apply]').forEach((b) => b.addEventListener('click', openApply));
+  const webPlan = ({ essentials: 'Website pricing: Essentials. $99 to build, one-time, and $99 a month to host.', managed: 'Website pricing: Managed. $99 setup, one-time, and $299 a month.', custom: 'Website pricing: Custom. Contact us for pricing.' })[new URLSearchParams(location.search).get('plan')];
+  const goals = document.querySelector('[data-panel="brand"] textarea[name="goals"]');
+  if (webPlan && goals && !goals.value) goals.value = webPlan;
   if (location.hash === '#apply') setTimeout(openApply, 200);
 
   // Lead forms → JSON POST
