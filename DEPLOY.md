@@ -110,3 +110,9 @@ Admin-only chat where Matt can ask Grok to change live site copy and CSS. Code: 
 - **Secret:** Worker `XAI_API_KEY` (from [console.x.ai](https://console.x.ai)). Set with `echo -n 'xai-...' | node scripts/cf-xai-secret.js` then run `4-xai-secret.js` via the Cloudflare connector and delete the file. Without the secret the page loads but chat is disabled.
 - **Migration:** apply `cf/ai-schema.sql` to D1 `morrow-media-crm` (additive). Redeploy the Worker after.
 - **Source of truth:** overrides are live until reverted or a full KV redeploy replaces the underlying file (override still wins until Revert). Sync important edits back into `src/` / `public/` when you can.
+
+## Admin setup guide (`/admin/setup`)
+
+Read-only checklist for administrators. Source: `cf/setup-src.js` (inlined by `scripts/build-cf.js`). It uses the existing admin login, navigation, and security headers.
+
+Change a status only after a new check, and say what was observed. Do not mark GitHub import, mail, or an optional integration complete just because this page exists. The page does not save checkboxes or call providers. Preview with `node scripts/worker-dev.js`, then `npm run setup-guide-check`. Publishing it to the live Worker is a separate deploy and is not part of editing the checklist. Secret names are in `SECRETS.md`; never put values in the guide.

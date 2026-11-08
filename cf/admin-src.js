@@ -82,7 +82,7 @@ input{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1px solid 
 
 function adminDoc(title, body, nonce = '', bodyClass = '') {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
-<title>${escH(title)} — ${escH(META.BRAND)}</title><style>${ADMIN_CSS}${CRM_CSS}${TICKETS_CSS}${typeof AI_CSS!=='undefined'?AI_CSS:''}</style></head><body class="${bodyClass}">${body}${nonce ? `<script nonce="${nonce}">document.querySelectorAll('form[data-confirm]').forEach(function(f){f.addEventListener('submit',function(e){if(!confirm(f.getAttribute('data-confirm')))e.preventDefault();});});${BOARD_JS}${typeof AI_JS!=='undefined'?AI_JS:''}document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){var i=document.getElementById(b.getAttribute('data-copy'));i.select();(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(function(){document.execCommand('copy');}).finally(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1800);});});});</script>` : ''}</body></html>`;
+<title>${escH(title)} — ${escH(META.BRAND)}</title><style>${ADMIN_CSS}${CRM_CSS}${TICKETS_CSS}${typeof AI_CSS!=='undefined'?AI_CSS:''}${typeof SETUP_CSS!=='undefined'?SETUP_CSS:''}</style></head><body class="${bodyClass}">${body}${nonce ? `<script nonce="${nonce}">document.querySelectorAll('form[data-confirm]').forEach(function(f){f.addEventListener('submit',function(e){if(!confirm(f.getAttribute('data-confirm')))e.preventDefault();});});${BOARD_JS}${typeof AI_JS!=='undefined'?AI_JS:''}document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){var i=document.getElementById(b.getAttribute('data-copy'));i.select();(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(function(){document.execCommand('copy');}).finally(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1800);});});});</script>` : ''}</body></html>`;
 }
 function loginPage(msg = '', email = '', status = 200) {
   const body = `<div class="login"><div class="box"><a class="logo" href="/">${escH(META.BRAND)}</a><p class="eyebrow">Admin</p><h1>Sign <em>in</em></h1>
@@ -190,6 +190,7 @@ async function admin(req, env, url, p) {
     return adminJson({ ok: false, error: 'Not found' }, 404);
   }
   if (p === '/admin' && req.method === 'GET') return dashboard(env, url);
+  if (p === '/admin/setup' && req.method === 'GET') return setupGuidePage();
   const crm = await crmRoute(req, env, url, p); if (crm) return crm;
   const ex = p.match(/^\/admin\/export\/([a-z]+)\.csv$/);
   if (ex && ADMIN_TABLES.includes(ex[1]) && req.method === 'GET') return csvExport(env, ex[1]);

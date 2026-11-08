@@ -63,7 +63,7 @@ select,textarea{width:100%;font:inherit;font-size:16px;padding:11px 13px;border:
 
 function adminPage(title, active, body, { msg = '', status = 200, err = false } = {}) {
   const nonce = b64u(crypto.getRandomValues(new Uint8Array(16)));
-  const nav = [['Home', '/admin', 'subs'], ['Contacts', '/admin/contacts', 'contacts'], ['Calendar', '/admin/calendar', 'calendar'], ['Tickets', '/admin/tickets', 'tickets'], ['KPIs', '/admin/kpis', 'kpis'], ['Signings', '/admin/signings', 'signings'], ['Site AI', '/admin/ai', 'ai']]
+  const nav = [['Home', '/admin', 'subs'], ['Contacts', '/admin/contacts', 'contacts'], ['Calendar', '/admin/calendar', 'calendar'], ['Tickets', '/admin/tickets', 'tickets'], ['KPIs', '/admin/kpis', 'kpis'], ['Signings', '/admin/signings', 'signings'], ['Site AI', '/admin/ai', 'ai'], ['Setup guide', '/admin/setup', 'setup']]
     .map(([l, h, k]) => `<a href="${h}"${k === active ? ' class="on" aria-current="page"' : ''}>${l}</a>`).join('');
   const html = `<div class="top"><div class="in"><a class="logo" href="/admin">${escH(META.BRAND)}<small>Admin</small></a><nav aria-label="Admin">${nav}</nav><span class="sp"></span><a class="l" href="/" target="_blank" rel="noopener">Site ↗</a>
 <form method="post" action="/admin/logout" style="margin:0"><button class="l" type="submit">Log out</button></form></div></div>

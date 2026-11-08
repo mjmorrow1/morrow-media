@@ -34,6 +34,13 @@ const forms = {
   const home = await (await fetch(base + '/')).text();
   const navOk = home.includes('href="/legal"') && !home.includes('href="/portfolio"') && !home.includes('href="/marketing"');
   console.log('nav has /legal, no /portfolio or /marketing links:', navOk); if (!navOk) fail++;
+  const guidePublic = home.includes('href="/admin/setup"') || home.includes('Recommended setup order');
+  console.log('public home does not include the admin setup guide:', !guidePublic); if (guidePublic) fail++;
+  const setupOff = await fetch(base + '/admin/setup', { redirect: 'manual' });
+  const setupBody = await setupOff.text();
+  const setupLoc = setupOff.headers.get('location') || '';
+  const setupOk = setupOff.status === 302 && setupLoc.includes('/admin/login') && !setupBody.includes('Recommended setup order');
+  console.log('signed-out /admin/setup redirects to login:', setupOk, setupOff.status, setupLoc); if (!setupOk) fail++;
   const ab = await (await fetch(base + '/about')).text();
   const abOk = ab.includes('The agent.<br>The creator.<br>The developer.') && ab.includes('REALTORS® membership') && !/Former real estate|e-PRO/.test(ab + home) && !ab.includes('href="/marketing"');
   console.log('about has new copy, no old bio:', abOk); if (!abOk) fail++;

@@ -50,7 +50,7 @@ Aliases: `/creator-network`, `/events`, `/real-estate`, `/legal-services`.
 
 **The Work page (`/portfolio`) was removed.** `/portfolio` and `/work` now 301-redirect to `/media` (real work lives in the Featured listings there). The "View our work" buttons on Home point to `/media`, and the portfolio grid data, template, CSS, and filter JS were deleted.
 
-The live site's `/admin` also has a contacts CRM, a follow-up calendar with an iPhone/Google calendar feed, and an Authentisign signings log, plus Jira-style tickets (board, list, comments, subtasks) and a KPIs page with goals (see DEPLOY.md). To run that version locally, use `node scripts/worker-dev.js`.
+The live site's `/admin` also has a contacts CRM, a follow-up calendar with an iPhone/Google calendar feed, and an Authentisign signings log, plus Jira-style tickets (board, list, comments, subtasks) and a KPIs page with goals (see DEPLOY.md). The same login protects `/admin/setup`, a read-only setup guide. To run that version locally, use `node scripts/worker-dev.js`.
 
 ## CRM / admin (local, login required)
 
