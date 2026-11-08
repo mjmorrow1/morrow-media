@@ -416,8 +416,13 @@ function creators() {
       <p class="eyebrow">Creator Network</p>
       <h1 class="display" id="creators-title">Creators wanted.</h1>
       <p class="lede">Join our network of photographers, influencers, videographers, and content creators.</p>
+      <ul class="creator-platforms" aria-label="Platforms">
+        <li><img src="/images/icons/instagram.svg" alt="" width="18" height="18"><span>Instagram</span></li>
+        <li><img src="/images/icons/tiktok.svg" alt="" width="18" height="18"><span>TikTok</span></li>
+        <li><img src="/images/icons/youtube.svg" alt="" width="18" height="18"><span>YouTube</span></li>
+      </ul>
       <a class="btn btn-solid" href="#apply" data-open-apply>Join the Creator Network</a>
-      <p class="creator-hero-note">These photographs are examples of the kinds of work. They are not members of this network, and they are not endorsements.</p>
+      <p class="creator-hero-note">These photographs are examples of the kinds of work. They are not members of this network, and they are not endorsements. The platform names say where creators publish. They are not partnerships.</p>
     </div>
     <ul class="creator-collage" aria-label="Example photographs of travel, fitness, food, video, and art">
       ${tiles}
@@ -621,7 +626,7 @@ function credits() {
       <p>Photo by ${esc(c.author)} · <a href="${esc(c.licenseUrl)}" target="_blank" rel="noopener">${esc(c.license)}</a> · <a href="${esc(c.source)}" target="_blank" rel="noopener">Source (Wikimedia Commons)</a>${c.changes ? ` · ${esc(c.changes)}` : ''}</p></div>
     </div>`).join('');
   const body = `
-${pageHero({ eyebrow: 'Credits', title: 'Photo credits.', sub: 'Third-party photographs used on this site, with their authors and licenses. All other photography is our own unless noted.' })}
+${pageHero({ eyebrow: 'Credits', title: 'Photo credits.', sub: 'Third-party photographs used on this site, with their authors and licenses. All other photography is our own unless noted. Instagram, TikTok, and YouTube marks on the Creator Network page are the standard glyphs from Simple Icons (CC0), in the published colors, and name those platforms only. The marks are trademarks of their owners.' })}
 <section class="section pt-0"><div class="wrap credits">${rows}</div></section>`;
   return layout({ title: 'Photo credits', path: '/credits', body });
 }

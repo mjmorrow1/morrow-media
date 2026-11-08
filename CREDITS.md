@@ -4,6 +4,8 @@ Third-party photographs used on the Morrow Media site. They are from Wikimedia C
 The two St. Petersburg photos were checked as St. Petersburg, **Florida** (not Russia) from their Commons descriptions and categories.
 The Creator Network hero uses five more Commons photographs as examples of kinds of work (travel, food, fitness, video, and art). They are not members of the network and are not endorsements.
 
+The Instagram, TikTok, and YouTube icons on that hero are the standard brand glyphs from [Simple Icons](https://github.com/simple-icons/simple-icons) (CC0 1.0). The paths and colors are unchanged from the published files: Instagram `#FF0069`, TikTok `#000000`, YouTube `#FF0000`. The marks are trademarks of their owners and are used only to name the platforms. They are not partnerships or endorsements. Local files: `public/images/icons/instagram.svg`, `tiktok.svg`, and `youtube.svg`.
+
 | Image file | Shows | Used on | Author | License | Source |
 |---|---|---|---|---|---|
 | `public/images/stpete/hero-demens-landing-sunset.webp` (+ `-1280`) | Long-exposure sunset of the downtown St. Petersburg, FL skyline from Demens Landing Park | Home hero | Gregory Urbano | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) | https://commons.wikimedia.org/wiki/File:Sitting_by_the_dock_on_the_bay._(28240365509).jpg |
