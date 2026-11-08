@@ -402,13 +402,13 @@ function creatorNetwork() {
 }
 function creators() {
   const collage = [
-    { cls: 'cc-travel', cat: 'Travel', src: '/images/creators/collage/travel.webp', alt: 'Two hikers on a windy snow ridge above a sea of clouds. Example of travel photography, not a member of this network.' },
-    { cls: 'cc-fitness', cat: 'Fitness', src: '/images/creators/collage/fitness.webp', alt: 'A large outdoor yoga class on a city lawn. Example of fitness photography, not a member of this network.' },
-    { cls: 'cc-food', cat: 'Food', src: '/images/creators/collage/food.webp', alt: 'Strawberries in a glass bowl on striped cloth. Example of food photography, not a member of this network.' },
-    { cls: 'cc-video', cat: 'Video', src: '/images/creators/collage/video.webp', alt: 'A camera operator filming with a cinema camera outdoors. Example of video work, not a member of this network.' },
-    { cls: 'cc-studio', cat: 'Art', src: '/images/creators/collage/studio.webp', alt: 'A painter at an easel beside the water. Example of artwork being made, not a member of this network.' },
+    { cls: 'cc-travel', cat: 'Travel', src: '/images/creators/collage/travel.webp', w: 550, h: 538, alt: 'Two hikers on a windy snow ridge above a sea of clouds. Example of travel photography, not a member of this network.' },
+    { cls: 'cc-fitness', cat: 'Fitness', src: '/images/creators/collage/fitness.webp', w: 230, h: 538, alt: 'A large outdoor yoga class on a city lawn. Example of fitness photography, not a member of this network.' },
+    { cls: 'cc-food', cat: 'Food', src: '/images/creators/collage/food.webp', w: 292, h: 270, alt: 'Strawberries in a glass bowl on striped cloth. Example of food photography, not a member of this network.' },
+    { cls: 'cc-video', cat: 'Video', src: '/images/creators/collage/video.webp', w: 242, h: 270, alt: 'A camera operator filming with a cinema camera outdoors. Example of video work, not a member of this network.' },
+    { cls: 'cc-studio', cat: 'Art', src: '/images/creators/collage/studio.webp', w: 230, h: 270, alt: 'A painter at an easel beside the water. Example of artwork being made, not a member of this network.' },
   ];
-  const tiles = collage.map((t) => `<li class="cc-tile ${t.cls}"><figure><img src="${t.src}" alt="${esc(t.alt)}" width="1400" decoding="async"><figcaption>${esc(t.cat)}</figcaption></figure></li>`).join('');
+  const tiles = collage.map((t) => `<li class="cc-tile ${t.cls}"><figure><img src="${t.src}" alt="${esc(t.alt)}" width="${t.w}" height="${t.h}" decoding="async"><figcaption>${esc(t.cat)}</figcaption></figure></li>`).join('');
   const body = `
 <section class="page-hero creator-hero">
   <div class="wrap creator-hero-grid">
