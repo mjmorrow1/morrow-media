@@ -3,7 +3,7 @@
 // Refresh tokens are AES-GCM encrypted with CALENDAR_TOKEN_KEY. Event bodies are not stored.
 const GCAL_READ_SCOPE = 'openid email https://www.googleapis.com/auth/calendar.readonly';
 const GCAL_STATE_COOKIE = '__Host-mm_gcal';
-const GCAL_CSS = `.gcal-tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.gcal-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px}.gcal-status{margin:0 0 12px}.gcal-calpick{display:flex;gap:8px 14px;flex-wrap:wrap;margin:0 0 14px}.gcal-calpick label{display:flex;gap:6px;align-items:center;font-size:13px;margin:0}.gcal-swatch{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}.gcal-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.gcal-col{background:#fff;border:1px solid var(--line);border-radius:12px;min-width:0;padding:8px}.gcal-col h3{margin:0 0 6px;font:600 13px/1.3 var(--sans)}.gcal-all{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}.gcal-ev{display:block;border-left:4px solid var(--ink);background:var(--sand);border-radius:8px;padding:4px 6px;margin-top:4px;text-decoration:none;font-size:12.5px;line-height:1.35;overflow-wrap:anywhere}.gcal-ev small{display:block;color:var(--muted);font-size:11px}.gcal-ev.followup{border-left-style:dashed;background:#fff}.gcal-ev .src{display:block;margin:0 0 2px;font:500 10px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase}.gcal-ev .ttl{display:block;font-weight:600}.gcal-board{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:start}.gcal-hours{position:relative;margin-top:34px;color:var(--muted);font:500 10px/1 var(--sans)}.gcal-hours span{position:absolute;right:0;transform:translateY(-50%)}.gcal-time{position:relative;border-top:1px solid var(--line);background:repeating-linear-gradient(to bottom,transparent,transparent calc(100% / var(--gcal-hours) - 1px),var(--line) calc(100% / var(--gcal-hours) - 1px),var(--line) calc(100% / var(--gcal-hours)))}.gcal-slot{position:absolute;padding:0 1px;box-sizing:border-box;min-height:56px;overflow:visible;z-index:1}.gcal-time .gcal-ev{height:auto;min-height:100%;margin:0;overflow:visible}.gcal-setup{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 16px}.gcal-setup code{overflow-wrap:anywhere}.gcal-agenda .dayhead{margin:18px 0 8px;font:600 14px/1.3 var(--sans)}@media (max-width:800px){.gcal-board{grid-template-columns:1fr}.gcal-hours{display:none}.gcal-week{grid-template-columns:1fr}.gcal-time{height:auto !important;background:none}.gcal-slot{position:static;height:auto !important;width:auto !important;left:auto !important;margin-top:4px}.gcal-time .gcal-ev{height:auto;overflow:visible}}`;
+const GCAL_CSS = `.gcal-tabs,.gcal-sub{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.gcal-tabs a,.gcal-sub a{min-height:44px}.gcal-sub{margin:0 0 14px}.gcal-nav{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px}.gcal-status{margin:0 0 12px}.gcal-calpick{display:flex;gap:8px 14px;flex-wrap:wrap;margin:0 0 14px}.gcal-calpick label{display:flex;gap:6px;align-items:center;font-size:13px;margin:0}.gcal-swatch{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none}.gcal-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}.gcal-col{background:#fff;border:1px solid var(--line);border-radius:12px;min-width:0;padding:8px}.gcal-col h3{margin:0 0 6px;font:600 13px/1.3 var(--sans)}.gcal-all{display:flex;flex-direction:column;gap:4px;margin-bottom:6px}.gcal-ev{display:block;border-left:4px solid var(--ink);background:var(--sand);border-radius:8px;padding:4px 6px;margin-top:4px;text-decoration:none;font-size:12.5px;line-height:1.35;overflow-wrap:anywhere}.gcal-ev small{display:block;color:var(--muted);font-size:11px}.gcal-ev.followup{border-left-style:dashed;background:#fff}.gcal-ev .src{display:block;margin:0 0 2px;font:500 10px/1.3 var(--sans);letter-spacing:.08em;text-transform:uppercase}.gcal-ev .ttl{display:block;font-weight:600}.gcal-board{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:start}.gcal-hours{position:relative;margin-top:34px;color:var(--muted);font:500 10px/1 var(--sans)}.gcal-hours span{position:absolute;right:0;transform:translateY(-50%)}.gcal-time{position:relative;border-top:1px solid var(--line);background:repeating-linear-gradient(to bottom,transparent,transparent calc(100% / var(--gcal-hours) - 1px),var(--line) calc(100% / var(--gcal-hours) - 1px),var(--line) calc(100% / var(--gcal-hours)))}.gcal-slot{position:absolute;padding:0 1px;box-sizing:border-box;min-height:56px;overflow:visible;z-index:1}.gcal-time .gcal-ev{height:auto;min-height:100%;margin:0;overflow:visible}.gcal-setup{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 16px}.gcal-setup code{overflow-wrap:anywhere}.gcal-agenda .dayhead{margin:18px 0 8px;font:600 14px/1.3 var(--sans)}@media (max-width:800px){.gcal-board{grid-template-columns:1fr}.gcal-hours{display:none}.gcal-week{grid-template-columns:1fr}.gcal-time{height:auto !important;background:none}.gcal-slot{position:static;height:auto !important;width:auto !important;left:auto !important;margin-top:4px}.gcal-time .gcal-ev{height:auto;overflow:visible}}`;
 
 function gcalReadReady(env) { return !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET && env.CALENDAR_TOKEN_KEY); }
 function gcalOauthCookie(value, maxAge) { return `${GCAL_STATE_COOKIE}=${value}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`; }
@@ -108,25 +108,34 @@ function gcalMinutes(iso) { const p = etParts(new Date(iso)); return p.h * 60 + 
 function gcalHourLabel(min) { const h = Math.floor(min / 60) % 24; return `${((h + 11) % 12) + 1}${h < 12 ? 'a' : 'p'}`; }
 function gcalHref(view, anchor) {
   const q = new URLSearchParams();
-  if (view && view !== 'agenda') q.set('view', view);
+  if (view && view !== 'month') q.set('view', view);
   if (anchor) q.set('d', anchor);
   const s = q.toString();
   return '/admin/calendar' + (s ? '?' + s : '');
 }
+function gcalSectionNav(active, anchor) {
+  const items = [['calendar', 'Calendar', gcalHref('month', anchor)], ['agenda', 'Agenda', gcalHref('agenda', anchor)], ['sync', 'Sync', '/admin/calendar/settings']];
+  return `<nav class="gcal-tabs" aria-label="Calendar sections">${items.map(([id, label, href]) => `<a class="b${id === active ? ' on' : ''}" href="${href}"${id === active ? ' aria-current="page"' : ''}>${label}</a>`).join('')}</nav>`;
+}
 async function workspaceCalendarPage(env, url) {
   const sp = url.searchParams;
-  const view = ['month', 'week', 'day', 'agenda'].includes(sp.get('view')) ? sp.get('view') : 'agenda';
+  const requested = sp.get('view');
+  if (requested === 'sync') return goTo('/admin/calendar/settings' + (sp.get('msg') ? '?msg=' + encodeURIComponent(sp.get('msg')) : ''));
+  const view = ['month', 'week', 'day', 'agenda'].includes(requested) ? requested : 'month';
   const range = GCalView.viewRange(view, sp.get('d') || '');
   const bounds = GCalView.rangeInstants(range);
   const followups = bounds.start && bounds.end ? (await qy(env, `${FU_LIST_SQL} WHERE f.status != 'done' AND f.due_at >= ? AND f.due_at < ? ORDER BY f.due_at LIMIT 500`, bounds.start.toISOString().replace(/\.\d+Z$/, 'Z'), bounds.end.toISOString().replace(/\.\d+Z$/, 'Z')).all()).results : [];
   const overdue = view === 'agenda' ? (await qy(env, `${FU_LIST_SQL} WHERE f.status != 'done' AND f.due_at < ? ORDER BY f.due_at LIMIT 50`, bounds.start.toISOString().replace(/\.\d+Z$/, 'Z')).all()).results : [];
   const google = await gcalLoadEvents(env, range);
-  const tabs = ['agenda', 'week', 'day', 'month'].map((v) => `<a class="b${v === view ? ' on' : ''}" href="${gcalHref(v, range.anchor)}"${v === view ? ' aria-current="page"' : ''}>${v === 'agenda' ? 'Agenda' : v[0].toUpperCase() + v.slice(1)}</a>`).join('');
+  const section = view === 'agenda' ? 'agenda' : 'calendar';
+  const place = /^\d{4}-\d{2}-\d{2}$/.test(String(sp.get('d') || '')) ? sp.get('d') : '';
+  const tabs = gcalSectionNav(section, place);
+  const sub = section === 'calendar' ? `<nav class="gcal-sub" aria-label="Calendar view">${['month', 'week', 'day'].map((v) => `<a class="b sm${v === view ? ' on' : ''}" href="${gcalHref(v, place)}"${v === view ? ' aria-current="page"' : ''}>${v[0].toUpperCase() + v.slice(1)}</a>`).join('')}</nav>` : '';
   const lastDay = GCalView.addDays(range.end, -1);
   const label = view === 'month' ? new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(range.anchor + 'T00:00:00Z')) : (range.start === lastDay ? range.start : `${range.start} – ${lastDay}`);
-  const status = google.code === 'setup' ? 'Google Calendar is not configured yet. Add the Worker secrets named on Calendar settings, then connect.'
+  const status = google.code === 'setup' ? 'Google Calendar is not configured yet. Add the Worker secrets named on Sync, then connect.'
     : google.code === 'connect' ? 'Google Calendar is not connected. Follow-ups below are from this CRM only.'
-    : google.code === 'revoked' ? 'Google access expired or was revoked. Connect again from Calendar settings. No Workspace events are shown.'
+    : google.code === 'revoked' ? 'Google access expired or was revoked. Connect again from Sync. No Workspace events are shown.'
     : google.ok ? `Loaded ${google.events.length} Workspace event${google.events.length === 1 ? '' : 's'}${google.truncated ? ' (this range has more; narrow the view)' : ''}${google.email ? ' · ' + google.email : ''}.` : 'Workspace calendars could not be loaded. Follow-ups are still shown.';
   const byDay = {};
   for (const f of followups) (byDay[etDay(f.due_at)] ||= { fu: [], ev: [] }).fu.push(f);
@@ -184,9 +193,11 @@ async function workspaceCalendarPage(env, url) {
   } else grid = `<div class="gcal-board"><div class="gcal-hours" style="height:${Math.max(420, hours * 48)}px">${hourMarks}</div><div class="gcal-week">${range.days.map(dayBlock).join('')}</div></div>`;
   const visibleIds = new Set(await gcalVisibleIds(env, google.calendars || []));
   const picker = (google.calendars || []).length ? `<form class="gcal-calpick" method="post" action="/admin/calendar/google/visible"><input type="hidden" name="posted" value="1"><span class="eyebrow">Calendars</span>${google.calendars.map((c) => `<label><input type="checkbox" name="cal" value="${escH(c.id)}"${visibleIds.has(c.id) ? ' checked' : ''}><span class="gcal-swatch" style="background:${escH(c.color)}"></span>${escH(c.summary)}</label>`).join('')}<button class="b sm" type="submit">Update</button></form>` : '';
-  const ident = google.email ? `<p class="note">Connected as <b>${escH(google.email)}</b>. Google events are read-only. <a href="/admin/calendar/settings">Refresh, disconnect, or choose calendars</a>.</p>` : '';
-  const body = `<p class="eyebrow">Eastern time · America/New_York</p><h1>Calendar <em>${escH(view)}</em></h1>
-<div class="gcal-nav"><div class="gcal-tabs" role="tablist">${tabs}</div><span class="sp"></span><a class="b sm" href="${gcalHref(view, range.prev)}">← Prev</a><a class="b sm" href="${gcalHref(view, '')}">Today</a><a class="b sm" href="${gcalHref(view, range.next)}">Next →</a><a class="b dark" href="/admin/followups/new">+ Follow-up</a></div>
+  const ident = google.email ? `<p class="note">Connected as <b>${escH(google.email)}</b>. Google events are read-only. <a href="/admin/calendar/settings">Refresh, disconnect, or choose calendars on Sync</a>.</p>` : '';
+  const title = section === 'agenda' ? 'Agenda' : 'Calendar';
+  const body = `<p class="eyebrow">Eastern time · America/New_York</p><h1>${title}</h1>
+<div class="gcal-nav">${tabs}<span class="sp"></span><a class="b sm" href="${gcalHref(view, range.prev)}">← Prev</a><a class="b sm" href="${gcalHref(view, '')}">Today</a><a class="b sm" href="${gcalHref(view, range.next)}">Next →</a><a class="b dark" href="/admin/followups/new">+ Follow-up</a></div>
+${sub}
 <p class="gcal-status" role="status">${escH(status)}</p>${ident}${picker}<h2 class="sec">${escH(label)}</h2>${grid}
 <p class="eyebrow">Follow-ups stay in this CRM and keep Done, Snooze, and .ics. Workspace events open in Google and are not edited here.</p>`;
   return adminPage('Calendar', 'calendar', body, { msg: sp.get('msg') || '' });

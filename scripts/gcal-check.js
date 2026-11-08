@@ -17,6 +17,11 @@ const tokenKey = 'synthetic-calendar-token-key';
 const refresh = 'synthetic-refresh-token-value';
 
 function assert(cond, msg) { if (!cond) bad(msg); }
+function navText(html, label) {
+  const start = html.indexOf('aria-label="' + label + '"');
+  if (start < 0) return '';
+  return html.slice(start, html.indexOf('</nav>', start));
+}
 
 function unit() {
   const springEarly = G.wallToUtc('2026-03-08T01:30');
@@ -117,7 +122,14 @@ async function workerTests() {
   const cookie = cookiePair(login, '__Host-mm_admin');
   assert(login.status === 303 && cookie, 'login');
   const setup = await call('/admin/calendar/settings', { cookie });
-  assert(setup.status === 200 && setup.text.includes('CALENDAR_TOKEN_KEY') && setup.text.includes('calendar.readonly') && !setup.text.includes('Synthetic planning'), 'setup screen without secrets ' + setup.status);
+  const setupNav = navText(setup.text, 'Calendar sections');
+  assert(setup.status === 200 && setup.text.includes('CALENDAR_TOKEN_KEY') && setup.text.includes('calendar.readonly') && setup.text.includes('Subscribe on iPhone') && !setup.text.includes('Synthetic planning'), 'setup screen without secrets ' + setup.status);
+  assert(setupNav.indexOf('>Calendar<') < setupNav.indexOf('>Agenda<') && setupNav.indexOf('>Agenda<') < setupNav.indexOf('>Sync<') && setupNav.includes('aria-current="page">Sync'), 'sync tab order ' + setupNav);
+  const home = await call('/admin/calendar', { cookie });
+  const homeNav = navText(home.text, 'Calendar sections');
+  const homeSub = navText(home.text, 'Calendar view');
+  assert(home.status === 200 && home.text.includes('class="cal"') && homeNav.includes('aria-current="page">Calendar') && !homeNav.includes('Week') && !homeNav.includes('Day'), 'default month grid ' + home.status);
+  assert(homeNav.indexOf('>Calendar<') < homeNav.indexOf('>Agenda<') && homeNav.indexOf('>Agenda<') < homeNav.indexOf('>Sync<') && homeSub.includes('aria-current="page">Month'), 'calendar subviews ' + homeSub);
   env.GOOGLE_CLIENT_ID = 'synthetic-client-id';
   env.GOOGLE_CLIENT_SECRET = 'synthetic-client-secret';
   env.CALENDAR_TOKEN_KEY = tokenKey;
@@ -138,7 +150,10 @@ async function workerTests() {
   assert(eventPages === 2, 'range pagination followed one next page, got ' + eventPages);
   assert(!calls.some((c) => c.method !== 'GET' && c.host === 'www.googleapis.com'), 'no calendar writes');
   const page = await call('/admin/calendar?view=day&d=2026-07-15', { cookie });
-  assert(page.status === 200 && page.text.includes('Synthetic planning block') && page.text.includes('Open in Google Calendar'), 'day page renders google event');
+  const dayNav = navText(page.text, 'Calendar sections');
+  assert(page.status === 200 && page.text.includes('Synthetic planning block') && page.text.includes('Open in Google Calendar') && dayNav.includes('aria-current="page">Calendar') && page.text.includes('aria-current="page">Day'), 'day page renders google event');
+  const month = await call('/admin/calendar?d=2026-07-15', { cookie });
+  assert(month.status === 200 && month.text.includes('class="cal"') && month.text.includes('Synthetic planning block') && month.text.includes('July 2026'), 'dated month keeps calendar tab');
   await call('/admin/followups', { method: 'POST', cookie, json: { title: 'Synthetic CRM follow-up', due: '2026-07-15T10:00', duration: 30, type: 'call' } });
   const withFu = await call('/admin/calendar?view=agenda&d=2026-07-15', { cookie });
   assert(withFu.text.includes('Synthetic CRM follow-up') && withFu.text.includes('/admin/followups/') && withFu.text.includes('.ics'), 'follow-up remains distinct with ics action');

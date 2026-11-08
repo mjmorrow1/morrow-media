@@ -41,7 +41,7 @@ All of it sits behind the same admin login. Code is in `cf/crm-src.js`, which `s
 - **Contacts** (`/admin/contacts`): search, type and stage filters, sort, add, edit, delete, CSV (`/admin/contacts.csv`).
   - Each contact page has a timeline of notes and logged calls, emails, and meetings. Stage changes and completed follow-ups are added to it automatically.
   - Each website submission card has a **Convert to contact** button. It prefills the form and links back to the submission. If the email or submission is already a contact, the card shows **View contact** instead.
-- **Follow-ups** (`/admin/calendar`): agenda, week, day, and month. Follow-ups stay visually separate from Workspace events and keep Done, Snooze, and `.ics`.
+- **Follow-ups** (`/admin/calendar`): the page opens on the month grid. The section tabs are Calendar, Agenda, and Sync, in that order. Month, week, and day are controls inside Calendar. Follow-ups stay visually separate from Workspace events and keep Done, Snooze, and `.ics`. `/admin/calendar/settings` is the Sync tab.
   - You can create, edit, complete, reopen, snooze (1 hour, tomorrow 9am, next week), or delete a follow-up.
   - Times are entered and shown in Eastern (`America/New_York`) and stored in UTC.
   - The dashboard shows a widget with overdue and today items.

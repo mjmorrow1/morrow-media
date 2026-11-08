@@ -400,7 +400,8 @@ async function settingsPage(env, url) {
   const calId = gcalCalId(env);
   const readSection = await gcalReadSettingsSection(env, url);
   const writeNote = connected ? `<p class="note">An older follow-up write token is also present for <code>${escH(calId)}</code>${connectedAt ? ` · linked ${escH(fmtET(connectedAt))}` : ''}. The read-only calendar above does not use that token, and this page does not send a write test.</p>` : '';
-  const body = `<p class="eyebrow"><a href="/admin/calendar">Calendar</a> · settings</p><h1>Calendar <em>settings</em></h1>
+  const body = `<p class="eyebrow">Eastern time · America/New_York</p><h1>Sync</h1>
+<div class="gcal-nav">${gcalSectionNav('sync', '')}<span class="sp"></span><a class="b dark" href="/admin/followups/new">+ Follow-up</a></div>
 ${readSection}
 ${writeNote}
 <p class="eyebrow">Follow-up write sync is separate and stays off for a read-only connection. Client ready: ${clientReady ? 'yes' : 'no'}.</p>
