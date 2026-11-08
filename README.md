@@ -150,7 +150,7 @@ Swap a file in place under the same name, or change the paths in `src/content.js
 |---|---|
 | `card-media.jpg` | Media card + Media page hero |
 | `card-marketing.jpg` | Marketing card + Marketing page hero |
-| `card-creators.jpg` | Creator Partnerships card, Creator Network hero, Brands "Connect" |
+| `card-creators.jpg` | Creator Partnerships card and Brands "Connect". The Creator Network hero no longer uses this file. |
 | `card-sponsorships.jpg` | Sponsorships card, Sponsorships hero |
 | `pf-restaurant.jpg` | Home showcase (Brands) |
 | `pf-product.jpg` | Brands "Create" |

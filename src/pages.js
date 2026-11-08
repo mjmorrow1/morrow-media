@@ -401,8 +401,30 @@ function creatorNetwork() {
 </section>`;
 }
 function creators() {
+  const collage = [
+    { cls: 'cc-travel', cat: 'Travel', src: '/images/creators/collage/travel.webp', alt: 'Two hikers on a windy snow ridge above a sea of clouds. Example of travel photography, not a member of this network.' },
+    { cls: 'cc-fitness', cat: 'Fitness', src: '/images/creators/collage/fitness.webp', alt: 'A large outdoor yoga class on a city lawn. Example of fitness photography, not a member of this network.' },
+    { cls: 'cc-food', cat: 'Food', src: '/images/creators/collage/food.webp', alt: 'Strawberries in a glass bowl on striped cloth. Example of food photography, not a member of this network.' },
+    { cls: 'cc-video', cat: 'Video', src: '/images/creators/collage/video.webp', alt: 'A camera operator filming with a cinema camera outdoors. Example of video work, not a member of this network.' },
+    { cls: 'cc-studio', cat: 'Art', src: '/images/creators/collage/studio.webp', alt: 'A painter at an easel beside the water. Example of artwork being made, not a member of this network.' },
+  ];
+  const tiles = collage.map((t) => `<li class="cc-tile ${t.cls}"><figure><img src="${t.src}" alt="${esc(t.alt)}" width="1400" decoding="async"><figcaption>${esc(t.cat)}</figcaption></figure></li>`).join('');
   const body = `
-${pageHero({ eyebrow: 'Creator Network', title: 'Creators wanted.', sub: 'Join our network of photographers, influencers, videographers, and content creators.', image: C.images.creators, cta: '<a class="btn btn-light" href="#apply" data-open-apply>Join the Creator Network</a>' })}
+<section class="page-hero creator-hero">
+  <div class="wrap creator-hero-grid">
+    <div class="creator-hero-copy">
+      <p class="eyebrow">Creator Network</p>
+      <h1 class="display" id="creators-title">Creators wanted.</h1>
+      <p class="lede">Join our network of photographers, influencers, videographers, and content creators.</p>
+      <a class="btn btn-solid" href="#apply" data-open-apply>Join the Creator Network</a>
+      <p class="creator-hero-note">These photographs are examples of the kinds of work. They are not members of this network, and they are not endorsements.</p>
+    </div>
+    <ul class="creator-collage" aria-label="Example photographs of travel, fitness, food, video, and art">
+      ${tiles}
+    </ul>
+  </div>
+  <p class="creator-hero-credit wrap">Photographs by Jakub Hałun, Rhododendrites, W.carter, Maria Eklind, and Christian Senger, via Wikimedia Commons. <a href="/credits">Photo credits and licenses</a></p>
+</section>
 ${creatorNetwork()}
 <section class="section">
   <div class="wrap two-col reveal">
@@ -423,7 +445,7 @@ ${creatorNetwork()}
     <div>${list(C.pillars[2].items, 'svc-list cols light')}</div>
   </div>
 </section>`;
-  return layout({ title: 'Creator Network', path: '/creators', body, heroNav: true });
+  return layout({ title: 'Creator Network', path: '/creators', body });
 }
 
 // ───────────── BRANDS ─────────────
