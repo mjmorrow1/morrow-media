@@ -175,7 +175,8 @@ function featuredWebsite(w) {
 
 // ───────────── HOME ─────────────
 function home() {
-  const cards = pillarsLive().map((p, i) => `
+  // Media and Marketing stay on /media, /marketing, and /services. They are not homepage tiles.
+  const cards = pillarsLive().filter((p) => p.key !== 'media' && p.key !== 'marketing').map((p, i) => `
     <a class="pillar-card reveal" style="--d:${i * 80}ms" href="${p.href}">
       <div class="pc-media">${img(p.img, p.title)}</div>
       <div class="pc-body">
@@ -269,7 +270,7 @@ ${photographyVertical()}
 
 <section class="section pt-0" id="what-we-do">
   <div class="wrap">
-    <div class="section-head reveal"><p class="eyebrow">What we do</p><h2 class="h2">Four ways we move a brand forward.</h2></div>
+    <div class="section-head reveal"><p class="eyebrow">What we do</p><h2 class="h2">Two ways we move a brand forward.</h2></div>
     <div class="pillar-grid">${cards}</div>
   </div>
 </section>
