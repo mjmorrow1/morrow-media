@@ -117,7 +117,8 @@ a:hover .arr,.link:hover .arr{transform:translateX(5px)}
 body:not(.has-hero) .page-hero.with-img{margin-top:0}
 
 /* Creator Network hero: clean type beside an editorial collage. Not a profile grid. */
-.creator-hero{padding:clamp(112px,13vw,148px) 0 clamp(28px,4vw,48px);background:var(--paper);color:var(--ink)}
+.creator-hero{padding:clamp(112px,13vw,148px) 0 clamp(28px,4vw,48px);background:var(--sand);color:var(--ink)}
+body:not(.menu-open):has(.creator-hero) .site-header:not(.scrolled){background:var(--sand)}
 .creator-hero-grid{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(28px,4vw,64px);align-items:center}
 .creator-hero .display{font-size:clamp(3rem,5.4vw,5.6rem);max-width:9ch;margin:0}
 .creator-hero .lede{margin-top:18px}
