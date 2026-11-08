@@ -1,0 +1,69 @@
+{
+  "_readme": "Featured sponsorship campaign shown on /sponsorships (#st-pete-marathon) and teased on Home. Set enabled=false to hide it everywhere; set showPricing=false to hide tier prices (the client's partner page is marked CONFIDENTIAL: FOR INAUGURAL PARTNER REVIEW ONLY). Facts come only from partners.stpetemarathon.com and stpetemarathon.com (fetched 2026-10-31).",
+  "enabled": true,
+  "showPricing": true,
+  "id": "st-pete-marathon",
+  "client": "St. Pete Marathon",
+  "campaignName": "St. Pete Marathon (Inaugural) Sponsorships",
+  "eyebrow": "Now booking sponsors",
+  "title": "St. Pete Marathon (Inaugural)",
+  "date": "December 2027",
+  "location": "St. Petersburg, FL",
+  "startFinish": "Flora Wylie Park, Historic Old Northeast",
+  "logo": "/images/campaigns/st-pete-marathon/logo.webp",
+  "heroImage": "/images/stpete/skyline-sunrise.webp",
+  "heroImageMobile": "/images/stpete/skyline-sunrise-1280.webp",
+  "heroImageAlt": "Downtown St. Petersburg, Florida skyline reflected in the bay just before sunrise",
+  "heroCredit": "Photo: Andrew Heneen, CC BY 4.0, via Wikimedia Commons",
+  "pitch": [
+    "December 2027 is the first running of the St. Pete Marathon, St. Petersburg's inaugural December marathon. It's a fast, flat waterfront course that starts and finishes at Flora Wylie Park in Historic Old Northeast and stays inside the city the whole way.",
+    "The race is home to the 2027 USATF Florida Association Marathon Open and Masters Championships. Morrow Media is working with the event to bring on its founding partners, the brands whose names are attached to the race from day one."
+  ],
+  "facts": [
+    ["Date", "December 2027 (inaugural)"],
+    ["Start & finish", "Flora Wylie Park, 1400 N Shore Dr NE"],
+    ["Course", "Fast, flat, waterfront; entirely within St. Petersburg"],
+    ["Championship", "2027 USATF Florida Association Marathon Open & Masters"],
+    ["Race day", "6 AM start · 6-hour time limit"],
+    ["Training partner", "St. Pete Run Club (official training club)"]
+  ],
+  "tiers": [
+    {
+      "name": "Founding Partner",
+      "price": "$5K",
+      "featured": true,
+      "badge": "Lifetime distinction",
+      "benefits": [
+        "Includes all Inner Circle & Stakeholder benefits",
+        "“Founding Partner” status (lifetime distinction)",
+        "Premium logo placement on official race shirts & course signage",
+        "10 complimentary VIP race entries"
+      ]
+    },
+    {
+      "name": "Inner Circle",
+      "price": "$2K",
+      "benefits": [
+        "Includes all Stakeholder benefits",
+        "Featured website & registration branding",
+        "Social media partner spotlight",
+        "5 complimentary race entries"
+      ]
+    },
+    {
+      "name": "Stakeholder",
+      "price": "$1K",
+      "benefits": [
+        "Name on the official “Wall of Founders”",
+        "Digital swag bag inclusion",
+        "2 complimentary race entries"
+      ]
+    }
+  ],
+  "processedBy": "Partnerships are processed via St. Petersburg Marathon LLC.",
+  "sources": [
+    "https://partners.stpetemarathon.com",
+    "https://stpetemarathon.com",
+    "https://stpetemarathon.com/course/"
+  ]
+}
