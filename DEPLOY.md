@@ -108,6 +108,7 @@ Admin-only chat where Matt can ask Grok to change live site copy and CSS. Code: 
 - **Flow:** message → xAI Grok (`grok-4.7`) proposes JSON find/replace patches on allowlisted paths → dry-run must match exactly once → **Apply** writes `site_overrides` in D1 → Worker serves override before KV (`x-mm-override: 1`).
 - **Allowlist:** `/_pages/*.html` marketing pages + `/css/site.css` only. No admin/auth/forms.
 - **Secret:** Worker `XAI_API_KEY` (from [console.x.ai](https://console.x.ai)). Set with `echo -n 'xai-...' | node scripts/cf-xai-secret.js` then run `4-xai-secret.js` via the Cloudflare connector and delete the file. Without the secret the page loads but chat is disabled.
+- **Screenshots:** The composer accepts up to 3 PNG, JPEG, or WebP images, 1 MB each. They are sent only on that chat request, using xAI's documented chat-completions `image_url` data URL, and are not written to KV, D1, or the repository. Typed text still works with no image. xAI's published image types for this endpoint are JPEG and PNG; WebP uses the same content part.
 - **Migration:** apply `cf/ai-schema.sql` to D1 `morrow-media-crm` (additive). Redeploy the Worker after.
 - **Source of truth:** overrides are live until reverted or a full KV redeploy replaces the underlying file (override still wins until Revert). Sync important edits back into `src/` / `public/` when you can.
 
