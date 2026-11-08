@@ -90,16 +90,16 @@ const ctaBand = (title, label, href) => `
 
 const WEB_PLANS = {
   essentials: 'Website pricing: Essentials. $99 to build, one-time, and $99 a month to host.',
-  managed: 'Website pricing: Managed. $99 setup, one-time, and $299 a month.',
+  premium: 'Website pricing: Premium. $99 setup, one-time, and $299 a month.',
   custom: 'Website pricing: Custom. Contact us for pricing.',
 };
 function websitePricing() {
-  const card = (slug, name, prices, items) => `
-    <article class="wp-card">
+  const card = (slug, name, prices, items, tone = '') => `
+    <article class="wp-card${tone ? ' ' + tone : ''}">
       <h3 class="wp-name">${esc(name)}</h3>
       ${prices}
       <ul class="wp-list">${items.map((item) => `<li>${esc(item)}</li>`).join('')}</ul>
-      <a class="btn btn-solid" href="/contact?type=brand&amp;plan=${slug}">Ask about ${esc(name)}</a>
+      <a class="btn ${tone === 'premium' ? 'btn-light' : 'btn-solid'}" href="/contact?type=brand&amp;plan=${slug}">Ask about ${esc(name)}</a>
     </article>`;
   const money = (label, amount, when) => `<p class="wp-price"><span>${label}</span><strong>${amount}</strong><small>${when}</small></p>`;
   return `<section class="section web-pricing" id="website-pricing" aria-labelledby="website-pricing-title">
@@ -111,21 +111,23 @@ function websitePricing() {
     </div>
     <div class="wp-grid">
       ${card('essentials', 'Essentials', `<div class="wp-prices">${money('Build', '$99', 'one-time')}${money('Host', '$99', 'per month')}</div>`, [
-        '1 Google Workspace account and email',
+        '1 Google Workspace email account',
+        'Hosting for the site',
         'A lite dashboard where you submit your own change requests',
+        'You submit those requests yourself. This plan does not include full-service editing',
       ])}
-      ${card('managed', 'Managed', `<div class="wp-prices">${money('Setup', '$99', 'one-time')}${money('Monthly', '$299', 'per month')}</div>`, [
-        'Dashboard',
-        'Workspace calendar',
-        'Contact management',
-        'Behind-the-scenes backend web development',
-        'Full-service AI-driven editing for changes',
-      ])}
+      ${card('premium', 'Premium', `<div class="wp-prices">${money('Setup', '$99', 'one-time')}${money('Monthly', '$299', 'per month')}</div>`, [
+        'A dashboard for a business overview and access to the tools',
+        'Workspace calendar to view schedules and events in the dashboard',
+        'Contact management to organize people and follow-ups',
+        'Behind-the-scenes backend development to maintain and evolve the site',
+        'Full-service AI-assisted website editing for requested content and layout changes',
+      ], 'premium')}
       ${card('custom', 'Custom', '<p class="wp-ask">Contact us for pricing</p>', [
-        'How many Google Workspace accounts you need',
-        'Customer relationship management',
+        'The number of Google Workspace accounts is scoped to what you need',
+        'Customer relationship management workflows',
         'Inventory',
-        'Merchandise storefronts, including ecommerce sites',
+        'Merchandise and ecommerce storefront needs',
       ])}
     </div>
   </div>
