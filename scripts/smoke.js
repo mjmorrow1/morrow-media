@@ -34,6 +34,25 @@ const forms = {
   const home = await (await fetch(base + '/')).text();
   const navOk = home.includes('href="/legal"') && !home.includes('href="/portfolio"') && !home.includes('href="/marketing"');
   console.log('nav has /legal, no /portfolio or /marketing links:', navOk); if (!navOk) fail++;
+  const homeTiles = (home.match(/class="pillar-card/g) || []).length;
+  const homeTileOk = homeTiles === 2
+    && home.includes('Two ways we move a brand forward.')
+    && home.includes('>CREATOR PARTNERSHIPS<')
+    && home.includes('SPONSORSHIPS &amp; EVENTS')
+    && home.includes('Photography and Media')
+    && !home.includes('designed to make your brand stand out.')
+    && !home.includes('Strategy, social media, creative direction, and campaigns built around your goals.')
+    && !home.includes('>MEDIA<')
+    && !home.includes('>MARKETING<');
+  console.log('home tiles are creator partnerships and sponsorships only:', homeTileOk, 'count', homeTiles); if (!homeTileOk) fail++;
+  const svc = await (await fetch(base + '/services')).text();
+  const svcOk = (svc.match(/class="svc-block/g) || []).length === 4
+    && svc.includes('designed to make your brand stand out.')
+    && svc.includes('Strategy, social media, creative direction, and campaigns built around your goals.');
+  console.log('services page still lists media and marketing:', svcOk); if (!svcOk) fail++;
+  const mediaPage = await (await fetch(base + '/media')).text();
+  const mediaOk = mediaPage.includes('Content that makes') && mediaPage.includes('designed to make your brand stand out.');
+  console.log('media service page still renders:', mediaOk); if (!mediaOk) fail++;
   const guidePublic = home.includes('href="/admin/setup"') || home.includes('Recommended setup order');
   console.log('public home does not include the admin setup guide:', !guidePublic); if (guidePublic) fail++;
   const setupOff = await fetch(base + '/admin/setup', { redirect: 'manual' });
