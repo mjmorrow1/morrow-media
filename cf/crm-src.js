@@ -289,29 +289,6 @@ async function gcalSyncFollowup(env, id, origin, { remove = false } = {}) {
 async function gcalSyncMany(env, ids, origin, opts) {
   for (const id of ids) await gcalSyncFollowup(env, id, origin, opts);
 }
-function gcalAuthUrl(env, origin, state) {
-  const u = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-  u.searchParams.set('client_id', env.GOOGLE_CLIENT_ID);
-  u.searchParams.set('redirect_uri', `${origin}/admin/calendar/google/callback`);
-  u.searchParams.set('response_type', 'code');
-  u.searchParams.set('scope', GCAL_SCOPE);
-  u.searchParams.set('access_type', 'offline');
-  u.searchParams.set('prompt', 'consent');
-  u.searchParams.set('include_granted_scopes', 'true');
-  u.searchParams.set('state', state);
-  return u.toString();
-}
-async function gcalExchangeCode(env, origin, code) {
-  const r = await fetch('https://oauth2.googleapis.com/token', {
-    method: 'POST', headers: { 'content-type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ code, client_id: env.GOOGLE_CLIENT_ID, client_secret: env.GOOGLE_CLIENT_SECRET, redirect_uri: `${origin}/admin/calendar/google/callback`, grant_type: 'authorization_code' }),
-  });
-  const j = await r.json().catch(() => ({}));
-  if (!r.ok || !j.refresh_token && !j.access_token) return { ok: false, error: j.error || `token_${r.status}`, raw: j };
-  if (j.refresh_token) await settingSet(env, 'gcal_refresh_token', j.refresh_token);
-  await settingSet(env, 'gcal_connected_at', nowIso());
-  return { ok: true, hasRefresh: !!j.refresh_token, j };
-}
 
 // ── Follow-ups
 function fuFromBody(b) {
@@ -356,35 +333,7 @@ async function homeWidget(env) {
 ${rows.length ? sec('<span class="late">Overdue</span>', g.overdue) + sec('Today', g.today) : '<p class="eyebrow" style="margin:12px 0 0">Nothing overdue or due today.</p>'}</section>`;
 }
 async function calendarPage(env, url) {
-  const sp = url.searchParams; const view = sp.get('view') === 'month' ? 'month' : 'agenda';
-  const tabs = `<div class="bar"><a class="b${view === 'agenda' ? ' on' : ''}" href="/admin/calendar">Agenda</a><a class="b${view === 'month' ? ' on' : ''}" href="/admin/calendar?view=month">Month</a><a class="b" href="/admin/calendar/settings">iPhone & Google sync</a><span class="sp"></span><a class="b dark" href="/admin/followups/new">+ Follow-up</a></div>`;
-  let body;
-  if (view === 'agenda') {
-    const back = '/admin/calendar';
-    const [open, done] = await Promise.all([env.DB.prepare(`${FU_LIST_SQL} WHERE f.status != 'done' ORDER BY f.due_at LIMIT 1000`).all(), env.DB.prepare(`${FU_LIST_SQL} WHERE f.status = 'done' ORDER BY f.completed_at DESC LIMIT 10`).all()]);
-    const g = agendaGroups(open.results);
-    const sec = (label, list, cls = '') => `<h2 class="sec ${cls}">${label} <span class="badge">${list.length}</span></h2>${list.length ? list.map((f) => fuRow(f, back)).join('') : '<p class="eyebrow">Nothing here.</p>'}`;
-    body = `<p class="eyebrow">Follow-up calendar · Eastern time</p><h1>Calendar <em>agenda</em></h1>${tabs}${sec('Overdue', g.overdue, 'late')}${sec('Today', g.today)}${sec('This week', g.week)}${g.later.length ? sec('Later', g.later) : ''}
-${done.results.length ? `<h2 class="sec">Recently completed</h2>${done.results.map((f) => fuRow(f, back)).join('')}` : ''}`;
-  } else {
-    const t = etParts(new Date()); const mm = String(sp.get('m') || '').match(/^(\d{4})-(\d\d)$/);
-    const y = mm ? +mm[1] : t.y, m = mm && +mm[2] >= 1 && +mm[2] <= 12 ? +mm[2] : t.m;
-    const first = `${y}-${pad(m)}-01`, startDow = new Date(Date.UTC(y, m - 1, 1)).getUTCDay(), days = new Date(Date.UTC(y, m, 0)).getUTCDate();
-    const gridStart = dayPlus(first, -startDow), cells = Math.ceil((startDow + days) / 7) * 7;
-    const from = etLocalToUtc(gridStart + 'T00:00'), to = etLocalToUtc(dayPlus(gridStart, cells) + 'T00:00');
-    const rows = (await qy(env, `${FU_LIST_SQL} WHERE f.due_at >= ? AND f.due_at < ? ORDER BY f.due_at`, isoOf(from), isoOf(to)).all()).results;
-    const byDay = {}; for (const f of rows) (byDay[etDay(f.due_at)] ||= []).push(f);
-    const today = etDay(new Date()), now = nowIso();
-    const prev = m === 1 ? `${y - 1}-12` : `${y}-${pad(m - 1)}`, next = m === 12 ? `${y + 1}-01` : `${y}-${pad(m + 1)}`;
-    const label = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(y, m - 1, 1)));
-    let grid = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => `<div class="h">${d}</div>`).join('');
-    for (let i = 0; i < cells; i++) {
-      const k = dayPlus(gridStart, i), inMonth = k.slice(0, 7) === `${y}-${pad(m)}`;
-      grid += `<div class="d${inMonth ? '' : ' out'}${k === today ? ' today' : ''}"><a class="n" href="/admin/followups/new?date=${k}" title="Add a follow-up on ${k}">${+k.slice(8)}</a>${(byDay[k] || []).map((f) => `<a class="chip${f.status === 'done' ? ' done' : f.due_at < now ? ' late' : ''}" href="/admin/followups/${f.id}" title="${escH(fmtTime(f.due_at) + ' ' + f.title)}"><span class="tm">${escH(fmtTime(f.due_at))} </span>${escH(f.title)}</a>`).join('')}</div>`;
-    }
-    body = `<p class="eyebrow">Follow-up calendar · Eastern time · tap a date to add</p><h1>${escH(label)}</h1>${tabs}<div class="bar"><a class="b sm" href="/admin/calendar?view=month&m=${prev}">← Prev</a><a class="b sm" href="/admin/calendar?view=month">Today</a><a class="b sm" href="/admin/calendar?view=month&m=${next}">Next →</a></div><div class="cal">${grid}</div>`;
-  }
-  return adminPage('Calendar', 'calendar', body, { msg: sp.get('msg') || '' });
+  return workspaceCalendarPage(env, url);
 }
 function snoozeTarget(f, kind) {
   const now = Date.now();
@@ -449,24 +398,15 @@ async function settingsPage(env, url) {
   const connected = await gcalConfigured(env);
   const connectedAt = await settingGet(env, 'gcal_connected_at');
   const calId = gcalCalId(env);
-  const wsStatus = connected
-    ? `<p class="note"><b>Connected.</b> New, edited, snoozed, reopened, completed, and deleted follow-ups sync to <code>${escH(calId)}</code>${connectedAt ? ` · linked ${escH(fmtET(connectedAt))}` : ''}.</p>
-<div class="bar"><form method="post" action="/admin/calendar/google/sync"><button class="b dark" type="submit">Sync all open follow-ups now</button></form>
-<form method="post" action="/admin/calendar/google/disconnect" data-confirm="Disconnect Google Calendar? Future follow-ups will not sync until you connect again."><button class="b red" type="submit">Disconnect</button></form></div>`
-    : clientReady
-      ? `<p class="note">OAuth client is configured. Connect the <b>${escH(calId)}</b> Google account so admin follow-ups appear on that Workspace calendar in real time (not just the slow ICS subscription).</p>
-<div class="bar"><a class="b dark" href="/admin/calendar/google/connect">Connect Google Workspace Calendar</a></div>
-<details style="margin-top:12px"><summary class="b">Or paste a refresh token ▾</summary>
-<form class="form" method="post" action="/admin/calendar/google/token" style="margin-top:10px">
-<label class="wide"><span>Refresh token</span><input name="refresh_token" required autocomplete="off" placeholder="1//..."></label>
-<div class="acts"><button class="btn" type="submit">Save token</button></div></form></details>`
-      : `<p class="note">To enable live sync, add Worker secrets <code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code> (OAuth web client with redirect <code>${escH(url.origin)}/admin/calendar/google/callback</code> and scope <code>https://www.googleapis.com/auth/calendar.events</code>), then return here and tap Connect. Sign in as <b>sponsors@morrowmediagroup.com</b>. Optional secrets: <code>GOOGLE_CALENDAR_ID</code> (defaults to that mailbox) and <code>GOOGLE_REFRESH_TOKEN</code>.</p>`;
-  const body = `<p class="eyebrow"><a href="/admin/calendar">Calendar</a> · settings</p><h1>iPhone & Google <em>sync</em></h1>
-<h2 class="sec">Google Workspace (live push)</h2>
-${wsStatus}
-<p class="eyebrow">Creates, updates, and deletes matching events on the Workspace calendar when you use New follow-up / Edit / Done / Snooze / Delete. Title, Eastern time, duration, location or Meet link, and notes are copied over.</p>
+  const readSection = await gcalReadSettingsSection(env, url);
+  const writeNote = connected ? `<p class="note">An older follow-up write token is also present for <code>${escH(calId)}</code>${connectedAt ? ` · linked ${escH(fmtET(connectedAt))}` : ''}. The read-only calendar above does not use that token, and this page does not send a write test.</p>` : '';
+  const body = `<p class="eyebrow">Eastern time · America/New_York</p><h1>Sync</h1>
+<div class="gcal-nav">${gcalSectionNav('sync', '')}<span class="sp"></span><a class="b dark" href="/admin/followups/new">+ Follow-up</a></div>
+${readSection}
+${writeNote}
+<p class="eyebrow">Follow-up write sync is separate and stays off for a read-only connection. Client ready: ${clientReady ? 'yes' : 'no'}.</p>
 <h2 class="sec">Subscribe feed (iPhone &amp; pull sync)</h2>
-<p class="note">This private link lists every open follow-up, each with a 15-minute alert. Anyone with the link can see them, so don't share it. If it leaks, regenerate it below; the old link stops working. Prefer <b>Google Workspace (live push)</b> above when you can — Google refreshes subscribed feeds slowly.</p>
+<p class="note">This private link lists every open follow-up, each with a 15-minute alert. Anyone with the link can see them, so don't share it. If it leaks, regenerate it below; the old link stops working. Google refreshes subscribed feeds slowly. The read-only Workspace view above is separate and does not replace this feed.</p>
 <div class="copy"><input id="feed" readonly value="${escH(https)}" aria-label="Feed URL"><button class="b dark" type="button" data-copy="feed">Copy</button></div>
 <div class="copy" style="margin-top:8px"><input id="feedw" readonly value="${escH(webcal)}" aria-label="webcal URL"><button class="b" type="button" data-copy="feedw">Copy</button></div>
 <div class="bar" style="margin-top:14px"><a class="b dark" href="${escH(webcal)}">Subscribe on iPhone / Mac</a><a class="b" href="${escH(google)}" target="_blank" rel="noopener noreferrer">Add feed to Google Calendar</a></div>
@@ -489,6 +429,7 @@ async function crmApi(env, p, url) {
   if (m) { const c = await qy(env, 'SELECT * FROM contacts WHERE id = ?', +m[1]).first(); if (!c) return adminJson({ ok: false, error: 'Not found' }, 404);
     const [a, f] = await Promise.all([qy(env, 'SELECT * FROM contact_activities WHERE contact_id = ? ORDER BY at DESC, id DESC', c.id).all(), qy(env, 'SELECT * FROM followups WHERE contact_id = ? ORDER BY due_at', c.id).all()]);
     return adminJson({ ok: true, contact: c, activities: a.results, followups: f.results }); }
+  if (p === '/admin/api/calendar/events') return gcalEventsApi(env, url);
   if (p === '/admin/api/followups') return adminJson({ ok: true, rows: (await env.DB.prepare(`${FU_LIST_SQL} ORDER BY f.due_at LIMIT 2000`).all()).results });
   m = p.match(/^\/admin\/api\/followups\/(\d+)$/);
   if (m) { const f = await qy(env, 'SELECT * FROM followups WHERE id = ?', +m[1]).first(); return f ? adminJson({ ok: true, followup: f }) : adminJson({ ok: false, error: 'Not found' }, 404); }
@@ -562,38 +503,19 @@ async function crmRoute(req, env, url, p) {
   if (p === '/admin/calendar' && GET) return calendarPage(env, url);
   if (p === '/admin/calendar/settings' && GET) return settingsPage(env, url);
   if (p === '/admin/calendar/regenerate' && POST) { await rotateFeedToken(env); return goTo(withMsg('/admin/calendar/settings', 'New link created. The old one no longer works. Re-subscribe on your devices.')); }
-  if (p === '/admin/calendar/google/connect' && GET) {
-    if (!gcalClientReady(env)) return goTo(withMsg('/admin/calendar/settings', 'Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET Worker secrets first.'));
-    const state = b64u(crypto.getRandomValues(new Uint8Array(16)));
-    await settingSet(env, 'gcal_oauth_state', state);
-    return Response.redirect(gcalAuthUrl(env, url.origin, state), 302);
+  if (p === '/admin/calendar/google/connect' && GET) return gcalReadConnect(env, url);
+  if (p === '/admin/calendar/google/visible' && POST) {
+    const b = await body();
+    const raw = b.cal == null ? [] : Array.isArray(b.cal) ? b.cal : [b.cal];
+    const allowed = new Set((await gcalStoredList(env)).map((c) => c.id));
+    const chosen = raw.map((id) => String(id)).filter((id) => allowed.has(id));
+    await settingSet(env, 'gcal_visible', JSON.stringify(chosen));
+    return goTo(withMsg('/admin/calendar', 'Calendar selection saved.'));
   }
-  if (p === '/admin/calendar/google/callback' && GET) {
-    if (!gcalClientReady(env)) return goTo(withMsg('/admin/calendar/settings', 'Google OAuth client is not configured.'));
-    const err = url.searchParams.get('error'); if (err) return goTo(withMsg('/admin/calendar/settings', `Google auth cancelled (${err}).`));
-    const code = url.searchParams.get('code') || ''; const state = url.searchParams.get('state') || '';
-    const expect = await settingGet(env, 'gcal_oauth_state');
-    await settingSet(env, 'gcal_oauth_state', '');
-    if (!code || !expect || state !== expect) return goTo(withMsg('/admin/calendar/settings', 'Google auth failed (bad state). Try Connect again.'));
-    const ex = await gcalExchangeCode(env, url.origin, code);
-    if (!ex.ok) return goTo(withMsg('/admin/calendar/settings', `Google token exchange failed (${ex.error || 'error'}).`));
-    if (!ex.hasRefresh && !(await gcalRefreshToken(env))) return goTo(withMsg('/admin/calendar/settings', 'Google did not return a refresh token. Disconnect any prior grant at myaccount.google.com/permissions, then Connect again.'));
-    return goTo(withMsg('/admin/calendar/settings', 'Google Workspace Calendar connected. New follow-ups will sync automatically.'));
-  }
-  if (p === '/admin/calendar/google/token' && POST) {
-    if (!gcalClientReady(env)) return goTo(withMsg('/admin/calendar/settings', 'Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET first.'));
-    const b = await body(); const tok = String(b.refresh_token || '').trim();
-    if (tok.length < 20) return goTo(withMsg('/admin/calendar/settings', 'That refresh token looks too short.'));
-    await settingSet(env, 'gcal_refresh_token', tok);
-    await settingSet(env, 'gcal_connected_at', nowIso());
-    const probe = await gcalAccessToken(env);
-    if (!probe) return goTo(withMsg('/admin/calendar/settings', 'Saved, but Google rejected the token. Check client id/secret and that the token was issued for this OAuth client.'));
-    return goTo(withMsg('/admin/calendar/settings', 'Google refresh token saved. Follow-ups will sync to Workspace Calendar.'));
-  }
+  if (p === '/admin/calendar/google/token' && POST) return goTo(withMsg('/admin/calendar/settings', 'Paste a token is turned off. Use Connect Google Calendar so the refresh token is encrypted.'));
   if (p === '/admin/calendar/google/disconnect' && POST) {
-    await settingSet(env, 'gcal_refresh_token', '');
-    await settingSet(env, 'gcal_connected_at', '');
-    return goTo(withMsg('/admin/calendar/settings', 'Disconnected Google Calendar sync.'));
+    await gcalReadDisconnect(env);
+    return goTo(withMsg('/admin/calendar/settings', 'Disconnected Google Calendar. The saved access was removed from this site.'));
   }
   if (p === '/admin/calendar/google/sync' && POST) {
     if (!(await gcalConfigured(env))) return goTo(withMsg('/admin/calendar/settings', 'Connect Google Calendar first.'));

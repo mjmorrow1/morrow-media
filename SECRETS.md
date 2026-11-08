@@ -18,11 +18,12 @@ Required for Site AI:
 
 - `XAI_API_KEY`
 
-Optional Google Calendar sync. Absence means sync is not configured:
+Optional Google Calendar. Absence means the admin calendar is not connected:
 
 - `GOOGLE_CLIENT_ID`
 - `GOOGLE_CLIENT_SECRET`
-- `GOOGLE_REFRESH_TOKEN`
+- `CALENDAR_TOKEN_KEY` (encrypts the read-only refresh token at rest)
+- `GOOGLE_REFRESH_TOKEN` (older follow-up write sync only; not used as proof of the read-only calendar)
 - `GOOGLE_CALENDAR_ID`
 
 Optional Authentisign API. The live webhook is still a stub until these are implemented and set:
@@ -39,6 +40,7 @@ No Cursor API secret belongs on the Worker unless a future, reviewed integration
 These setting names can hold credentials. Do not export or paste their values into the repository:
 
 - `gcal_refresh_token`
+- `gcal_refresh_enc`
 - `ics_token`
 
 ## Local files that stay untracked

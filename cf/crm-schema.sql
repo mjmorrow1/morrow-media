@@ -48,4 +48,11 @@ CREATE TABLE IF NOT EXISTS signings (
 CREATE INDEX IF NOT EXISTS signings_contact ON signings (contact_id, created_at);
 CREATE INDEX IF NOT EXISTS signings_status ON signings (status, updated_at);
 CREATE UNIQUE INDEX IF NOT EXISTS signings_external_uq ON signings (external_signing_id) WHERE external_signing_id IS NOT NULL;
+-- Short-lived Google OAuth state. The verifier is encrypted. Rows are single-use.
+CREATE TABLE IF NOT EXISTS gcal_oauth_states (
+  state TEXT PRIMARY KEY,
+  verifier_enc TEXT NOT NULL,
+  admin_email TEXT,
+  created_at TEXT NOT NULL
+);
 
