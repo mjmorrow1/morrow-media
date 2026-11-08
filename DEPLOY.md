@@ -41,15 +41,19 @@ All of it sits behind the same admin login. Code is in `cf/crm-src.js`, which `s
 - **Contacts** (`/admin/contacts`): search, type and stage filters, sort, add, edit, delete, CSV (`/admin/contacts.csv`).
   - Each contact page has a timeline of notes and logged calls, emails, and meetings. Stage changes and completed follow-ups are added to it automatically.
   - Each website submission card has a **Convert to contact** button. It prefills the form and links back to the submission. If the email or submission is already a contact, the card shows **View contact** instead.
-- **Follow-ups** (`/admin/calendar`): an agenda view (overdue, today, this week, later) and a month view.
+- **Follow-ups** (`/admin/calendar`): agenda, week, day, and month. Follow-ups stay visually separate from Workspace events and keep Done, Snooze, and `.ics`.
   - You can create, edit, complete, reopen, snooze (1 hour, tomorrow 9am, next week), or delete a follow-up.
-  - Times are entered and shown in Eastern and stored in UTC.
+  - Times are entered and shown in Eastern (`America/New_York`) and stored in UTC.
   - The dashboard shows a widget with overdue and today items.
-- **Google Workspace Calendar push** (same settings page, top section):
-  - When `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` Worker secrets are set and a refresh token is stored (`GOOGLE_REFRESH_TOKEN` secret or `settings.gcal_refresh_token` after **Connect**), creating/updating/snoozing/reopening/completing/deleting a follow-up creates/updates/deletes the matching event on `sponsors@morrowmediagroup.com` (override with `GOOGLE_CALENDAR_ID`).
-  - OAuth redirect: `https://morrowmediagroup.com/admin/calendar/google/callback`. Scope: `calendar.events`.
-  - Event fields: title (`Type: Title — Contact`), Eastern start/end from due + duration, location / Meet link, notes + CRM link, 15-minute popup+email reminders. Event id stored in `followups.gcal_event_id`.
-  - Admin → Calendar → settings: Connect / Disconnect / Sync all open follow-ups. Sync failures never block CRM saves.
+- **Google Workspace calendar (read-only)**:
+  - Admin → Calendar → settings explains the setup when secrets are missing. Connect uses Google OAuth with PKCE, a short-lived `__Host-mm_gcal` state cookie (`SameSite=Lax`, because the admin session cookie is `SameSite=Strict` and is not sent on Google's redirect), and scope `openid email https://www.googleapis.com/auth/calendar.readonly`.
+  - Redirect URI: `https://morrowmediagroup.com/admin/calendar/google/callback` (local dev uses the same path on the local origin).
+  - Worker secret names: `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `CALENDAR_TOKEN_KEY`. The refresh token is AES-GCM encrypted with `CALENDAR_TOKEN_KEY` and stored as `settings.gcal_refresh_enc`. It is not sent to the browser. Paste-a-token is refused.
+  - Before the first Connect on an existing D1 database, apply the additive `gcal_oauth_states` table from `cf/crm-schema.sql`.
+  - The calendar page shows the connected email, a calendar picker, refresh, and disconnect. Events are fetched for the visible range (`singleEvents=true`) and are not written back. A revoked or expired refresh token asks the admin to connect again. This is not live until those secrets exist and an admin completes Connect. Do not copy a token from any other Google connector.
+- **Older follow-up write sync** (not enabled by the read-only Connect):
+  - If `GOOGLE_CLIENT_ID` + `GOOGLE_CLIENT_SECRET` are set and a write refresh token already exists (`GOOGLE_REFRESH_TOKEN` or `settings.gcal_refresh_token`), creating/updating/snoozing/reopening/completing/deleting a follow-up still creates/updates/deletes the matching event on `sponsors@morrowmediagroup.com` (override with `GOOGLE_CALENDAR_ID`). Scope for that older path: `calendar.events`.
+  - The settings page does not offer that write Connect, and it does not send a write test. Sync failures never block CRM saves.
 - **Calendar feed** (Admin → Calendar → **iPhone & Google sync**, `/admin/calendar/settings`):
   - There is a private ICS link, `/cal/<token>.ics`, the only unauthenticated admin-data route. It lists every open or snoozed follow-up, each with a 15-minute alert and a stable UID.
   - The token is in D1 `settings.ics_token`. **Regenerate link** replaces it, and the old link returns 404.
