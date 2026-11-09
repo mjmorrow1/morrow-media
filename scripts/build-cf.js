@@ -7,6 +7,7 @@ const ROOT = path.join(__dirname, '..');
 const CF = path.join(ROOT, 'cf');
 const DIST = path.join(CF, 'dist');
 const cfg = require('../src/config');
+const { lockupSvg } = require('../src/logo');
 const pages = require('../src/pages');
 const campaign = require('../src/campaign');
 
@@ -52,7 +53,7 @@ const META = {
   VERSION: BUILD_VERSION,
 };
 const tpl = fs.readFileSync(path.join(CF, 'worker-src.js'), 'utf8');
-const adminSrc = fs.readFileSync(path.join(CF, 'admin-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'crm-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'tickets-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'ai-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'setup-src.js'), 'utf8');
+const adminSrc = fs.readFileSync(path.join(CF, 'admin-src.js'), 'utf8').replace('/*__LOGO_LOCKUP__*/\'\'', () => JSON.stringify(lockupSvg())) + '\n' + fs.readFileSync(path.join(CF, 'crm-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'tickets-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'ai-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'setup-src.js'), 'utf8');
 fs.writeFileSync(path.join(CF, 'worker.js'), tpl.replace('/*__META__*/null', () => JSON.stringify(META)).replace('/*__ADMIN__*/', () => adminSrc));
 // D1 schema (same tables/columns as the local SQLite CRM)
 const ddl = Object.entries(TABLES).map(([name, t]) => `CREATE TABLE IF NOT EXISTS ${name} (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  ${t.columns.map((col) => `"${col.key}" ${col.type === 'number' ? 'REAL' : 'TEXT'}`).join(',\n  ')},\n  source TEXT,\n  created_at TEXT DEFAULT (datetime('now'))\n);`).join('\n');

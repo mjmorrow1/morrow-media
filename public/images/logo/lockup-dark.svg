@@ -1,0 +1,19 @@
+<svg class="logo-lockup" viewBox="0 0 276 64" role="img" aria-label="SouthBridge Media" focusable="false" color="#0d0d0c" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(0 8) scale(0.7)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke-width="1.45"><path d="M44 16 L4 51"/><path d="M44 16 L14 49"/><path d="M44 16 L24 47.4"/><path d="M44 16 L34 46.6"/><path d="M44 17 L54 46"/><path d="M44 17 L64 45.8"/><path d="M96 9 L62 45.8"/><path d="M96 9 L74 45.4"/><path d="M96 9 L86 45.2"/><path d="M96 10 L108 47.6"/><path d="M96 10 L120 51"/><path d="M96 10 L134 55"/><path d="M96 10 L148 60"/></g>
+    <path d="M41 48 V14 h6 V48" fill="currentColor" stroke="none"/>
+    <path d="M93 46.4 V6 h6.6 V46.4" fill="currentColor" stroke="none"/>
+    <path d="M2 52.5 C 38 42.5, 98 43, 154 62" stroke-width="3.5"/>
+    <g stroke-width="2.05">
+      <path d="M16 51 V66"/>
+      <path d="M44 47.6 V66"/>
+      <path d="M70 45.6 V66"/>
+      <path d="M96 46.2 V66"/>
+      <path d="M124 52.4 V66"/>
+    </g>
+  </g></g>
+  <g fill="currentColor" stroke="none" font-family="Inter, Arial, Helvetica, sans-serif">
+    <text x="116" y="28" font-size="20" font-weight="600" letter-spacing="0.2">SOUTHBRIDGE</text>
+    <text x="116.2" y="50" font-size="18" font-weight="300" letter-spacing="6.4">MEDIA</text>
+  </g>
+</svg>
