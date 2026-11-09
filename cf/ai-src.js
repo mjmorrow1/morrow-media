@@ -181,7 +181,7 @@ async function buildSiteContext(env, hint) {
   return parts.join('\n\n');
 }
 
-const AI_SYSTEM = `You are Grok helping Matt edit the live Morrow Media marketing site (morrowmediagroup.com) from the admin panel.
+const AI_SYSTEM = `You are Grok helping Matt edit the live SouthBridge Media marketing site from the admin panel. The public brand is SouthBridge Media. The intended canonical host is sbridgemedia.com. The site also still answers on morrowmediagroup.com. Mailboxes stay on morrowmediagroup.com until that move is confirmed. Do not invent a new mailbox.
 You propose SAFE, scoped find/replace patches on allowlisted files only:
 ${AI_EDITABLE.join(', ')}
 

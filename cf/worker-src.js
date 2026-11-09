@@ -1,7 +1,15 @@
 // Cloudflare Worker for morrowmediagroup.com. GENERATED into cf/worker.js by scripts/build-cf.js — edit this file (worker-src.js), not worker.js.
 // Mirrors server.js: same routes, redirects and form → CRM behavior. Form rows go to D1 (binding DB) instead of local SQLite.
 const META = /*__META__*/null;
-const { PAGES, TIER_SLUGS, TABLES, REDIRECTS_301, REDIRECTS_302, CAMPAIGN, CANONICAL_HOST } = META;
+const { PAGES, TIER_SLUGS, TABLES, REDIRECTS_301, REDIRECTS_302, CAMPAIGN, CANONICAL_HOST, LEGACY_HOST, SERVICE_HOST } = META;
+// www of either public apex folds to that same apex. The legacy apex is not sent to the new host.
+function wwwFoldTarget(hostname) {
+  const host = String(hostname || '').toLowerCase();
+  for (const apex of [CANONICAL_HOST, LEGACY_HOST]) {
+    if (apex && host === 'www.' + apex) return apex;
+  }
+  return '';
+}
 const FORM_TABLE = { brand: 'brands', creator: 'creators', event: 'events', sponsor: 'sponsors', legal: 'brands' };
 const slugify = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const json = (obj, status = 200) => new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json; charset=utf-8' } });
@@ -101,7 +109,8 @@ const page = async (env, req, key, status = 200, ctx) => (await asset(env, req, 
 export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
-    if (url.hostname === 'www.' + CANONICAL_HOST) { url.hostname = CANONICAL_HOST; return Response.redirect(url.toString(), 301); }
+    const folded = wwwFoldTarget(url.hostname);
+    if (folded) { url.hostname = folded; return Response.redirect(url.toString(), 301); }
     let p = url.pathname; if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
     const m = p.match(/^\/api\/submit\/([^/]+)$/);
     if (m && req.method === 'POST') return submit(req, env, m[1]);

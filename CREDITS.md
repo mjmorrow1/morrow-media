@@ -1,6 +1,6 @@
 # Photo credits
 
-Third-party photographs used on the Morrow Media site. They are from Wikimedia Commons under licenses that allow commercial use with attribution. Attribution appears on the page that uses the photo and on `/credits`; the footer links to `/credits`.
+Third-party photographs used on the SouthBridge Media site. They are from Wikimedia Commons under licenses that allow commercial use with attribution. Attribution appears on the page that uses the photo and on `/credits`; the footer links to `/credits`.
 The two St. Petersburg photos were checked as St. Petersburg, **Florida** (not Russia) from their Commons descriptions and categories.
 The Creator Network hero uses five more Commons photographs as examples of kinds of work (travel, food, fitness, video, and art). They are not members of the network and are not endorsements.
 

@@ -1,6 +1,6 @@
-# Deploying morrowmediagroup.com
+# Deploying the site
 
-Live: https://morrowmediagroup.com (www.morrowmediagroup.com 301-redirects to it). HTTPS via Cloudflare, Always Use HTTPS on.
+Currently live: https://morrowmediagroup.com (`www.morrowmediagroup.com` 301-redirects to that apex). The intended canonical host is `sbridgemedia.com`. This repository does not attach that hostname and does not redirect the old apex to it. HTTPS via Cloudflare, Always Use HTTPS on.
 The local Express app in this folder is still the source of truth. Edit `src/` and `public/` as usual and check on http://localhost:3000. Then redeploy.
 
 ## How it's hosted (Cloudflare free plan, $0/month)
@@ -9,7 +9,7 @@ The local Express app in this folder is still the source of truth. Edit `src/` a
   - www 301s to the apex domain. `/admin` is a login-protected dashboard (see **Admin dashboard** below).
 - **Workers KV `morrow-media-site`** (id ad8b4e83b63b4540a64f72d50dc73f7b) holds every file: pages pre-rendered by `src/pages.js` under `/_pages/*`, plus images, css, js, and fonts.
 - **D1 database `morrow-media-crm`** (id a9500a4a-00ac-4370-94a3-6ac6eb9181fd) stores the form submissions. It uses the same tables and columns as `data/crm.sqlite` (schema in `cf/schema.sql`).
-- **Custom domains**: morrowmediagroup.com and www.morrowmediagroup.com are attached to the Worker, so DNS and certificates are automatic.
+- **Custom domains**: morrowmediagroup.com and www.morrowmediagroup.com are attached to the Worker, so DNS and certificates are automatic. `sbridgemedia.com` is the intended canonical host and is not attached by this file.
 - Free-plan limits: 100k Worker requests/day, 100k KV reads/day (edge-cached), and 1k KV writes/day (a full redeploy writes about 190; a changed-only redeploy writes fewer).
 
 ## Admin dashboard — https://morrowmediagroup.com/admin
@@ -71,7 +71,7 @@ All of it sits behind the same admin login. Code is in `cf/crm-src.js`, which `s
 
 ### Tickets & KPIs (live /admin)
 
-Jira-style tickets and a KPI dashboard on the same Worker, D1 (`morrow-media-crm`) and admin login. Code: `cf/tickets-src.js` (inlined by `scripts/build-cf.js`); tables: `cf/tickets-schema.sql` (projects, tickets, ticket_comments, ticket_history, kpi_goals; additive, `CREATE … IF NOT EXISTS`, seeds project "Morrow Media" / key MM).
+Jira-style tickets and a KPI dashboard on the same Worker, D1 (`morrow-media-crm`) and admin login. Code: `cf/tickets-src.js` (inlined by `scripts/build-cf.js`); tables: `cf/tickets-schema.sql` (projects, tickets, ticket_comments, ticket_history, kpi_goals; additive, `CREATE … IF NOT EXISTS`, seeds project "SouthBridge Media" / key MM). An existing database row with key MM is left unchanged.
 
 - **/admin/tickets**: Kanban board (backlog → to do → in progress → review → done). Drag cards on desktop; on phones each card has a status dropdown + Move. Filters: project, type, priority, label, assignee. Done shows the last 30 days.
 - **/admin/tickets?view=list**: backlog/list with search (title, description, labels, contact, or a key like `MM-12`), status filter, overdue-only, and sort.

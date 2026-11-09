@@ -22,14 +22,34 @@ const NAV = [
 
 function layout({ title, path = '/', body, description, heroNav = false }) {
   const fullTitle = title ? `${title} — ${cfg.brand}` : `${cfg.brand} — ${cfg.tagline}`;
+  const desc = description || cfg.oneLiner;
+  const canonPath = path.startsWith('/') ? path : `/${path}`;
+  const canonical = `https://${cfg.canonicalHost}${canonPath === '/' ? '/' : canonPath}`;
   const nav = NAV.map(([l, h]) => `<a href="${h}"${path.startsWith(h) ? ' aria-current="page"' : ''}>${l}</a>`).join('');
+  const org = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: cfg.brand,
+    url: `https://${cfg.canonicalHost}/`,
+    email: cfg.email,
+  }).replace(/</g, '\\u003c');
   return `<!doctype html>
 <html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(fullTitle)}</title>
-<meta name="description" content="${esc(description || cfg.oneLiner)}">
+<meta name="description" content="${esc(desc)}">
+<link rel="canonical" href="${esc(canonical)}">
+<meta property="og:site_name" content="${esc(cfg.brand)}">
+<meta property="og:title" content="${esc(fullTitle)}">
+<meta property="og:description" content="${esc(desc)}">
+<meta property="og:url" content="${esc(canonical)}">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="${esc(fullTitle)}">
+<meta name="twitter:description" content="${esc(desc)}">
+<script type="application/ld+json">${org}</script>
 <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/site.css?v=${assetV()}">
 </head>

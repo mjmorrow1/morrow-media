@@ -204,7 +204,7 @@ CREATE TABLE IF NOT EXISTS kpi_goals (
   archived INTEGER DEFAULT 0,
   created_at TEXT, updated_at TEXT
 );
-INSERT OR IGNORE INTO projects (name, key, color, archived, next_num, created_at, updated_at) VALUES ('Morrow Media', 'MM', '#0d0d0c', 0, 1, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), strftime('%Y-%m-%dT%H:%M:%SZ', 'now'));
+INSERT OR IGNORE INTO projects (name, key, color, archived, next_num, created_at, updated_at) VALUES ('SouthBridge Media', 'MM', '#0d0d0c', 0, 1, strftime('%Y-%m-%dT%H:%M:%SZ', 'now'), strftime('%Y-%m-%dT%H:%M:%SZ', 'now'));
 
 -- Grok site-editor chatbot (admin). Additive only.
 CREATE TABLE IF NOT EXISTS ai_messages (
