@@ -1,6 +1,7 @@
 const cfg = require('./config');
 const fs = require('fs');
 const path = require('path');
+const { lockupSvg } = require('./logo');
 
 // Cache-bust static assets (build-cf sets ASSET_VERSION = META.VERSION)
 function assetV() {
@@ -46,17 +47,24 @@ function layout({ title, path = '/', body, description, heroNav = false }) {
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${esc(canonical)}">
 <meta property="og:type" content="website">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://${esc(cfg.canonicalHost)}/images/logo/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${esc(fullTitle)}">
 <meta name="twitter:description" content="${esc(desc)}">
+<meta name="twitter:image" content="https://${esc(cfg.canonicalHost)}/images/logo/og.png">
 <script type="application/ld+json">${org}</script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/site.css?v=${assetV()}">
 </head>
 <body class="${heroNav ? 'has-hero' : ''}">
 <header class="site-header${heroNav ? ' on-hero' : ''}" data-header>
   <div class="wrap header-inner">
-    <a class="logo" href="/" aria-label="${esc(cfg.brand)} home">${esc(cfg.brand)}</a>
+    <a class="logo" href="/" aria-label="${esc(cfg.brand)}">${lockupSvg()}</a>
     <nav class="nav" aria-label="Primary">${nav}</nav>
     <a class="btn btn-sm btn-solid header-cta" href="/contact">Work with us</a>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" data-menu-toggle><span></span><span></span></button>
@@ -72,7 +80,7 @@ ${body}
   <div class="wrap">
     <div class="footer-top">
       <div>
-        <p class="footer-brand">${esc(cfg.brand)}</p>
+        <p class="footer-brand">${lockupSvg({ hidden: false })}</p>
         <p class="footer-tag">${esc(cfg.tagline)}</p>
       </div>
       <a class="footer-big" href="/contact">Let's build something <span>→</span></a>

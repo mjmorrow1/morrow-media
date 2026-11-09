@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SouthBridge Media">
+  <g transform="translate(0 14)" color="#0d0d0c"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke-width="1.35"><path d="M18 8 L3 24"/><path d="M18 8 L9 23"/><path d="M18 8 L14 22.6"/><path d="M18 8.4 L23 22.4"/><path d="M18 8.4 L28 22.2"/><path d="M40 5 L28 22.2"/><path d="M40 5 L34 21.8"/><path d="M40 5 L38 21.8"/><path d="M40 5.4 L46 23"/><path d="M40 5.4 L54 25.2"/><path d="M40 5.4 L62 28"/></g>
+    <path d="M16.3 23.2 V7.2 h3.4 V23.2" fill="currentColor" stroke="none"/>
+    <path d="M38.2 22.2 V3.6 h3.6 V22.2" fill="currentColor" stroke="none"/>
+    <path d="M1 25 C 16 20.5, 40 21, 63 29.2" stroke-width="2.4"/>
+    <g stroke-width="1.7"><path d="M8 24.4 V33"/><path d="M18 22.6 V33"/><path d="M30 21.8 V33"/><path d="M40 22.2 V33"/><path d="M52 25.2 V33"/></g>
+  </g></g>
+</svg>
