@@ -46,7 +46,9 @@ const META = {
   REDIRECTS_302: marketingOn ? {} : { '/marketing': '/media' },
   CAMPAIGN: { client: c.client || 'St. Pete Marathon', tiers: (c.tiers || []).map((t) => t.name) },
   BRAND: cfg.brand,
-  CANONICAL_HOST: 'morrowmediagroup.com',
+  CANONICAL_HOST: cfg.canonicalHost,
+  LEGACY_HOST: cfg.legacyHost,
+  SERVICE_HOST: cfg.serviceHost,
   VERSION: BUILD_VERSION,
 };
 const tpl = fs.readFileSync(path.join(CF, 'worker-src.js'), 'utf8');

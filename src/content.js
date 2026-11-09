@@ -48,15 +48,15 @@ const showcase = {
     eyebrow: 'Website creation',
     title: 'Sites we build.',
     items: [
-      { label: 'Tango Two One', id: 'tango-two-one', copy: 'Brand website for an aviation and aerospace engineering firm — positioning, design, and build. Side-by-side: the old live site vs the new Morrow Media build.', img: '/images/work/tango-two-one-after.webp', alt: 'Tango Two One Engineering — new Morrow Media website', href: 'https://tangotwoone.pages.dev/', cta: 'Visit new site', tag: 'Website redesign',
+      { label: 'Tango Two One', id: 'tango-two-one', copy: 'Brand website for an aviation and aerospace engineering firm — positioning, design, and build. Side-by-side: the old live site vs the new SouthBridge Media build.', img: '/images/work/tango-two-one-after.webp', alt: 'Tango Two One Engineering — new SouthBridge Media website', href: 'https://tangotwoone.pages.dev/', cta: 'Visit new site', tag: 'Website redesign',
         compare: {
           before: { img: '/images/work/tango-two-one-before.webp', alt: 'Previous Tango Two One live site at tangotwoone.com', caption: 'Before — tangotwoone.com', href: 'https://www.tangotwoone.com/', note: 'Old live site' },
-          after:  { img: '/images/work/tango-two-one-after.webp',  alt: 'New Tango Two One site built by Morrow Media', caption: 'After — tangotwoone.pages.dev', href: 'https://tangotwoone.pages.dev/', note: 'New Morrow Media build' },
+          after:  { img: '/images/work/tango-two-one-after.webp',  alt: 'New Tango Two One site built by SouthBridge Media', caption: 'After — tangotwoone.pages.dev', href: 'https://tangotwoone.pages.dev/', note: 'New SouthBridge Media build' },
         } },
-      { label: 'Neurons Away', id: 'neurons-away', copy: 'Brand and commerce site for a publisher of books, journals, and creative activities that build mental flexibility — positioning, design, and build. Side-by-side: the old Weebly site vs the new Morrow Media build.', img: '/images/work/neuronsaway-after.webp', alt: 'Neurons Away — new Morrow Media website', href: 'https://neuronsaway.pages.dev/', cta: 'Visit new site', tag: 'Website redesign',
+      { label: 'Neurons Away', id: 'neurons-away', copy: 'Brand and commerce site for a publisher of books, journals, and creative activities that build mental flexibility — positioning, design, and build. Side-by-side: the old Weebly site vs the new SouthBridge Media build.', img: '/images/work/neuronsaway-after.webp', alt: 'Neurons Away — new SouthBridge Media website', href: 'https://neuronsaway.pages.dev/', cta: 'Visit new site', tag: 'Website redesign',
         compare: {
           before: { img: '/images/work/neuronsaway-before.webp', alt: 'Previous Neurons Away live site at neuronsaway.com', caption: 'Before — neuronsaway.com', href: 'https://www.neuronsaway.com/', note: 'Old Weebly site' },
-          after:  { img: '/images/work/neuronsaway-after.webp',  alt: 'New Neurons Away site built by Morrow Media', caption: 'After — neuronsaway.pages.dev', href: 'https://neuronsaway.pages.dev/', note: 'New Morrow Media build' },
+          after:  { img: '/images/work/neuronsaway-after.webp',  alt: 'New Neurons Away site built by SouthBridge Media', caption: 'After — neuronsaway.pages.dev', href: 'https://neuronsaway.pages.dev/', note: 'New SouthBridge Media build' },
         },
       },
     ],
@@ -88,7 +88,7 @@ const revenueModel = [
   ['Creator management', 'Commission on deals sourced / managed.'],
 ];
 
-// /legal — practice areas offered through an INDEPENDENT attorney at law (not Morrow Media).
+// /legal — practice areas offered through an INDEPENDENT attorney at law (not this website's public brand).
 // Keep this descriptive: no prices, outcomes, credentials or names here (attorney details live in config.legal).
 const legal = {
   areas: [
@@ -233,7 +233,7 @@ module.exports.about = {
   headline: ['The agent.', 'The creator.', 'The developer.'],
   lede: 'One founder who has worked across real estate, media, marketing, content creation, and software development—and now brings brands, creators, organizations, and events together.',
   story: [
-    'Morrow Media is a creative agency based in St. Petersburg, Florida, founded by Matt Morrow. Matt brings an unusual combination of experience to the agency: he understands the business side of marketing, the creative side of content, and the technical side of building and measuring digital products.',
+    'SouthBridge Media is a creative agency based in St. Petersburg, Florida, founded by Matt Morrow. Matt brings an unusual combination of experience to the agency: he understands the business side of marketing, the creative side of content, and the technical side of building and measuring digital products.',
     'Matt\u2019s background began in real estate, where he learned firsthand how much the quality of a property\u2019s marketing can influence how it is perceived. Through his work with RMS Elite Properties and his National Association of REALTORS® membership, he developed a strong understanding of branding, visual marketing, and the importance of presenting a property or business correctly online.',
     'He\u2019s also a photographer and videographer who has spent years building a substantial body of work across travel, outdoor, lifestyle, events, real estate, and commercial projects. Photography and video aren\u2019t simply services he outsources—he is the person behind the camera creating the content.',
     'Matt is also the creator behind Travelers Content, a travel-focused brand spanning social media, YouTube, and other digital platforms. Building Travelers Content has provided firsthand experience with what it takes to grow a social audience, develop a recognizable brand, create content consistently, and work with organizations and creators.',
@@ -241,10 +241,10 @@ module.exports.about = {
   ],
   quote: 'A successful partnership isn\u2019t just putting a logo on an event or paying an influencer to make a post. It\u2019s about finding the right audience, the right creator, the right story, and the right brand—and creating something that provides real value to everyone involved.',
   founder: [
-    'Matt brings the developer side of his background into that process as well. With more than four years of professional software development experience, he understands data, systems, automation, digital products, and how to measure what is actually working. That technical perspective helps Morrow Media approach marketing with more than just aesthetics.',
+    'Matt brings the developer side of his background into that process as well. With more than four years of professional software development experience, he understands data, systems, automation, digital products, and how to measure what is actually working. That technical perspective helps SouthBridge Media approach marketing with more than just aesthetics.',
     'He\u2019s also a licensed real estate professional and photographer, allowing the agency to produce much of its visual content in-house.',
   ],
-  doesTitle: 'What Morrow Media does',
+  doesTitle: 'What SouthBridge Media does',
   does: [
     ['CONTENT', 'Photography, videography, drone, social media content, short-form video, and visual storytelling.'],
     ['SOCIAL BRANDS', 'Helping organizations and businesses develop a recognizable presence and build an audience that actually cares about what they do.'],
@@ -254,7 +254,7 @@ module.exports.about = {
     ['REAL ESTATE & COMMERCIAL MEDIA', 'Professional photography, video, and aerial content designed to market properties, businesses, destinations, and experiences.'],
   ],
   closing: [
-    'Morrow Media exists at the intersection of media, marketing, technology, and relationships.',
+    'SouthBridge Media exists at the intersection of media, marketing, technology, and relationships.',
     'We create the media. Build the campaigns. Connect the people. And help turn attention into something valuable.',
   ],
 };

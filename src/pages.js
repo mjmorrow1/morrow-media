@@ -133,7 +133,7 @@ function featuredWebsite(w) {
         ? `<div class="ba-hover-hint" aria-hidden="true"><span>Hover to reveal</span></div>`
         : '';
       return `
-    <a class="ba-side${revealCls}" href="${side.href}" target="_blank" rel="noopener noreferrer" aria-label="${esc(side.caption || key)}"${key === 'after' ? ` style="--d:${delay}ms"` : ''}>
+    <a class="ba-side${revealCls}" href="${side.href}" target="_blank" rel="noopener noreferrer" aria-label="${esc([side.caption || key, side.note].filter(Boolean).join('. '))}"${key === 'after' ? ` style="--d:${delay}ms"` : ''}>
       <div class="ba-frame">
         <span class="ba-label">${esc(key === 'before' ? 'Before' : 'After')}</span>
         <img src="${side.img}" alt="${esc(side.alt || side.caption || w.label)}" loading="lazy" decoding="async">
@@ -498,12 +498,12 @@ ${ctaBand('Have an event with an audience?', 'Talk about your event', '/contact?
 }
 
 // ───────────── LEGAL ─────────────
-// Legal services come from an INDEPENDENT attorney at law. Morrow Media is not a law firm; keep the disclaimers.
+// Legal services come from an INDEPENDENT attorney at law. The public brand is not a law firm; keep the disclaimers.
 function legal() {
   const L = cfg.legal || {};
   const counsel = [L.attorneyName, L.firmName].filter(Boolean).map(esc).join(' · ');
   const counselLine = counsel ? `<p class="legal-counsel"><span>Independent counsel</span>${L.website ? `<a href="${esc(L.website)}" target="_blank" rel="noopener noreferrer">${counsel}</a>` : counsel}${L.bar ? ` <em>${esc(L.bar)}</em>` : ''}</p>` : '';
-  const oneLine = 'Legal services are provided by an independent attorney, not Morrow Media. Submitting this form does not create an attorney-client relationship.';
+  const oneLine = `Legal services are provided by an independent attorney, not ${cfg.brand}. Submitting this form does not create an attorney-client relationship.`;
   const areas = C.legal.areas.map((a, i) => `
     <article class="legal-area reveal" style="--d:${(i % 2) * 70}ms">
       <p class="eyebrow">${a.n}</p>
@@ -522,7 +522,7 @@ ${pageHero({ eyebrow: 'Legal · Independent counsel', title: 'The paperwork behi
   <div class="wrap">
     <aside class="legal-notice reveal" aria-label="Important legal notice">
       <p class="eyebrow">Important</p>
-      <p><strong>Morrow Media is not a law firm and does not provide legal advice.</strong> Legal services on this page are provided by an independent attorney at law who is not an employee of Morrow Media. Any engagement is made directly between you and the attorney.</p>
+      <p><strong>${esc(cfg.brand)} is the public name of this website. It is not stated here as a registered trademark, DBA, or separate legal entity, and it is not a law firm.</strong> Legal services on this page are provided by an independent attorney at law who is not an employee of ${esc(cfg.brand)}. Any engagement is made directly between you and the attorney.</p>
     </aside>
     ${counselLine}
   </div>
@@ -548,12 +548,12 @@ ${pageHero({ eyebrow: 'Legal · Independent counsel', title: 'The paperwork behi
 <section class="section legal-disclaimer">
   <div class="wrap narrow">
     <h2 class="h3">Disclaimer</h2>
-    <p>Morrow Media is a media and marketing company. It is not a law firm, does not practice law, and does not provide legal advice. Legal services described on this page are provided solely by an independent attorney at law who is not an employee, partner, or agent of Morrow Media and who exercises independent professional judgment.</p>
-    <p>Using this website, reading this page, or submitting a form does not create an attorney-client relationship with the attorney or with Morrow Media. An attorney-client relationship is formed only by a written engagement made directly with the attorney. Until then, please don't send confidential or time-sensitive information.</p>
+    <p>${esc(cfg.brand)} is the public name on this media and marketing website. This page does not state that the name is a registered trademark, a filed DBA, or a separate legal entity. It is not a law firm, does not practice law, and does not provide legal advice. Legal services described on this page are provided solely by an independent attorney at law who is not an employee, partner, or agent of ${esc(cfg.brand)} and who exercises independent professional judgment.</p>
+    <p>Using this website, reading this page, or submitting a form does not create an attorney-client relationship with the attorney or with ${esc(cfg.brand)}. An attorney-client relationship is formed only by a written engagement made directly with the attorney. Until then, please don't send confidential or time-sensitive information.</p>
     <p>Information on this page is general in nature, is not legal advice, and is not a guarantee of any result. The hiring of a lawyer is an important decision that should not be based solely upon advertisements.</p>
   </div>
 </section>`;
-  return layout({ title: 'Legal', path: '/legal', body, description: 'LLC, sponsorship, creator, and event agreements through an independent attorney at law. Morrow Media is not a law firm.' });
+  return layout({ title: 'Legal', path: '/legal', body, description: `LLC, sponsorship, creator, and event agreements through an independent attorney at law. ${cfg.brand} is not a law firm.` });
 }
 
 
@@ -592,7 +592,7 @@ function featuredCampaign(preTier = '') {
       </div>
       <div class="section-head reveal"><p class="eyebrow light">Partnership tiers</p><h3 class="h2">Founding partnerships for the inaugural race.</h3></div>
       <div class="tier-grid">${cards}</div>
-      <p class="campaign-note">${esc(c.processedBy)} Morrow Media coordinates sponsor inquiries on behalf of the St. Pete Marathon.</p>
+      <p class="campaign-note">${esc(c.processedBy)} ${esc(cfg.brand)} coordinates sponsor inquiries on behalf of the St. Pete Marathon.</p>
     </div>
   </div>
   <div class="section soft" id="sponsor-inquiry">
@@ -641,7 +641,7 @@ function about() {
 ${pageHero({ eyebrow: 'About', title: A.headline.map(esc).join('<br>'), sub: esc(A.lede) })}
 <section class="section pt-0">
   <div class="wrap two-col about reveal">
-    <div class="about-photo">${img(C.images.about, 'Matt Morrow, founder of Morrow Media, shooting with a Sony camera among the palms')}</div>
+    <div class="about-photo">${img(C.images.about, 'Matt Morrow, founder of SouthBridge Media, shooting with a Sony camera among the palms')}</div>
     <div class="about-copy">${story}</div>
   </div>
 </section>

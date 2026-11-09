@@ -407,16 +407,16 @@ function vevent(f, origin, { invite = false, organizer = '' } = {}) {
   const start = Date.parse(f.due_at), end = start + (f.duration_min || 30) * 60000;
   const who = f.contact_name ? `${f.contact_name}${f.contact_company ? ` (${f.contact_company})` : ''}` : '';
   const desc = [who && `Contact: ${who}`, f.contact_email && `Email: ${f.contact_email}`, f.contact_phone && `Phone: ${f.contact_phone}`, f.notes, `Open in CRM: ${origin}/admin/followups/${f.id}`].filter(Boolean).join('\n');
-  const L = ['BEGIN:VEVENT', `UID:followup-${f.id}${invite ? '-invite' : ''}@${CANONICAL_HOST}`, `DTSTAMP:${icsDate(invite ? nowIso() : f.updated_at || f.created_at)}`, `CREATED:${icsDate(f.created_at)}`, `LAST-MODIFIED:${icsDate(f.updated_at || f.created_at)}`,
+  const L = ['BEGIN:VEVENT', `UID:followup-${f.id}${invite ? '-invite' : ''}@${SERVICE_HOST}`, `DTSTAMP:${icsDate(invite ? nowIso() : f.updated_at || f.created_at)}`, `CREATED:${icsDate(f.created_at)}`, `LAST-MODIFIED:${icsDate(f.updated_at || f.created_at)}`,
     `SEQUENCE:${f.seq || 0}`, `DTSTART:${icsDate(new Date(start).toISOString())}`, `DTEND:${icsDate(new Date(end).toISOString())}`,
     `SUMMARY:${icsEsc(`${cap(f.type)}: ${f.title}${f.contact_name ? ` — ${f.contact_name}` : ''}`)}`, `DESCRIPTION:${icsEsc(desc)}`];
   if (f.location) L.push(`LOCATION:${icsEsc(f.location)}`);
-  L.push(`URL:${origin}/admin/followups/${f.id}`, `CATEGORIES:${icsEsc('Morrow Media')},${icsEsc(cap(f.type))}`, 'STATUS:CONFIRMED', 'TRANSP:OPAQUE', 'CLASS:PRIVATE');
-  if (invite && organizer) L.push(`ORGANIZER;CN="Morrow Media CRM":mailto:${organizer}`, `ATTENDEE;CN="Matt Morrow";ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=FALSE:mailto:${organizer}`);
+  L.push(`URL:${origin}/admin/followups/${f.id}`, `CATEGORIES:${icsEsc('SouthBridge Media')},${icsEsc(cap(f.type))}`, 'STATUS:CONFIRMED', 'TRANSP:OPAQUE', 'CLASS:PRIVATE');
+  if (invite && organizer) L.push(`ORGANIZER;CN="SouthBridge Media CRM":mailto:${organizer}`, `ATTENDEE;CN="Matt Morrow";ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;RSVP=FALSE:mailto:${organizer}`);
   L.push('BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${icsEsc(f.title)}`, 'TRIGGER:-PT15M', 'END:VALARM', 'END:VEVENT');
   return L;
 }
-const icsHeader = (method, name) => ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Morrow Media//CRM Follow-ups//EN', 'CALSCALE:GREGORIAN', `METHOD:${method}`, ...(name ? [`X-WR-CALNAME:${icsEsc(name)}`, 'X-WR-CALDESC:Follow-ups from the Morrow Media admin CRM', `X-WR-TIMEZONE:${TZ}`, 'REFRESH-INTERVAL;VALUE=DURATION:PT1H', 'X-PUBLISHED-TTL:PT1H'] : [])];
+const icsHeader = (method, name) => ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//SouthBridge Media//CRM Follow-ups//EN', 'CALSCALE:GREGORIAN', `METHOD:${method}`, ...(name ? [`X-WR-CALNAME:${icsEsc(name)}`, 'X-WR-CALDESC:Follow-ups from the SouthBridge Media admin CRM', `X-WR-TIMEZONE:${TZ}`, 'REFRESH-INTERVAL;VALUE=DURATION:PT1H', 'X-PUBLISHED-TTL:PT1H'] : [])];
 // One follow-up as an invite (.ics). Built by a pure function so it can be emailed later (see DEPLOY.md: "Emailing invites").
 function buildInvite(f, origin, organizer) { return icsDoc([...icsHeader('REQUEST'), ...vevent(f, origin, { invite: true, organizer }), 'END:VCALENDAR']); }
 async function getFeedToken(env, create = false) {
@@ -438,7 +438,7 @@ async function icsFeed(req, env, url, p) {
   const tok = await getFeedToken(env);
   if (!tok || !safeEq(m[1], tok)) return nf();
   const rows = (await env.DB.prepare("SELECT f.*, c.name AS contact_name, c.company AS contact_company, c.email AS contact_email, c.phone AS contact_phone FROM followups f LEFT JOIN contacts c ON c.id = f.contact_id WHERE f.status != 'done' ORDER BY f.due_at LIMIT 2000").all()).results;
-  const body = icsDoc([...icsHeader('PUBLISH', 'Morrow Media Follow-ups'), ...rows.flatMap((f) => vevent(f, url.origin)), 'END:VCALENDAR']);
+  const body = icsDoc([...icsHeader('PUBLISH', 'SouthBridge Media Follow-ups'), ...rows.flatMap((f) => vevent(f, url.origin)), 'END:VCALENDAR']);
   return new Response(req.method === 'HEAD' ? null : body, { headers: { 'content-type': 'text/calendar; charset=utf-8', 'content-disposition': 'inline; filename="morrow-media-followups.ics"', 'cache-control': 'private, max-age=300', 'x-robots-tag': 'noindex, nofollow', 'referrer-policy': 'no-referrer' } });
 }
 async function settingsPage(env, url) {
@@ -622,7 +622,7 @@ async function crmRoute(req, env, url, p) {
   }
   if ((m = p.match(/^\/admin\/followups\/(\d+)\.ics$/)) && GET) {
     const f = await fuWithContact(env, +m[1]); if (!f) return new Response('Not found', { status: 404 });
-    return new Response(buildInvite(f, url.origin, String(env.ADMIN_EMAIL || 'admin@' + CANONICAL_HOST)), { headers: { 'content-type': 'text/calendar; charset=utf-8; method=REQUEST', 'content-disposition': `attachment; filename="followup-${f.id}.ics"`, 'cache-control': 'no-store', 'x-robots-tag': 'noindex' } });
+    return new Response(buildInvite(f, url.origin, String(env.ADMIN_EMAIL || 'admin@' + SERVICE_HOST)), { headers: { 'content-type': 'text/calendar; charset=utf-8; method=REQUEST', 'content-disposition': `attachment; filename="followup-${f.id}.ics"`, 'cache-control': 'no-store', 'x-robots-tag': 'noindex' } });
   }
   if ((m = p.match(/^\/admin\/followups\/(\d+)$/))) {
     const id = +m[1]; const cur = await fuWithContact(env, id);
@@ -677,7 +677,7 @@ const authentisign = {
     if (!r.ok) { const e = new Error(`Authentisign ${r.status}`); e.status = 502; throw e; }
     return r.json();
   },
-  callbackUrl: (env) => `https://${CANONICAL_HOST}/api/authentisign/webhook`, // + a secret token (LW_WEBHOOK_SECRET) when wired up
+  callbackUrl: (env) => `https://${SERVICE_HOST}/api/authentisign/webhook`, // stays on the existing host until that registration is changed
 };
 // Public stub. Returns 501 until the API is connected. Never reads or echoes the request body.
 async function authentisignWebhook(req) {

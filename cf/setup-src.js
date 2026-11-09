@@ -27,7 +27,7 @@ const SETUP_SECTIONS = [
       {
         n: 2,
         title: 'Register and retain control of the domain',
-        task: ['Register the domain in an account the owner controls. The live domain is morrowmediagroup.com. The registrar, renewal date, price, and auto-renew setting were not verified for this page.'],
+        task: ['Register each public hostname in an account the owner controls. The site currently answers on morrowmediagroup.com. The intended canonical hostname is sbridgemedia.com. This page does not purchase, delegate, or attach that hostname, and it does not move mail. Existing addresses on morrowmediagroup.com stay in use until Workspace verification and mailbox migration are confirmed. The registrar, renewal date, price, and auto-renew setting were not verified for this page.'],
         why: 'The domain is the durable public address. Losing renewal control can take down both the site and mail.',
         needs: 'An approved name, the account owner, and purchase approval.',
         statuses: [

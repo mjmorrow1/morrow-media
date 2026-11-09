@@ -55,7 +55,7 @@ const ADMIN_CSS = `*,*::before,*::after{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
 a{color:inherit}
 .top{background:var(--ink);color:#f4f2ee}.top .in{max-width:1280px;margin:0 auto;padding:18px var(--gut);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
-.logo{font:600 14px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;text-decoration:none;color:#fff}.logo small{letter-spacing:.14em;color:rgba(255,255,255,.55);font-weight:500;margin-left:10px}
+.logo{font:600 14px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:#fff}.logo small{letter-spacing:.08em;color:rgba(255,255,255,.55);font-weight:500;margin-left:10px}
 .top .sp{flex:1}.top a.l,.top button.l{color:rgba(255,255,255,.8);text-decoration:none;font:500 11.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;background:none;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:10px 16px;cursor:pointer}
 .top a.l:hover,.top button.l:hover{background:#fff;color:var(--ink)}
 .wrap{max-width:1280px;margin:0 auto;padding:28px var(--gut) 64px}

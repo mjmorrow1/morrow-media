@@ -1,4 +1,4 @@
-/* ───────── Morrow Media — site styles ───────── */
+/* ───────── SouthBridge Media — site styles ───────── */
 @font-face{font-family:Inter;src:url(/fonts/inter-latin-300-normal.woff2) format("woff2");font-weight:300;font-display:swap}
 @font-face{font-family:Inter;src:url(/fonts/inter-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:Inter;src:url(/fonts/inter-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
@@ -62,7 +62,7 @@ a:hover .arr,.link:hover .arr{transform:translateX(5px)}
 .site-header.scrolled{background:rgba(251,250,247,.9);color:var(--ink);border-color:var(--line);backdrop-filter:saturate(1.2) blur(14px);-webkit-backdrop-filter:saturate(1.2) blur(14px)}
 .site-header.hide{transform:translateY(-100%)}
 .header-inner{display:flex;align-items:center;gap:32px;height:76px}
-.logo{font:600 15px/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;white-space:nowrap}
+.logo{font:600 15px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
 .nav{display:none;gap:30px;margin-left:auto}
 .nav a{font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;opacity:.82;position:relative;padding:6px 0}
 .nav a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}

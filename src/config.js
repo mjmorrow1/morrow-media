@@ -3,8 +3,15 @@
 //  Every page, title, footer and the admin pull from this file.
 // ─────────────────────────────────────────────────────────────
 module.exports = {
-  brand: 'Morrow Media',
-  brandShort: 'Morrow',           // used in the compact logo mark
+  brand: 'SouthBridge Media',
+  brandShort: 'SouthBridge',      // used in the compact logo mark
+  // Public canonical origin. The previous hostname still serves this Worker.
+  // Do not redirect the old apex here; that cutover is a separate routing step.
+  canonicalHost: 'sbridgemedia.com',
+  legacyHost: 'morrowmediagroup.com',
+  // Stable host for calendar UIDs, the Authentisign webhook, and mailbox fallbacks.
+  // These stay on the existing domain until those registrations are changed.
+  serviceHost: 'morrowmediagroup.com',
   tagline: 'Creative media. Strategic marketing. Meaningful partnerships.',
   oneLiner: 'We create the content, build the campaigns, and connect brands, creators, and events.',
   positioning: 'We create the media, build the campaigns, and connect the people behind them.',
@@ -21,7 +28,7 @@ module.exports = {
     youtube: '',
     tiktok: '',
   },
-  // ── Legal page (/legal). Legal services are provided by an INDEPENDENT attorney at law, not by Morrow Media.
+  // ── Legal page (/legal). Legal services are provided by an INDEPENDENT attorney at law, not by this website's public brand.
   //    PLACEHOLDERS: leave '' until Matt confirms the details with the attorney. Empty fields render nothing.
   legal: {
     attorneyName: '',   // e.g. 'Jane Doe, Esq.'  (shown as "Independent counsel: …" only when filled)

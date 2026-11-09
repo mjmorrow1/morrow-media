@@ -1,6 +1,6 @@
-# Morrow Media — rough-draft website + local CRM
+# SouthBridge Media — rough-draft website + local CRM
 
-Agency site for **Morrow Media** (St. Petersburg, FL): *Creative media. Strategic marketing. Meaningful partnerships.*
+Agency site for **SouthBridge Media** (St. Petersburg, FL): *Creative media. Strategic marketing. Meaningful partnerships.* The intended canonical host is `sbridgemedia.com`. The site still answers on `morrowmediagroup.com`. Mail stays at the existing `morrowmediagroup.com` addresses until Workspace verification and mailbox migration are confirmed.
 Four pillars up front — **MEDIA | MARKETING | CREATORS | SPONSORSHIPS** — with every service listed underneath.
 
 ## Run it
@@ -40,7 +40,7 @@ The public contact email is `sponsors@morrowmediagroup.com` (set in `src/config.
 | `/brands` | "Need people to see your brand?": CREATE / CONNECT / ACTIVATE → START A CAMPAIGN |
 | `/sponsorships` | Events & Sponsorships: featured client campaign **St. Pete Marathon (Inaugural)** (`#st-pete-marathon`: hero, pitch, facts, 3 tier cards), sponsor inquiry form (`#sponsor-inquiry`, `?tier=founding-partner|inner-circle|stakeholder` preselects), then "Turn your audience into opportunity." → TALK ABOUT YOUR EVENT |
 | `/legal` | Legal: services from an **independent attorney at law** (LLC formation & structure, sponsorship/partnership contracts, creator & talent agreements, event agreements, other matters), how it works, consultation form (`#consultation`), prominent disclaimer. See "Legal page" below |
-| `/about` | About: Matt's own copy (headline, lede, story, pull quote, founder block, "What Morrow Media does" six-item grid, closing statement), text in `about` in `src/content.js` |
+| `/about` | About: Matt's own copy (headline, lede, story, pull quote, founder block, "What SouthBridge Media does" six-item grid, closing statement), text in `about` in `src/content.js` |
 | `/credits` | Photo credits / licenses for the stock photos (linked from the footer and from each photo's credit line) |
 | `/contact` | Three entry points with their own forms: I'm a Brand / I'm a Creator / I'm an Event Organizer (`?type=brand|creator|event`) |
 
@@ -135,7 +135,7 @@ The AI home hero (`hero-st-pete-waterfront.jpg`, now in `data-src/unused-placeho
 
 ## Legal page (`/legal`): independent attorney
 
-- Legal services are provided by an **independent attorney at law who is not an employee of Morrow Media**. Morrow Media is not a law firm and gives no legal advice; using the site or the form creates no attorney-client relationship, and engagements are made directly with the attorney. The page carries a notice block under the hero, a one-line version next to the form, and a full disclaimer at the bottom. **Keep them.**
+- Legal services are provided by an **independent attorney at law who is not an employee of SouthBridge Media**. The public name is not stated as a registered trademark, DBA, or separate legal entity. It is not a law firm and gives no legal advice; using the site or the form creates no attorney-client relationship, and engagements are made directly with the attorney. The page carries a notice block under the hero, a one-line version next to the form, and a full disclaimer at the bottom. **Keep them.**
 - Copy (practice areas, how-it-works steps) lives in `legal` in `src/content.js`. No attorney names, bar numbers, credentials, prices, or outcomes are claimed anywhere.
 - **Placeholders to fill in:** `legal` in `src/config.js` has `attorneyName`, `firmName`, `bar`, and `website`. All are empty, and while they're empty nothing renders. Once filled, an "Independent counsel: …" line appears under the notice.
 - **Inquiries:** the consultation form posts to `/api/submit/legal` and lands in the **Brands** table with `interests = "Legal / contracts · <matter>"`, `goals = details`, `source = "website · legal inquiry"` (company defaults to "Individual"). The Brand form on `/contact` also has a "Legal / contracts" interest chip.
