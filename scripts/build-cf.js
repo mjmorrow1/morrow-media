@@ -52,13 +52,13 @@ const META = {
   VERSION: BUILD_VERSION,
 };
 const tpl = fs.readFileSync(path.join(CF, 'worker-src.js'), 'utf8');
-const adminSrc = fs.readFileSync(path.join(CF, 'admin-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'crm-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'tickets-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'ai-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'setup-src.js'), 'utf8');
+const adminSrc = fs.readFileSync(path.join(CF, 'admin-users.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'admin-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'crm-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'tickets-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'ai-src.js'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'setup-src.js'), 'utf8');
 fs.writeFileSync(path.join(CF, 'worker.js'), tpl.replace('/*__META__*/null', () => JSON.stringify(META)).replace('/*__ADMIN__*/', () => adminSrc));
 // D1 schema (same tables/columns as the local SQLite CRM)
 const ddl = Object.entries(TABLES).map(([name, t]) => `CREATE TABLE IF NOT EXISTS ${name} (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  ${t.columns.map((col) => `"${col.key}" ${col.type === 'number' ? 'REAL' : 'TEXT'}`).join(',\n  ')},\n  source TEXT,\n  created_at TEXT DEFAULT (datetime('now'))\n);`).join('\n');
 fs.copyFileSync(path.join(CF, 'worker.js'), path.join(CF, 'worker.mjs')); // ESM copy for scripts/worker-dev.js
 const authDdl = `CREATE TABLE IF NOT EXISTS admin_login_fails (\n  id INTEGER PRIMARY KEY AUTOINCREMENT,\n  ip TEXT,\n  at INTEGER\n);\nCREATE INDEX IF NOT EXISTS admin_login_fails_ip_at ON admin_login_fails (ip, at);`;
-fs.writeFileSync(path.join(CF, 'schema.sql'), ddl + '\n' + authDdl + '\n' + fs.readFileSync(path.join(CF, 'crm-schema.sql'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'tickets-schema.sql'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'ai-schema.sql'), 'utf8'));
+fs.writeFileSync(path.join(CF, 'schema.sql'), ddl + '\n' + authDdl + '\n' + fs.readFileSync(path.join(CF, 'crm-schema.sql'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'tickets-schema.sql'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'ai-schema.sql'), 'utf8') + '\n' + fs.readFileSync(path.join(CF, 'admin-users-schema.sql'), 'utf8'));
 const files = [];
 (function walk(d) { for (const f of fs.readdirSync(d, { withFileTypes: true })) { const p = path.join(d, f.name); f.isDirectory() ? walk(p) : files.push(p); } })(DIST);
 console.log(`Built cf/dist (${files.length} files), cf/worker.js, cf/schema.sql`);

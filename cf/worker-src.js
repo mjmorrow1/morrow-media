@@ -43,7 +43,46 @@ async function readBody(req) {
   for (const k of new Set(fd.keys())) { const all = fd.getAll(k); o[k] = all.length > 1 ? all : all[0]; }
   return o;
 }
-async function submit(req, env, type) {
+async function notifyFormAlert(env, type, body, id) {
+  const toAddr = 'matt@sbridgemedia.com';
+  const fromAddr = 'noreply@notify.sbridgemedia.com';
+  const fromName = 'SouthBridge Media Website';
+  let ok = 0, detail = 'skipped';
+  try {
+    if (!env.EMAIL) { detail = 'no EMAIL binding'; throw new Error(detail); }
+    const name = String(body.name || body.contact_name || body.company || body.event_name || body.organizer || 'unknown').trim() || 'unknown';
+    const subject = 'New ' + type + ' inquiry: ' + name;
+    const lines = ['Form: ' + type, 'D1 id: ' + id, 'Submitted (UTC): ' + new Date().toISOString(), ''];
+    for (const [k, v] of Object.entries(body || {})) {
+      if (k === 'website_url') continue;
+      const val = Array.isArray(v) ? v.join(', ') : v;
+      if (val == null || String(val).trim() === '') continue;
+      lines.push(k + ': ' + String(val).slice(0, 5000));
+    }
+    const text = lines.join('\n');
+    const email = String(body.email || '').trim();
+    const replyTo = (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) ? email : undefined;
+    const msg = { from: { email: fromAddr, name: fromName }, to: toAddr, subject, text };
+    if (replyTo) msg.replyTo = replyTo;
+    const result = await env.EMAIL.send(msg);
+    ok = 1;
+    detail = 'sent messageId=' + (result && result.messageId ? result.messageId : 'ok');
+    console.log('form alert email ok', type, id, detail);
+  } catch (err) {
+    ok = 0;
+    detail = String((err && (err.code ? (err.code + ' ' + err.message) : err.message)) || err).slice(0, 500);
+    console.error('form alert email failed', detail);
+  }
+  try {
+    if (env.DB) {
+      await env.DB.prepare('CREATE TABLE IF NOT EXISTS form_alert_log (id INTEGER PRIMARY KEY AUTOINCREMENT, form_type TEXT, row_id INTEGER, ok INTEGER, detail TEXT, created_at TEXT DEFAULT (datetime(\'now\')))').run();
+      await env.DB.prepare('INSERT INTO form_alert_log (form_type, row_id, ok, detail) VALUES (?, ?, ?, ?)').bind(String(type || ''), Number(id) || 0, ok, detail).run();
+    }
+  } catch (logErr) {
+    console.error('form_alert_log write failed', logErr && (logErr.message || String(logErr)));
+  }
+}
+async function submit(req, env, type, ctx) {
   const table = FORM_TABLE[type];
   const ct = req.headers.get('content-type') || '';
   const wantsJson = ct.includes('application/json') || (req.headers.get('accept') || '').includes('application/json');
@@ -64,6 +103,7 @@ async function submit(req, env, type) {
       source = 'website · legal inquiry';
     }
     const id = await insert(env, table, body, source);
+    if (ctx) ctx.waitUntil(notifyFormAlert(env, type, body, id));
     return wantsJson ? json({ ok: true, id }) : redirect('/thanks', 303);
   } catch (e) {
     return json({ ok: false, error: e.status ? e.message : 'Server error' }, e.status || 500);
@@ -113,7 +153,7 @@ export default {
     if (folded) { url.hostname = folded; return Response.redirect(url.toString(), 301); }
     let p = url.pathname; if (p.length > 1 && p.endsWith('/')) p = p.slice(0, -1);
     const m = p.match(/^\/api\/submit\/([^/]+)$/);
-    if (m && req.method === 'POST') return submit(req, env, m[1]);
+    if (m && req.method === 'POST') return submit(req, env, m[1], ctx);
     if (p === '/admin' || p.startsWith('/admin/')) return admin(req, env, url, p);
     if (p.startsWith('/cal/')) return icsFeed(req, env, url, p);
     if (p === '/api/authentisign/webhook') return authentisignWebhook(req);

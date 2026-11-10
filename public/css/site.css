@@ -760,7 +760,7 @@ body.lb-open{overflow:hidden}
 .section.dark .ba-label{background:rgba(244,242,238,.95);color:#0b0b0b}
 .section.dark .ba-side:nth-child(2) .ba-label{background:#c8102e;color:#fff}
 
-/* Featured sites: After under ~58% dark veil → 0% on hover/focus (hint clears with it) */
+/* Featured sites: the After veil stays off. Hover still clears the hint. */
 .ba-before{opacity:1}
 .ba-after .ba-frame{isolation:isolate}
 .ba-after .ba-frame::after{
@@ -769,7 +769,7 @@ body.lb-open{overflow:hidden}
   background:rgba(10,10,9,.58) !important; /* ~58% veil — After still readable underneath */
   pointer-events:none !important;
   transition:opacity .4s var(--ease) !important;
-  opacity:1 !important;
+  opacity:0 !important;
 }
 .ba-hover-hint{
   position:absolute;inset:0;z-index:3;
