@@ -1,5 +1,5 @@
 // Exercises provision, account setup, login, reset, disable, and the owner-only gate.
-const Database = require('better-sqlite3');
+let Database; try { Database = require('better-sqlite3'); } catch { Database = require('./sqlite-shim'); }
 const u = require('../cf/admin-users');
 
 function wrap(db) {
@@ -39,6 +39,7 @@ function check(cond, msg) { if (!cond) { failed++; console.error('FAIL', msg); }
 
   check(await u.usersHas({ role: 'owner', email: 'matt@sbridgemedia.com' }, env, 'dashboard'), 'owner has dashboard');
   check(await u.usersHas({ role: 'owner', email: 'matt@sbridgemedia.com' }, env, 'permissions'), 'owner has permissions screen');
+  check(await u.usersHas({ role: 'owner', email: 'matt@sbridgemedia.com' }, env, 'invoices'), 'owner always has invoices');
   check(!(await u.usersHas({ role: 'user', email: 'sam@example.com' }, env, 'permissions')), 'a user without a grant cannot open permissions');
   check(!(await u.usersHas({ role: 'owner', email: 'someone-else@example.com' }, otherEnv, 'dashboard')), 'a different owner secret is not granted by the owner rule');
   check((await u.usersSetGrants(env, 'matt@sbridgemedia.com', [])).ok === false, 'owner grants cannot be edited down');
@@ -53,6 +54,7 @@ function check(cond, msg) { if (!cond) { failed++; console.error('FAIL', msg); }
   check(made.ok && made.email === 'sam@example.com' && made.token, 'provision stores a lowercase email and a setup token');
   check(await u.usersHas({ role: 'user', email: 'sam@example.com' }, env, 'dashboard'), 'new users start with the dashboard');
   check(!(await u.usersHas({ role: 'user', email: 'sam@example.com' }, env, 'permissions')), 'new users do not start with the permissions screen');
+  check(!(await u.usersHas({ role: 'user', email: 'sam@example.com' }, env, 'invoices')), 'new users do not start with invoices');
   const again = await u.usersProvision(env, 'sam@example.com');
   check(!again.ok, 'cannot provision the same email twice');
 
@@ -73,11 +75,14 @@ function check(cond, msg) { if (!cond) { failed++; console.error('FAIL', msg); }
 
   const ownerNav = await u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a></nav>', ownerWho, env, '/admin');
   const userNav = await u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a></nav>', who, env, '/admin');
-  check(ownerNav.includes('href="/admin/users"') && ownerNav.includes('href="/admin/permissions"') && ownerNav.includes('href="/admin/ai"'), 'owner nav has Users, Permissions, and Site AI');
-  check(!userNav.includes('/admin/users') && !userNav.includes('/admin/permissions') && !userNav.includes('/admin/ai') && userNav.includes('href="/admin/contacts"'), 'dashboard-only nav hides user management and Site AI');
+  check(ownerNav.includes('href="/admin/users"') && ownerNav.includes('href="/admin/permissions"') && ownerNav.includes('href="/admin/ai"') && ownerNav.includes('href="/admin/jobs"') && ownerNav.includes('href="/admin/invoices"'), 'owner nav has Users, Permissions, Site AI, Jobs, and Invoices');
+  check(!userNav.includes('/admin/users') && !userNav.includes('/admin/permissions') && !userNav.includes('/admin/ai') && !userNav.includes('/admin/jobs') && !userNav.includes('/admin/invoices') && userNav.includes('href="/admin/contacts"'), 'dashboard-only nav hides user management, Site AI, and invoicing');
   await u.usersSetGrants(env, 'sam@example.com', ['dashboard', 'permissions']);
   const permNav = await u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a></nav>', who, env, '/admin');
-  check(permNav.includes('/admin/users') && permNav.includes('/admin/permissions') && !permNav.includes('/admin/ai'), 'permissions grant opens Users and Permissions, not Site AI');
+  check(permNav.includes('/admin/users') && permNav.includes('/admin/permissions') && !permNav.includes('/admin/ai') && !permNav.includes('/admin/invoices'), 'permissions grant opens Users and Permissions, not Site AI or invoicing');
+  await u.usersSetGrants(env, 'sam@example.com', ['dashboard', 'invoices']);
+  const invNav = await u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a></nav>', who, env, '/admin');
+  check(invNav.includes('/admin/jobs') && invNav.includes('/admin/invoices') && !invNav.includes('/admin/users') && !invNav.includes('/admin/ai'), 'invoices grant opens Jobs and Invoices only');
   await u.usersSetGrants(env, 'sam@example.com', []);
   check(!(await u.usersHas(who, env, 'dashboard')), 'clearing grants blocks the dashboard');
   const added = await u.usersAddPermission(env, 'Edit tickets');

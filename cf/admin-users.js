@@ -67,7 +67,7 @@ async function usersEnsure(env) {
     perm TEXT NOT NULL,
     PRIMARY KEY (email, perm)
   )`).run();
-  await env.DB.prepare(`INSERT OR IGNORE INTO admin_permissions (key, label, sort) VALUES ('dashboard', 'View admin dashboard', 1), ('permissions', 'Access permissions screen', 2)`).run();
+  await env.DB.prepare(`INSERT OR IGNORE INTO admin_permissions (key, label, sort) VALUES ('dashboard', 'View admin dashboard', 1), ('permissions', 'Access permissions screen', 2), ('invoices', 'Manage jobs and invoices', 3)`).run();
 }
 async function usersCatalog(env) {
   await usersEnsure(env);
@@ -239,19 +239,21 @@ async function usersRemove(env, email) {
 }
 function usersRejectOwnerChange() { return { ok: false, error: 'Only matt@sbridgemedia.com can manage users, and that access cannot be removed.' }; }
 
-function usersNavItems(canPerms, isOwner, path) {
+function usersNavItems(canPerms, isOwner, path, canInvoices) {
   const items = [['Home', '/admin', 'subs'], ['Contacts', '/admin/contacts', 'contacts'], ['Calendar', '/admin/calendar', 'calendar'], ['Tickets', '/admin/tickets', 'tickets'], ['KPIs', '/admin/kpis', 'kpis'], ['Signings', '/admin/signings', 'signings']];
+  if (canInvoices) items.push(['Jobs', '/admin/jobs', 'jobs'], ['Invoices', '/admin/invoices', 'invoices']);
   if (isOwner) items.push(['Site AI', '/admin/ai', 'ai']);
   if (canPerms) items.push(['Users', '/admin/users', 'users'], ['Permissions', '/admin/permissions', 'perms']);
   items.push(['Setup guide', '/admin/setup', 'setup']);
-  const on = path.startsWith('/admin/users') ? 'users' : path.startsWith('/admin/permissions') ? 'perms' : path.startsWith('/admin/ai') ? 'ai' : path.startsWith('/admin/contacts') ? 'contacts' : path.startsWith('/admin/calendar') ? 'calendar' : path.startsWith('/admin/tickets') ? 'tickets' : path.startsWith('/admin/kpis') ? 'kpis' : path.startsWith('/admin/signings') ? 'signings' : path.startsWith('/admin/setup') ? 'setup' : 'subs';
+  const on = path.startsWith('/admin/users') ? 'users' : path.startsWith('/admin/permissions') ? 'perms' : path.startsWith('/admin/ai') ? 'ai' : path.startsWith('/admin/contacts') ? 'contacts' : path.startsWith('/admin/calendar') ? 'calendar' : path.startsWith('/admin/tickets') ? 'tickets' : path.startsWith('/admin/kpis') ? 'kpis' : path.startsWith('/admin/signings') ? 'signings' : path.startsWith('/admin/jobs') ? 'jobs' : path.startsWith('/admin/invoices') ? 'invoices' : path.startsWith('/admin/setup') ? 'setup' : 'subs';
   return items.map(([l, h, k]) => `<a href="${h}"${k === on ? ' class="on" aria-current="page"' : ''}>${l}</a>`).join('');
 }
 async function usersDecorateHtml(html, who, env, path) {
   if (!html || html.indexOf('aria-label="Admin"') < 0) return html;
   const isOwner = !!(who && who.role === 'owner' && usersIsOwnerAccount(env, who.email));
   const canPerms = isOwner || await usersHas(who, env, 'permissions');
-  return html.replace(/<nav aria-label="Admin">[\s\S]*?<\/nav>/, `<nav aria-label="Admin">${usersNavItems(canPerms, isOwner, path)}</nav>`);
+  const canInvoices = isOwner || await usersHas(who, env, 'invoices');
+  return html.replace(/<nav aria-label="Admin">[\s\S]*?<\/nav>/, `<nav aria-label="Admin">${usersNavItems(canPerms, isOwner, path, canInvoices)}</nav>`);
 }
 function usersOrigin(url) {
   const host = String(url && url.hostname || '').toLowerCase();

@@ -234,13 +234,26 @@ const SETUP_SECTIONS = [
       },
       {
         n: 18,
+        title: 'Jobs, invoices, and Stripe charging',
+        task: ['The admin can record jobs for a CRM contact, create an invoice from a completed job, print a SouthBridge Media invoice billed from Splitt LLC doing business as SouthBridge Media in St. Petersburg, FL, mark it paid, and share a tokenized client page. Card charging uses Stripe Checkout when the Worker secrets ', C('STRIPE_SECRET_KEY'), ' and ', C('STRIPE_WEBHOOK_SECRET'), ' are both set. If they are missing, the Charge button stays in a Stripe not connected state. The webhook path is /api/stripe/webhook. Apply the additive jobs and invoices tables to D1 only with explicit approval. The owner account always has the invoices permission.'],
+        why: 'Invoices move money. The feature can be reviewed in admin without connecting Stripe, and card charging stays off until the owner adds an account and the two secrets.',
+        needs: 'The invoices permission (automatic for the owner), the additive D1 tables, and, for card payments only, a Stripe account plus the two Worker secrets and a verified webhook.',
+        statuses: [
+          { tone: 'complete', text: 'Jobs, invoices, printable view, mark as paid, the public invoice page, the invoices permission, and the feature-flagged Stripe hook are implemented in this source.' },
+          { tone: 'pending', text: 'Stripe is not connected on production until the owner sets the two secrets and points a webhook at /api/stripe/webhook. The production D1 migration is not applied in this preview.' },
+        ],
+        check: 'On a preview or after an approved publish: complete a job, create an invoice, open the printable view, and confirm the Charge button shows Stripe not connected until the secrets are set. Do not place a real charge just to test.',
+        refs: [{ label: 'Jobs', href: '/admin/jobs' }, { label: 'Invoices', href: '/admin/invoices' }, { label: 'Stripe Checkout', href: 'https://docs.stripe.com/payments/checkout' }, { label: 'Stripe webhooks', href: 'https://docs.stripe.com/webhooks' }],
+      },
+      {
+        n: 19,
         title: 'Payments and outbound notifications',
         optional: true,
-        task: ['Add checkout, transactional email, or calendar email invitations only if the owner asks. No functioning card checkout or automatic notification service was verified. Stored forms and a business mailbox do not send those messages by themselves.'],
-        why: 'Payments and outbound messages move money or reach customers, and they add operational duties.',
+        task: ['Card checkout for invoices is covered in the previous step. Add transactional email or calendar email invitations only if the owner asks. Stored forms and a business mailbox do not send those messages by themselves.'],
+        why: 'Outbound messages reach customers and add operational duties.',
         needs: 'An approved requirement, provider setup, legal terms, and a secure implementation.',
-        statuses: [{ tone: 'optional', text: 'Not verified as implemented. Leave it off until there is a real request.' }],
-        check: 'Use the provider’s test mode first. Approve a real charge or a real message separately.',
+        statuses: [{ tone: 'optional', text: 'Automatic invoice email and other outbound notifications are not verified as implemented. Leave them off until there is a real request.' }],
+        check: 'Use the provider’s test mode first. Approve a real message separately.',
         refs: [{ label: 'Stripe documentation', href: 'https://docs.stripe.com/' }],
       },
     ],
@@ -251,7 +264,7 @@ const SETUP_SECTIONS = [
     intro: 'A home page that loads is not the same as a site someone can operate next month.',
     steps: [
       {
-        n: 19,
+        n: 20,
         title: 'Backups, monitoring, and launch approval',
         task: ['Keep private source backups, D1 exports, a restore drill, a DNS inventory, uptime and error checks, and a rollback plan. Preserve live override records when planning recovery. No complete backup routine or restore drill is evidenced here.'],
         why: 'The site is not operationally ready only because the home page loads.',
@@ -261,7 +274,7 @@ const SETUP_SECTIONS = [
         refs: [{ label: 'D1 recovery', href: 'https://developers.cloudflare.com/d1/reference/time-travel/' }, { label: 'Workers observability', href: 'https://developers.cloudflare.com/workers/observability/' }],
       },
       {
-        n: 20,
+        n: 21,
         title: 'Maintain ownership, renewals, and costs',
         task: ['On an agreed cadence, review domain and mailbox renewals, provider usage, API spending, permissions, security updates, dependency and build checks, backups, content, and broken links. This page does not create a recurring job.'],
         why: 'Cost and security follow continued use and provider settings. A one-time estimate is not a billing inventory.',

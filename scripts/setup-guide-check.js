@@ -32,6 +32,7 @@ const titles = [
   'xAI-powered Site AI',
   'Cursor coding integration',
   'Authentisign signing service',
+  'Jobs, invoices, and Stripe charging',
   'Payments and outbound notifications',
   'Backups, monitoring, and launch approval',
   'Maintain ownership, renewals, and costs',

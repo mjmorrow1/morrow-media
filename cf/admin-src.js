@@ -76,7 +76,7 @@ input{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1px solid 
 
 function adminDoc(title, body, nonce = '', bodyClass = '') {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
-<title>${escH(title)} — ${escH(META.BRAND)}</title><style>${ADMIN_CSS}${CRM_CSS}${TICKETS_CSS}${typeof AI_CSS!=='undefined'?AI_CSS:''}${typeof SETUP_CSS!=='undefined'?SETUP_CSS:''}</style></head><body class="${bodyClass}">${body}${nonce ? `<script nonce="${nonce}">document.querySelectorAll('form[data-confirm]').forEach(function(f){f.addEventListener('submit',function(e){if(!confirm(f.getAttribute('data-confirm')))e.preventDefault();});});${BOARD_JS}${typeof AI_JS!=='undefined'?AI_JS:''}document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){var i=document.getElementById(b.getAttribute('data-copy'));i.select();(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(function(){document.execCommand('copy');}).finally(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1800);});});});</script>` : ''}</body></html>`;
+<title>${escH(title)} — ${escH(META.BRAND)}</title><style>${ADMIN_CSS}${CRM_CSS}${TICKETS_CSS}${typeof AI_CSS!=='undefined'?AI_CSS:''}${typeof SETUP_CSS!=='undefined'?SETUP_CSS:''}${typeof INV_CSS!=='undefined'?INV_CSS:''}</style></head><body class="${bodyClass}">${body}${nonce ? `<script nonce="${nonce}">document.querySelectorAll('form[data-confirm]').forEach(function(f){f.addEventListener('submit',function(e){if(!confirm(f.getAttribute('data-confirm')))e.preventDefault();});});${BOARD_JS}${typeof AI_JS!=='undefined'?AI_JS:''}${typeof INV_JS!=='undefined'?INV_JS:''}document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){var i=document.getElementById(b.getAttribute('data-copy'));i.select();(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(function(){document.execCommand('copy');}).finally(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1800);});});});</script>` : ''}</body></html>`;
 }
 function loginPage(msg = '', email = '', status = 200) {
   const body = `<div class="login"><div class="box"><a class="logo" href="/" aria-label="SouthBridge Media"><svg class="logo-lockup" viewBox="0 0 276 64" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
@@ -222,6 +222,11 @@ async function admin(req, env, url, p) {
     return new Response(adminDoc('Not allowed', `<div class="login"><div class="box"><h1>Not allowed</h1><p>Site AI stays with ${escH(USERS_OWNER)} because it can change the live site.</p><p class="foot"><a href="/admin">← Dashboard</a></p></div></div>`), { status: 403, headers: adminHeaders() });
   }
   if (p === '/admin/users' || p.startsWith('/admin/users/') || p === '/admin/permissions') return ship(await usersAdmin(req, env, url, p));
+  const invScreen = p === '/admin/jobs' || p.startsWith('/admin/jobs/') || p === '/admin/invoices' || p.startsWith('/admin/invoices/');
+  if (invScreen && !(await usersHas(who, env, 'invoices'))) {
+    if (isApi) return adminJson({ ok: false, error: 'Forbidden' }, 403);
+    return new Response(adminDoc('Not allowed', `<div class="login"><div class="box"><h1>Not allowed</h1><p>The invoices permission is required to manage jobs and invoices.</p><p class="foot"><a href="/admin">← Dashboard</a></p></div></div>`), { status: 403, headers: adminHeaders() });
+  }
   // ── Signed in
   if (isApi) {
     if (p === '/admin/api' || p === '/admin/api/summary') return adminJson({ ok: true, counts: await counts(env) });
@@ -235,6 +240,7 @@ async function admin(req, env, url, p) {
   if (p === '/admin' && req.method === 'GET') return ship(await dashboard(env, url));
   if (p === '/admin/setup' && req.method === 'GET') return ship(await setupGuidePage());
   const crm = await crmRoute(req, env, url, p); if (crm) return ship(crm);
+  const inv = await invoicesRoute(req, env, url, p); if (inv) return ship(inv);
   const ex = p.match(/^\/admin\/export\/([a-z]+)\.csv$/);
   if (ex && ADMIN_TABLES.includes(ex[1]) && req.method === 'GET') return csvExport(env, ex[1]);
   if (p === '/admin/delete' && req.method === 'POST') {

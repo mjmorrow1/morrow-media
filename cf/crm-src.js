@@ -39,7 +39,7 @@ const fmtWhen = (iso) => `${fmtDayLong(iso)} · ${fmtTime(iso)}`;
 
 // ── Page shell with nav (Submissions · Contacts · Calendar)
 const CRM_CSS = `.top nav{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;order:3;width:100%}.top nav a{color:rgba(255,255,255,.7);text-decoration:none;font:500 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;padding:10px 12px;border-radius:999px;white-space:nowrap}.top nav a.on,.top nav a:hover{background:rgba(255,255,255,.14);color:#fff}
-@media (min-width:900px){.top nav{order:0;width:auto;margin-left:18px}}@media (max-width:520px){.top .in nav{gap:0;margin:0 -6px;flex-wrap:wrap;row-gap:2px}.top .in nav a{padding:9px 7px;letter-spacing:.06em;font-size:11px}}
+.top-acts{display:flex;gap:8px;align-items:center;margin-left:auto}.top nav{order:3;width:100%;margin-left:0}@media (min-width:900px){.top nav{order:3;width:100%;margin-left:0}}@media (max-width:520px){.top .in nav{gap:0;margin:0 -6px;flex-wrap:wrap;row-gap:2px}.top .in nav a{padding:9px 7px;letter-spacing:.06em;font-size:11px}}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 16px}.bar .sp{flex:1}
 .b{display:inline-flex;align-items:center;gap:6px;text-decoration:none;font:500 11.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;padding:11px 15px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;white-space:nowrap}.b.dark{background:var(--ink);color:#fff;border-color:var(--ink)}.b.sm{padding:7px 11px;font-size:10.5px}.b.red{color:#a33;border-color:#e3c9c9}.b.on{background:var(--ink);color:#fff}
 .inl{display:inline;margin:0}
@@ -63,10 +63,10 @@ select,textarea{width:100%;font:inherit;font-size:16px;padding:11px 13px;border:
 
 function adminPage(title, active, body, { msg = '', status = 200, err = false } = {}) {
   const nonce = b64u(crypto.getRandomValues(new Uint8Array(16)));
-  const nav = [['Home', '/admin', 'subs'], ['Contacts', '/admin/contacts', 'contacts'], ['Calendar', '/admin/calendar', 'calendar'], ['Tickets', '/admin/tickets', 'tickets'], ['KPIs', '/admin/kpis', 'kpis'], ['Signings', '/admin/signings', 'signings'], ['Site AI', '/admin/ai', 'ai'], ['Setup guide', '/admin/setup', 'setup']]
+  const nav = [['Home', '/admin', 'subs'], ['Contacts', '/admin/contacts', 'contacts'], ['Calendar', '/admin/calendar', 'calendar'], ['Tickets', '/admin/tickets', 'tickets'], ['KPIs', '/admin/kpis', 'kpis'], ['Signings', '/admin/signings', 'signings'], ['Jobs', '/admin/jobs', 'jobs'], ['Invoices', '/admin/invoices', 'invoices'], ['Site AI', '/admin/ai', 'ai'], ['Setup guide', '/admin/setup', 'setup']]
     .map(([l, h, k]) => `<a href="${h}"${k === active ? ' class="on" aria-current="page"' : ''}>${l}</a>`).join('');
-  const html = `<div class="top"><div class="in"><a class="logo" href="/admin">${escH(META.BRAND)}<small>Admin</small></a><nav aria-label="Admin">${nav}</nav><span class="sp"></span><a class="l" href="/" target="_blank" rel="noopener">Site ↗</a>
-<form method="post" action="/admin/logout" style="margin:0"><button class="l" type="submit">Log out</button></form></div></div>
+  const html = `<div class="top"><div class="in"><a class="logo" href="/admin">${escH(META.BRAND)}<small>Admin</small></a><nav aria-label="Admin">${nav}</nav><span class="sp"></span><div class="top-acts"><a class="l" href="/" target="_blank" rel="noopener">Site ↗</a>
+<form method="post" action="/admin/logout" style="margin:0"><button class="l" type="submit">Log out</button></form></div></div></div>
 <div class="wrap">${msg ? `<p class="msg${err ? ' err' : ''}" role="status">${escH(msg)}</p>` : ''}${body}</div>`;
   return new Response(adminDoc(title, html, nonce), { status, headers: adminHeaders({}, nonce) });
 }
@@ -164,6 +164,7 @@ ${dd('Tags', escH(c.tags))}${dd('Next follow-up', c.next_due ? nextHtml(c) : '')
 ${dd('Added', escH(fmtET(c.created_at)))}${dd('Updated', escH(fmtET(c.updated_at)))}${dd('Notes', escH(c.notes), true)}</dl></article>
 <h2 class="sec">Follow-ups</h2>${fus.results.length ? fus.results.map((f) => fuRow(f, back, { showContact: false })).join('') : '<p class="empty">Nothing scheduled. <a href="/admin/followups/new?contact_id=' + c.id + '">Add a follow-up</a>.</p>'}
 ${await contactTickets(env, c)}
+${typeof contactJobs === 'function' ? await contactJobs(env, c, back) : ''}
 ${await contactSignings(env, c, back)}
 <h2 class="sec" id="note">Add note or log activity</h2><form class="form" method="post" action="/admin/contacts/${c.id}/activities">${field('Kind', `<select name="kind">${opts(ACT_KINDS, 'note', (k) => ({ note: 'Note', call: 'Logged call', email: 'Logged email', meeting: 'Logged meeting' }[k]))}</select>`)}
 ${field('When (Eastern)', `<input type="datetime-local" name="at" value="${escH(etLocal(nowIso()))}">`)}${field('Details *', '<textarea name="body" required maxlength="10000" placeholder="What happened, next steps…"></textarea>', true)}<div class="acts"><button class="btn" type="submit">Add to timeline</button></div></form>
