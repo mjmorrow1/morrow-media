@@ -40,6 +40,7 @@ function adminHeaders(extra = {}, nonce = '') {
 const adminJson = (obj, status = 200, extra = {}) => new Response(JSON.stringify(obj), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex', ...extra } });
 
 const ADMIN_CSS = `*,*::before,*::after{box-sizing:border-box}
+@font-face{font-family:Inter;src:url(/fonts/inter-latin-300-normal.woff2) format("woff2");font-weight:300;font-display:swap}
 @font-face{font-family:Inter;src:url(/fonts/inter-latin-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
 @font-face{font-family:Inter;src:url(/fonts/inter-latin-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
 @font-face{font-family:Inter;src:url(/fonts/inter-latin-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
@@ -66,7 +67,7 @@ h1{font:500 clamp(28px,4.5vw,44px)/1.05 var(--sans);letter-spacing:-.03em;margin
 dl{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 18px;margin:0}dl div{min-width:0}dt{font:500 10.5px/1.4 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}dd{margin:2px 0 0;overflow-wrap:anywhere;white-space:pre-wrap}dl .wide{grid-column:1/-1}
 .empty{color:var(--muted);background:#fff;border:1px dashed var(--stone);border-radius:14px;padding:28px;text-align:center}
 .login{min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--sand)}.box{width:100%;max-width:400px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:32px}
-.box .logo{color:var(--ink);display:block;margin-bottom:28px}.box h1{font-size:30px;margin-bottom:22px}
+.box .logo{color:var(--ink);display:block;margin-bottom:28px;line-height:0;letter-spacing:0;text-transform:none}.box .logo .logo-lockup{height:52px;width:auto}.box h1{font-size:30px;margin-bottom:22px}
 label{display:block;margin-bottom:14px}label span{display:block;font:500 11px/1.4 var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 input{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1px solid var(--stone);border-radius:10px;background:var(--paper)}input:focus{outline:2px solid var(--ink);outline-offset:1px}
 .btn{width:100%;height:50px;border:0;border-radius:999px;background:var(--ink);color:#fff;font:500 12.5px/1 var(--sans);letter-spacing:.16em;text-transform:uppercase;cursor:pointer;margin-top:8px}
@@ -78,7 +79,25 @@ function adminDoc(title, body, nonce = '', bodyClass = '') {
 <title>${escH(title)} — ${escH(META.BRAND)}</title><style>${ADMIN_CSS}${CRM_CSS}${TICKETS_CSS}${typeof AI_CSS!=='undefined'?AI_CSS:''}${typeof SETUP_CSS!=='undefined'?SETUP_CSS:''}</style></head><body class="${bodyClass}">${body}${nonce ? `<script nonce="${nonce}">document.querySelectorAll('form[data-confirm]').forEach(function(f){f.addEventListener('submit',function(e){if(!confirm(f.getAttribute('data-confirm')))e.preventDefault();});});${BOARD_JS}${typeof AI_JS!=='undefined'?AI_JS:''}document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){var i=document.getElementById(b.getAttribute('data-copy'));i.select();(navigator.clipboard?navigator.clipboard.writeText(i.value):Promise.reject()).catch(function(){document.execCommand('copy');}).finally(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy';},1800);});});});</script>` : ''}</body></html>`;
 }
 function loginPage(msg = '', email = '', status = 200) {
-  const body = `<div class="login"><div class="box"><a class="logo" href="/">${escH(META.BRAND)}</a><p class="eyebrow">Admin</p><h1>Sign <em>in</em></h1>
+  const body = `<div class="login"><div class="box"><a class="logo" href="/" aria-label="SouthBridge Media"><svg class="logo-lockup" viewBox="0 0 276 64" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(0 8) scale(0.7)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke-width="1.45"><path d="M44 16 L4 51"/><path d="M44 16 L14 49"/><path d="M44 16 L24 47.4"/><path d="M44 16 L34 46.6"/><path d="M44 17 L54 46"/><path d="M44 17 L64 45.8"/><path d="M96 9 L62 45.8"/><path d="M96 9 L74 45.4"/><path d="M96 9 L86 45.2"/><path d="M96 10 L108 47.6"/><path d="M96 10 L120 51"/><path d="M96 10 L134 55"/><path d="M96 10 L148 60"/></g>
+    <path d="M41 48 V14 h6 V48" fill="currentColor" stroke="none"/>
+    <path d="M93 46.4 V6 h6.6 V46.4" fill="currentColor" stroke="none"/>
+    <path d="M2 52.5 C 38 42.5, 98 43, 154 62" stroke-width="3.5"/>
+    <g stroke-width="2.05">
+      <path d="M16 51 V66"/>
+      <path d="M44 47.6 V66"/>
+      <path d="M70 45.6 V66"/>
+      <path d="M96 46.2 V66"/>
+      <path d="M124 52.4 V66"/>
+    </g>
+  </g></g>
+  <g fill="currentColor" stroke="none" font-family="Inter, Arial, Helvetica, sans-serif">
+    <text x="116" y="28" font-size="20" font-weight="600" letter-spacing="0.2">SOUTHBRIDGE</text>
+    <text x="116.2" y="50" font-size="18" font-weight="300" letter-spacing="6.4">MEDIA</text>
+  </g>
+</svg></a><p class="eyebrow">Admin</p><h1>Sign <em>in</em></h1>
 ${msg ? `<p class="msg err" role="alert">${escH(msg)}</p>` : ''}<form method="post" action="/admin/login" autocomplete="on">
 <label><span>Email</span><input type="email" name="email" value="${escH(email)}" autocomplete="username" required autofocus></label>
 <label><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
