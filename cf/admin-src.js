@@ -202,15 +202,24 @@ async function admin(req, env, url, p) {
     if (!res || (res.status >= 300 && res.status < 400)) return res;
     const ct = res.headers.get('content-type') || '';
     if (!ct.includes('text/html')) return res;
-    const html = usersDecorateHtml(await res.text(), who, env, p);
+    const html = await usersDecorateHtml(await res.text(), who, env, p);
     const headers = new Headers(res.headers);
     headers.delete('content-length');
     return new Response(html, { status: res.status, headers });
   };
-  const ownerOnly = p === '/admin/ai' || p.startsWith('/admin/ai/') || p.startsWith('/admin/api/ai') || p === '/admin/users' || p.startsWith('/admin/users/') || p === '/admin/permissions' || p.startsWith('/admin/permissions/');
-  if (ownerOnly && !usersCanManage(who, env)) {
+  if (who.role !== 'owner' && !(await usersHas(who, env, 'dashboard'))) {
     if (isApi) return adminJson({ ok: false, error: 'Forbidden' }, 403);
-    return new Response(adminDoc('Forbidden', `<div class="login"><div class="box"><h1>Not allowed</h1><p>Only ${escH(USERS_OWNER)} can open user management and Site AI.</p><p class="foot"><a href="/admin">← Dashboard</a></p></div></div>`), { status: 403, headers: adminHeaders() });
+    return new Response(adminDoc('No access', usersBlockedHtml()), { status: 403, headers: adminHeaders() });
+  }
+  const permScreen = p === '/admin/users' || p.startsWith('/admin/users/') || p === '/admin/permissions' || p.startsWith('/admin/permissions/');
+  if (permScreen && !(await usersHas(who, env, 'permissions'))) {
+    if (isApi) return adminJson({ ok: false, error: 'Forbidden' }, 403);
+    return new Response(adminDoc('Not allowed', `<div class="login"><div class="box"><h1>Not allowed</h1><p>Access permissions screen is required for Users and Permissions.</p><p class="foot"><a href="/admin">← Dashboard</a></p></div></div>`), { status: 403, headers: adminHeaders() });
+  }
+  const siteAi = p === '/admin/ai' || p.startsWith('/admin/ai/') || p.startsWith('/admin/api/ai');
+  if (siteAi && !(who.role === 'owner' && usersIsOwnerAccount(env, who.email))) {
+    if (isApi) return adminJson({ ok: false, error: 'Forbidden' }, 403);
+    return new Response(adminDoc('Not allowed', `<div class="login"><div class="box"><h1>Not allowed</h1><p>Site AI stays with ${escH(USERS_OWNER)} because it can change the live site.</p><p class="foot"><a href="/admin">← Dashboard</a></p></div></div>`), { status: 403, headers: adminHeaders() });
   }
   if (p === '/admin/users' || p.startsWith('/admin/users/') || p === '/admin/permissions') return ship(await usersAdmin(req, env, url, p));
   // ── Signed in

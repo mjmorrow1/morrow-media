@@ -16,6 +16,8 @@ function wrap(db) {
           };
         },
         async run() { const info = db.prepare(sql).run(); return { meta: { changes: info.changes, last_row_id: Number(info.lastInsertRowid) } }; },
+        async first() { return db.prepare(sql).get() || null; },
+        async all() { return { results: db.prepare(sql).all() }; },
       };
     },
   };
@@ -35,10 +37,11 @@ function check(cond, msg) { if (!cond) { failed++; console.error('FAIL', msg); }
   };
   const otherEnv = { ...env, ADMIN_EMAIL: 'someone-else@example.com', ADMIN_PASS_HASH: await u.usersHash('other-owner-pass') };
 
-  check(u.usersCanManage({ role: 'owner', email: 'matt@sbridgemedia.com' }, env), 'owner can manage users');
-  check(!u.usersCanManage({ role: 'user', email: 'sam@example.com' }, env), 'provisioned user cannot manage users');
-  check(!u.usersCanManage({ role: 'owner', email: 'someone-else@example.com' }, otherEnv), 'a different owner secret is not the user-management owner');
-  check(u.usersRejectOwnerChange().ok === false, 'owner permission cannot be removed');
+  check(await u.usersHas({ role: 'owner', email: 'matt@sbridgemedia.com' }, env, 'dashboard'), 'owner has dashboard');
+  check(await u.usersHas({ role: 'owner', email: 'matt@sbridgemedia.com' }, env, 'permissions'), 'owner has permissions screen');
+  check(!(await u.usersHas({ role: 'user', email: 'sam@example.com' }, env, 'permissions')), 'a user without a grant cannot open permissions');
+  check(!(await u.usersHas({ role: 'owner', email: 'someone-else@example.com' }, otherEnv, 'dashboard')), 'a different owner secret is not granted by the owner rule');
+  check((await u.usersSetGrants(env, 'matt@sbridgemedia.com', [])).ok === false, 'owner grants cannot be edited down');
 
   const ownerCookie = await u.usersMakeOwnerSession(env);
   const ownerWho = await u.usersReadSession(cookieReq(ownerCookie), env);
@@ -48,6 +51,8 @@ function check(cond, msg) { if (!cond) { failed++; console.error('FAIL', msg); }
   check(!denied.ok, 'cannot provision the owner email');
   const made = await u.usersProvision(env, 'Sam@Example.com');
   check(made.ok && made.email === 'sam@example.com' && made.token, 'provision stores a lowercase email and a setup token');
+  check(await u.usersHas({ role: 'user', email: 'sam@example.com' }, env, 'dashboard'), 'new users start with the dashboard');
+  check(!(await u.usersHas({ role: 'user', email: 'sam@example.com' }, env, 'permissions')), 'new users do not start with the permissions screen');
   const again = await u.usersProvision(env, 'sam@example.com');
   check(!again.ok, 'cannot provision the same email twice');
 
@@ -66,10 +71,18 @@ function check(cond, msg) { if (!cond) { failed++; console.error('FAIL', msg); }
   const who = await u.usersReadSession(cookieReq(hit.session), env);
   check(who && who.role === 'user' && who.email === 'sam@example.com', 'user session is not an owner session');
 
-  const ownerNav = u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a><a href="/admin/ai">Site AI</a></nav>', ownerWho, env, '/admin');
-  const userNav = u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a><a href="/admin/ai">Site AI</a></nav>', who, env, '/admin');
+  const ownerNav = await u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a></nav>', ownerWho, env, '/admin');
+  const userNav = await u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a></nav>', who, env, '/admin');
   check(ownerNav.includes('href="/admin/users"') && ownerNav.includes('href="/admin/permissions"') && ownerNav.includes('href="/admin/ai"'), 'owner nav has Users, Permissions, and Site AI');
-  check(!userNav.includes('/admin/users') && !userNav.includes('/admin/permissions') && !userNav.includes('/admin/ai') && userNav.includes('href="/admin/contacts"'), 'non-owner nav hides user management and Site AI');
+  check(!userNav.includes('/admin/users') && !userNav.includes('/admin/permissions') && !userNav.includes('/admin/ai') && userNav.includes('href="/admin/contacts"'), 'dashboard-only nav hides user management and Site AI');
+  await u.usersSetGrants(env, 'sam@example.com', ['dashboard', 'permissions']);
+  const permNav = await u.usersDecorateHtml('<nav aria-label="Admin"><a href="/admin">Home</a></nav>', who, env, '/admin');
+  check(permNav.includes('/admin/users') && permNav.includes('/admin/permissions') && !permNav.includes('/admin/ai'), 'permissions grant opens Users and Permissions, not Site AI');
+  await u.usersSetGrants(env, 'sam@example.com', []);
+  check(!(await u.usersHas(who, env, 'dashboard')), 'clearing grants blocks the dashboard');
+  const added = await u.usersAddPermission(env, 'Edit tickets');
+  check(added.ok && (await u.usersCatalog(env)).some((p) => p.key === 'edit-tickets'), 'a new catalog permission appears for every dropdown');
+  await u.usersSetGrants(env, 'sam@example.com', ['dashboard']);
 
   const reset = await u.usersReset(env, 'sam@example.com');
   check(reset.ok && reset.token, 'reset issues a new link');

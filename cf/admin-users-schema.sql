@@ -18,6 +18,22 @@ CREATE TABLE IF NOT EXISTS admin_tokens (
   created_at TEXT DEFAULT (datetime('now'))
 );
 
+CREATE TABLE IF NOT EXISTS admin_permissions (
+  key TEXT PRIMARY KEY,
+  label TEXT NOT NULL,
+  sort INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS admin_user_permissions (
+  email TEXT NOT NULL,
+  perm TEXT NOT NULL,
+  PRIMARY KEY (email, perm)
+);
+
+INSERT OR IGNORE INTO admin_permissions (key, label, sort) VALUES
+  ('dashboard', 'View admin dashboard', 1),
+  ('permissions', 'Access permissions screen', 2);
+
 CREATE TABLE IF NOT EXISTS form_alert_log (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   form_type TEXT,
