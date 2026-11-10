@@ -30,14 +30,7 @@ async function hmac(secret, msg) {
 // The signature covers the email, expiry and the tail of the password hash, so changing the password signs everyone out.
 const sessionMsg = (env, exp) => `v1|${String(env.ADMIN_EMAIL).toLowerCase()}|${exp}|${String(env.ADMIN_PASS_HASH).slice(-12)}`;
 async function makeSession(env) { const exp = Math.floor(Date.now() / 1000) + SESSION_TTL; return `${exp}.${await hmac(env.SESSION_SECRET, sessionMsg(env, exp))}`; }
-async function hasSession(req, env) {
-  if (!env.SESSION_SECRET || !env.ADMIN_PASS_HASH || !env.ADMIN_EMAIL) return false;
-  const m = (req.headers.get('cookie') || '').match(new RegExp('(?:^|;\\s*)' + COOKIE.replace(/[-]/g, '\\-') + '=([^;]+)'));
-  if (!m) return false;
-  const [exp, sig] = m[1].split('.');
-  if (!sig || !(+exp > Date.now() / 1000)) return false;
-  return safeEq(sig, await hmac(env.SESSION_SECRET, sessionMsg(env, exp)));
-}
+async function hasSession(req, env) { return usersReadSession(req, env); }
 const cookieSet = (v, maxAge) => `${COOKIE}=${v}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${maxAge}`;
 
 function adminHeaders(extra = {}, nonce = '') {
@@ -89,7 +82,7 @@ function loginPage(msg = '', email = '', status = 200) {
 ${msg ? `<p class="msg err" role="alert">${escH(msg)}</p>` : ''}<form method="post" action="/admin/login" autocomplete="on">
 <label><span>Email</span><input type="email" name="email" value="${escH(email)}" autocomplete="username" required autofocus></label>
 <label><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
-<button class="btn" type="submit">Sign in</button></form><p class="foot"><a href="/">← Back to site</a></p></div></div>`;
+<button class="btn" type="submit">Sign in</button></form><p class="foot"><a href="/admin/setup-account">Create account</a> · <a href="/">← Back to site</a></p></div></div>`;
   return new Response(adminDoc('Sign in', body), { status, headers: adminHeaders() });
 }
 
@@ -159,6 +152,11 @@ async function login(req, env) {
     await env.DB.prepare('DELETE FROM admin_login_fails WHERE ip = ? OR at < ?').bind(ip, Date.now() - 86400000).run();
     return new Response(null, { status: 303, headers: { location: '/admin', 'set-cookie': cookieSet(await makeSession(env), SESSION_TTL), 'cache-control': 'no-store' } });
   }
+  const userHit = await usersTryLogin(env, email, password);
+  if (userHit) {
+    await env.DB.prepare('DELETE FROM admin_login_fails WHERE ip = ? OR at < ?').bind(ip, Date.now() - 86400000).run();
+    return new Response(null, { status: 303, headers: { location: '/admin', 'set-cookie': cookieSet(userHit.session, SESSION_TTL), 'cache-control': 'no-store' } });
+  }
   await env.DB.prepare('INSERT INTO admin_login_fails (ip, at) VALUES (?, ?)').bind(ip, Date.now()).run();
   const now = await locked(env, ip);
   return loginPage(now ? lockMsg : 'Wrong email or password.', email, now ? 429 : 401);
@@ -174,11 +172,28 @@ async function admin(req, env, url, p) {
     return (await hasSession(req, env)) ? new Response(null, { status: 302, headers: { location: '/admin' } }) : loginPage();
   }
   if (p === '/admin/logout') return new Response(null, { status: 303, headers: { location: '/admin/login', 'set-cookie': cookieSet('', 0), 'cache-control': 'no-store' } });
-  if (!(await hasSession(req, env))) {
+  if (p === '/admin/setup-account') return usersSetup(req, env, url);
+  const who = await hasSession(req, env);
+  if (!who) {
     if (isApi) return adminJson({ ok: false, error: 'Unauthorized' }, 401, { 'www-authenticate': 'Cookie' });
     if (p === '/admin' && req.method === 'GET') return loginPage('', '', 200);
     return new Response(null, { status: 302, headers: { location: '/admin/login', 'cache-control': 'no-store' } });
   }
+  const ship = async (res) => {
+    if (!res || (res.status >= 300 && res.status < 400)) return res;
+    const ct = res.headers.get('content-type') || '';
+    if (!ct.includes('text/html')) return res;
+    const html = usersDecorateHtml(await res.text(), who, env, p);
+    const headers = new Headers(res.headers);
+    headers.delete('content-length');
+    return new Response(html, { status: res.status, headers });
+  };
+  const ownerOnly = p === '/admin/ai' || p.startsWith('/admin/ai/') || p.startsWith('/admin/api/ai') || p === '/admin/users' || p.startsWith('/admin/users/') || p === '/admin/permissions' || p.startsWith('/admin/permissions/');
+  if (ownerOnly && !usersCanManage(who, env)) {
+    if (isApi) return adminJson({ ok: false, error: 'Forbidden' }, 403);
+    return new Response(adminDoc('Forbidden', `<div class="login"><div class="box"><h1>Not allowed</h1><p>Only ${escH(USERS_OWNER)} can open user management and Site AI.</p><p class="foot"><a href="/admin">← Dashboard</a></p></div></div>`), { status: 403, headers: adminHeaders() });
+  }
+  if (p === '/admin/users' || p.startsWith('/admin/users/') || p === '/admin/permissions') return ship(await usersAdmin(req, env, url, p));
   // ── Signed in
   if (isApi) {
     if (p === '/admin/api' || p === '/admin/api/summary') return adminJson({ ok: true, counts: await counts(env) });
@@ -189,9 +204,9 @@ async function admin(req, env, url, p) {
     const crm = req.method === 'GET' ? await crmApi(env, p, url) : null; if (crm) return crm;
     return adminJson({ ok: false, error: 'Not found' }, 404);
   }
-  if (p === '/admin' && req.method === 'GET') return dashboard(env, url);
-  if (p === '/admin/setup' && req.method === 'GET') return setupGuidePage();
-  const crm = await crmRoute(req, env, url, p); if (crm) return crm;
+  if (p === '/admin' && req.method === 'GET') return ship(await dashboard(env, url));
+  if (p === '/admin/setup' && req.method === 'GET') return ship(await setupGuidePage());
+  const crm = await crmRoute(req, env, url, p); if (crm) return ship(crm);
   const ex = p.match(/^\/admin\/export\/([a-z]+)\.csv$/);
   if (ex && ADMIN_TABLES.includes(ex[1]) && req.method === 'GET') return csvExport(env, ex[1]);
   if (p === '/admin/delete' && req.method === 'POST') {
