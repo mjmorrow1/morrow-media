@@ -3,7 +3,7 @@
 //   npm run build:cf && node scripts/worker-dev.js      → http://localhost:8787  (admin: /admin, same login as live via .env.admin)
 // DB file: data/worker-dev.sqlite (git-ignored). Pass DB=:memory: for a throwaway run; ADMIN_ENV_FILE=<path> to use a different secrets file than .env.admin. Nothing here touches Cloudflare.
 const http = require('http'); const fs = require('fs'); const path = require('path');
-const Database = require('better-sqlite3');
+let Database; try { Database = require('better-sqlite3'); } catch { Database = require('./sqlite-shim'); }
 const ROOT = path.join(__dirname, '..'); const PORT = +process.env.PORT || 8787;
 const envFile = process.env.ADMIN_ENV_FILE || path.join(ROOT, '.env.admin'); const secrets = {};
 if (fs.existsSync(envFile)) for (const l of fs.readFileSync(envFile, 'utf8').split(/\r?\n/)) { const m = l.match(/^\s*([A-Z_]+)\s*=\s*(.*)\s*$/); if (m) secrets[m[1]] = m[2]; }

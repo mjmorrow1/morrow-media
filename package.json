@@ -9,6 +9,8 @@
     "screenshots": "node scripts/screenshots.js",
     "smoke": "node scripts/smoke.js",
     "setup-guide-check": "node scripts/setup-guide-check.js",
+    "invoices-check": "node scripts/build-cf.js && node scripts/invoices-check.js",
+    "admin-users-check": "node scripts/admin-users-check.js",
     "ai-image-check": "node scripts/ai-image-check.js",
     "ui-test": "node scripts/ui-test.js",
     "build:cf": "node scripts/build-cf.js",

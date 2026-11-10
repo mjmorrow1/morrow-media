@@ -32,6 +32,11 @@ Optional Authentisign API. The live webhook is still a stub until these are impl
 - `LW_SUBSCRIPTION_KEY`
 - `LW_WEBHOOK_SECRET`
 
+Optional Stripe invoicing. Absence means the Charge button stays in a Stripe not connected state. Do not store values here:
+
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+
 No Cursor API secret belongs on the Worker unless a future, reviewed integration adds one. Do not reuse the xAI key for Cursor.
 
 ## Stored in D1, not in Git

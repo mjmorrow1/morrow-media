@@ -157,6 +157,8 @@ export default {
     if (p === '/admin' || p.startsWith('/admin/')) return admin(req, env, url, p);
     if (p.startsWith('/cal/')) return icsFeed(req, env, url, p);
     if (p === '/api/authentisign/webhook') return authentisignWebhook(req);
+    if (p === '/api/stripe/webhook') return stripeWebhook(req, env);
+    if (p.startsWith('/invoice/')) return publicInvoice(req, env, url, p);
     if (req.method !== 'GET' && req.method !== 'HEAD') return new Response('Method not allowed', { status: 405 });
     if (p === '/api/health') return json({ ok: true, brand: META.BRAND });
     if (REDIRECTS_301[p]) return redirect(REDIRECTS_301[p], 301);

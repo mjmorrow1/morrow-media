@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS admin_user_permissions (
 
 INSERT OR IGNORE INTO admin_permissions (key, label, sort) VALUES
   ('dashboard', 'View admin dashboard', 1),
-  ('permissions', 'Access permissions screen', 2);
+  ('permissions', 'Access permissions screen', 2),
+  ('invoices', 'Manage jobs and invoices', 3);
 
 CREATE TABLE IF NOT EXISTS form_alert_log (
   id INTEGER PRIMARY KEY AUTOINCREMENT,

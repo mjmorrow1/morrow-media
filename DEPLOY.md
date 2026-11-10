@@ -85,6 +85,18 @@ Jira-style tickets and a KPI dashboard on the same Worker, D1 (`morrow-media-crm
 
 Applying the schema to live D1 (already done): run the contents of `cf/tickets-schema.sql` against `morrow-media-crm` (Cloudflare connector `d1/database/<id>/query`, or `wrangler d1 execute morrow-media-crm --remote --file cf/tickets-schema.sql`). Code-only changes: `node scripts/build-cf.js && node scripts/cf-connector-deploy.js script`, then run `3-script.js` (no KV writes).
 
+### Jobs and invoices (preview in this branch; not live until approved)
+
+Billing jobs and invoices on the same Worker, D1 (`morrow-media-crm`) and admin login. Code: `cf/invoices-src.js` (inlined by `scripts/build-cf.js`); tables: `cf/invoices-schema.sql` (jobs, job_line_items, invoices, invoice_line_items, invoice_payments, invoice_counters; additive, `CREATE … IF NOT EXISTS`). The schema also seeds the `invoices` permission. **Do not apply this file to production D1 until the owner approves a publish.**
+
+- **/admin/jobs**: list, create, and edit jobs for a CRM contact (status open / in progress / completed, line items, completed date).
+- **/admin/invoices**: list and detail. Create an invoice only from a completed job. Auto invoice numbers (`SBM-0001` and up). Draft / sent / paid / void. Printable view branded SouthBridge Media, billed from Splitt LLC dba SouthBridge Media, St. Petersburg, FL. Mark as paid with method and date.
+- **/invoice/<token>**: public client page (no admin login). Pay button appears only when Stripe is connected and the invoice is unpaid.
+- **Stripe:** Checkout Sessions via `STRIPE_SECRET_KEY`. Webhook `POST /api/stripe/webhook` verified with `STRIPE_WEBHOOK_SECRET` marks the invoice paid. If either secret is missing, the admin Charge / send payment link control shows “Stripe not connected.” Do not place test charges against a live Stripe account without approval.
+- Permission: `invoices`. The owner `matt@sbridgemedia.com` always has it. Grant it to other admin users from /admin/users.
+
+Applying the schema after approval: run `cf/invoices-schema.sql` against `morrow-media-crm` (Cloudflare connector `d1/database/<id>/query`, or `wrangler d1 execute morrow-media-crm --remote --file cf/invoices-schema.sql`). Then deploy the Worker only (`node scripts/build-cf.js && node scripts/cf-connector-deploy.js script`, then run `3-script.js`, no KV writes required for this feature). Keep existing secrets and bindings. Add the two Stripe secrets only when connecting Stripe, then create a webhook endpoint for `https://sbridgemedia.com/api/stripe/webhook` (events `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `payment_intent.succeeded`).
+
 ### Local admin (Express)
 `server.js` uses the same login (`src/auth.js`), reading `ADMIN_EMAIL`, `ADMIN_PASS_HASH`, and `SESSION_SECRET` from the environment or from the git-ignored `.env.admin`. That file holds only the hash and a local session key, never the password. Local `/admin` still also only answers on localhost. It keeps its extra tools (add records, change status, campaigns, packages).
 
