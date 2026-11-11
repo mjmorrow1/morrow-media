@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: '1h' }));
 const routes = {
   '/': pages.home, '/services': pages.services, '/media': pages.media,
   '/creators': pages.creators, '/brands': pages.brands, '/credits': pages.credits,
-  '/legal': pages.legal, '/about': pages.about, '/thanks': pages.thanks,
+  '/legal': pages.legal, '/thanks': pages.thanks,
 };
 // Marketing page is switchable: cfg.pages.marketing = false hides it and 302s to /media (temporary).
 if ((cfg.pages || {}).marketing !== false) routes['/marketing'] = pages.marketing;
@@ -25,8 +25,9 @@ for (const [p, fn] of Object.entries(routes)) app.get(p, (req, res) => res.send(
 app.get('/contact', (req, res) => res.send(pages.contact(req.query.type)));
 app.get('/sponsorships', (req, res) => res.send(pages.sponsorships(req.query.tier)));
 // friendly aliases
-const alias = { '/creator-network': '/creators', '/events': '/sponsorships', '/events-sponsorships': '/sponsorships', '/work': '/media', '/portfolio': '/media', '/legal-services': '/legal', '/real-estate': '/media#real-estate' };
+const alias = { '/creator-network': '/creators', '/events': '/sponsorships', '/events-sponsorships': '/sponsorships', '/work': '/media', '/portfolio': '/media', '/legal-services': '/legal', '/real-estate': '/media#real-estate', '/about': '/', '/about.html': '/' };
 for (const [a, to] of Object.entries(alias)) app.get(a, (req, res) => res.redirect(301, to));
+app.get('/about/', (req, res) => res.redirect(301, '/'));
 app.get('/api/health', (req, res) => res.json({ ok: true, brand: cfg.brand }));
 
 // ── Form submissions → CRM

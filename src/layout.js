@@ -17,7 +17,6 @@ const NAV = [
   ['Creators', '/creators'],
   ['Sponsorships', '/sponsorships'],
   ['Legal', '/legal'],
-  ['About', '/about'],
 ].filter(([, , key]) => !key || (cfg.pages || {})[key] !== false);
 
 function layout({ title, path = '/', body, description, heroNav = false }) {
@@ -60,7 +59,7 @@ ${body}
     <div class="footer-cols">
       <div><h4>Services</h4><a href="/media">Media</a>${(cfg.pages || {}).marketing !== false ? '<a href="/marketing">Marketing</a>' : ''}<a href="/creators">Creator Network</a><a href="/sponsorships">Events &amp; Sponsorships</a></div>
       <div><h4>Work with us</h4><a href="/contact?type=brand">I'm a Brand</a><a href="/contact?type=creator">I'm a Creator</a><a href="/contact?type=event">I'm an Event Organizer</a></div>
-      <div><h4>Company</h4><a href="/about">About</a><a href="/legal">Legal</a><a href="/brands">Brands</a><a href="/services">All services</a></div>
+      <div><h4>Company</h4><a href="/legal">Legal</a><a href="/brands">Brands</a><a href="/services">All services</a></div>
       <div><h4>Studio</h4><span>${esc(cfg.location)}</span><a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>${cfg.phone ? `<a href="tel:${esc(cfg.phoneTel)}">${esc(cfg.phone)}</a>` : ''}${cfg.social.instagram ? `<a href="${esc(cfg.social.instagram)}" target="_blank" rel="noopener">Instagram</a>` : ''}</div>
     </div>
     <div class="footer-bottom"><span>© ${cfg.year} ${esc(cfg.brand)}</span><span>FAA Part 107 certified drone services · <a href="/credits">Photo credits</a> · <a class="footer-admin" href="/admin" rel="nofollow">Admin login</a></span></div>

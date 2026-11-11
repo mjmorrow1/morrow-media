@@ -246,15 +246,6 @@ ${photographyVertical()}
   </div>
 </section>
 
-<section class="section pt-0">
-  <div class="wrap">
-    <a class="founder-strip reveal" href="/about#founder">
-      <img src="${C.images.founder}" alt="Matt Morrow" loading="lazy" decoding="async">
-      <p><span class="eyebrow">Founded by Matt Morrow</span><span class="founder-strip-line">The agent, the creator, and the developer, based in St. Pete.</span></p>
-      <span class="link">Meet Matt ${arrow}</span>
-    </a>
-  </div>
-</section>
 
 <section class="section soft">
   <div class="wrap">
@@ -632,6 +623,7 @@ ${pageHero({ eyebrow: 'Credits', title: 'Photo credits.', sub: 'Third-party phot
 }
 
 // ───────────── ABOUT ─────────────
+// Unused after the About page was removed from nav and 301'd to home. Kept so the copy is not lost. Not routed from server.js or scripts/build-cf.js.
 function about() {
   const A = C.about, F = C.founder;
   const tc = (t) => esc(t).replace('Travelers Content', `<a class="inline" href="${esc(cfg.social.instagram)}" target="_blank" rel="noopener">Travelers Content</a>`);
