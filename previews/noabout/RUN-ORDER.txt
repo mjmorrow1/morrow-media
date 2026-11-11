@@ -1,0 +1,11 @@
+PREVIEW ONLY until the owner approves a publish.
+Do not apply the unpublished About rewrite in /workspace/about-preview/.
+Do not read or reset Worker secrets. keep_bindings: secret_text.
+
+1. node/cf execute 00-hash-check.js   (read-only; abort if any live KV hash drifted)
+2. node/cf execute 02-pages.js        (backs up each key to /_backups/noabout-* then writes patched HTML)
+3. node/cf execute 03-worker-redirects.js  (adds /about and /about.html 301s; does not bump CSS ?v= or META.VERSION; refuses if live worker is not 5ad8d7ad)
+4. Purge ONLY the URLs in PURGE-URLS.txt on both sbridgemedia.com and morrowmediagroup.com. Never a zone-wide purge.
+5. Verify /about, /about/, /about.html are 301 to /; nav has no About; featured-site cards remain, without visible .pages.dev labels; collage and admin login still work.
+
+Rollback: 90-rollback.js restores the KV backups and returns traffic to Worker version 5ad8d7ad-3330-43c9-b547-2e08fcf94be7.

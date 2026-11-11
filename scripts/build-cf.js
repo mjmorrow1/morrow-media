@@ -27,7 +27,7 @@ process.env.ASSET_VERSION = BUILD_VERSION;
 
 const routes = {
   '/': 'home', '/services': 'services', '/media': 'media', '/creators': 'creators', '/brands': 'brands',
-  '/credits': 'credits', '/legal': 'legal', '/about': 'about', '/thanks': 'thanks', '/contact': 'contact', '/sponsorships': 'sponsorships',
+  '/credits': 'credits', '/legal': 'legal', '/thanks': 'thanks', '/contact': 'contact', '/sponsorships': 'sponsorships',
 };
 const marketingOn = (cfg.pages || {}).marketing !== false;
 if (marketingOn) routes['/marketing'] = 'marketing';
@@ -42,7 +42,7 @@ for (const s of TIER_SLUGS) write(`sponsorships-${s}`, pages.sponsorships(s));
 
 const META = {
   PAGES, TIER_SLUGS, TABLES,
-  REDIRECTS_301: { '/creator-network': '/creators', '/events': '/sponsorships', '/events-sponsorships': '/sponsorships', '/work': '/media', '/portfolio': '/media', '/legal-services': '/legal', '/real-estate': '/media#real-estate' },
+  REDIRECTS_301: { '/creator-network': '/creators', '/events': '/sponsorships', '/events-sponsorships': '/sponsorships', '/work': '/media', '/portfolio': '/media', '/legal-services': '/legal', '/real-estate': '/media#real-estate', '/about': '/', '/about.html': '/' },
   REDIRECTS_302: marketingOn ? {} : { '/marketing': '/media' },
   CAMPAIGN: { client: c.client || 'St. Pete Marathon', tiers: (c.tiers || []).map((t) => t.name) },
   BRAND: cfg.brand,

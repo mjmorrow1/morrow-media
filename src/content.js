@@ -51,12 +51,12 @@ const showcase = {
       { label: 'Tango Two One', id: 'tango-two-one', copy: 'Brand website for an aviation and aerospace engineering firm — positioning, design, and build. Side-by-side: the old live site vs the new Morrow Media build.', img: '/images/work/tango-two-one-after.webp', alt: 'Tango Two One Engineering — new Morrow Media website', href: 'https://tangotwoone.pages.dev/', cta: 'Visit new site', tag: 'Website redesign',
         compare: {
           before: { img: '/images/work/tango-two-one-before.webp', alt: 'Previous Tango Two One live site at tangotwoone.com', caption: 'Before — tangotwoone.com', href: 'https://www.tangotwoone.com/', note: 'Old live site' },
-          after:  { img: '/images/work/tango-two-one-after.webp',  alt: 'New Tango Two One site built by Morrow Media', caption: 'After — tangotwoone.pages.dev', href: 'https://tangotwoone.pages.dev/', note: 'New Morrow Media build' },
+          after:  { img: '/images/work/tango-two-one-after.webp',  alt: 'New Tango Two One site built by Morrow Media', caption: 'After', href: 'https://tangotwoone.pages.dev/', note: 'New Morrow Media build' },
         } },
       { label: 'Neurons Away', id: 'neurons-away', copy: 'Brand and commerce site for a publisher of books, journals, and creative activities that build mental flexibility — positioning, design, and build. Side-by-side: the old Weebly site vs the new Morrow Media build.', img: '/images/work/neuronsaway-after.webp', alt: 'Neurons Away — new Morrow Media website', href: 'https://neuronsaway.pages.dev/', cta: 'Visit new site', tag: 'Website redesign',
         compare: {
           before: { img: '/images/work/neuronsaway-before.webp', alt: 'Previous Neurons Away live site at neuronsaway.com', caption: 'Before — neuronsaway.com', href: 'https://www.neuronsaway.com/', note: 'Old Weebly site' },
-          after:  { img: '/images/work/neuronsaway-after.webp',  alt: 'New Neurons Away site built by Morrow Media', caption: 'After — neuronsaway.pages.dev', href: 'https://neuronsaway.pages.dev/', note: 'New Morrow Media build' },
+          after:  { img: '/images/work/neuronsaway-after.webp',  alt: 'New Neurons Away site built by Morrow Media', caption: 'After', href: 'https://neuronsaway.pages.dev/', note: 'New Morrow Media build' },
         },
       },
     ],

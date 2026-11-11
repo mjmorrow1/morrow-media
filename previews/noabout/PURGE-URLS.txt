@@ -1,0 +1,24 @@
+# URL-only purge after publish (both zones). NEVER purge the whole zone.
+# Zones: sbridgemedia.com (586cb9bfd626f2b72c3c27520d8c1038), morrowmediagroup.com (3e0ec9bae92caee26dc3de7117790ba4)
+#
+# Per host:
+#   /
+#   /media
+#   /creators
+#   /sponsorships
+#   /sponsorships?tier=Founding Partner
+#   /sponsorships?tier=Inner Circle
+#   /sponsorships?tier=Stakeholder
+#   /legal
+#   /about
+#   /about/
+#   /about.html
+#   /brands
+#   /services
+#   /contact
+#   /contact?type=creator
+#   /contact?type=event
+#   /credits
+#   /thanks
+#   / (and the same paths on morrowmediagroup.com)
+# Do not purge /css/site.css or ?v= stamps; CSS was not changed.
