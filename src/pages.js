@@ -215,7 +215,7 @@ function home() {
   <div class="hero-shade"></div>
   <div class="wrap hero-inner">
     <p class="eyebrow light hero-eyebrow">${esc(cfg.brand)} · ${esc(cfg.location)}</p>
-    <h1 class="hero-title"><span>MEDIA.</span> <span>MARKETING.</span> <span>PARTNERSHIPS.</span></h1>
+    <h1 class="hero-title"><span>MEDIA.</span> <span>INFLUENCERS.</span> <span>SPONSORS.</span></h1>
     <p class="hero-sub">We create compelling content and connect brands, creators, and events to build campaigns that get noticed.</p>
     <div class="hero-ctas"><a class="btn btn-light" href="/contact">Work with us</a><a class="btn btn-ghost-light" href="/media">View our work</a></div>
   </div>
