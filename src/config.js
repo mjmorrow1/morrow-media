@@ -5,7 +5,7 @@
 module.exports = {
   brand: 'Morrow Media',
   brandShort: 'Morrow',           // used in the compact logo mark
-  tagline: 'Creative media. Strategic marketing. Meaningful partnerships.',
+  tagline: 'Media. Influencers. Sponsors.',
   oneLiner: 'We create the content, build the campaigns, and connect brands, creators, and events.',
   positioning: 'We create the media, build the campaigns, and connect the people behind them.',
   location: 'St. Petersburg, Florida',
