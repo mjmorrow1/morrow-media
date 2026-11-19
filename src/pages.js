@@ -107,6 +107,18 @@ ${rail}
   </div>`;
 }
 
+const creatorLifecycleSection = () => `
+<section class="section lifecycle dark" id="lifecycle-creators">
+  <div class="wrap">
+    <div class="lifecycle-head reveal">
+      <p class="eyebrow light">For creators and organizers</p>
+      <h2 class="h2">The partnership, from your side.</h2>
+      <p class="lede-sm">Apply or get discovered, get matched with a sponsor, create the work, and get paid. Affiliate links and reporting stay in the loop until renewal.</p>
+    </div>
+${lifecycleScene('creator', CREATOR_STEPS, 'Creator and organizer stages')}
+  </div>
+</section>`;
+
 const packagesStatementRow = () => `
 <section class="section partnership-statement" id="partnerships">
   <div class="wrap">
@@ -132,16 +144,7 @@ const packagesStatementRow = () => `
   </div>
 </section>
 
-<section class="section lifecycle dark" id="lifecycle-creators">
-  <div class="wrap">
-    <div class="lifecycle-head reveal">
-      <p class="eyebrow light">For creators and organizers</p>
-      <h2 class="h2">The partnership, from your side.</h2>
-      <p class="lede-sm">Apply or get discovered, get matched with a sponsor, create the work, and get paid. Affiliate links and reporting stay in the loop until renewal.</p>
-    </div>
-${lifecycleScene('creator', CREATOR_STEPS, 'Creator and organizer stages')}
-  </div>
-</section>
+${creatorLifecycleSection()}
 
 <section class="section lifecycle sand" id="lifecycle-sponsors">
   <div class="wrap">
@@ -488,6 +491,7 @@ function creators() {
   </div>
   <p class="creator-hero-credit wrap">Photographs by Jakub Hałun, Rhododendrites, W.carter, Maria Eklind, and Christian Senger, via Wikimedia Commons. <a href="/credits">Photo credits and licenses</a></p>
 </section>
+${creatorLifecycleSection()}
 ${creatorNetwork()}
 <section class="section">
   <div class="wrap two-col reveal">
