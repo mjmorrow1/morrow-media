@@ -46,31 +46,47 @@
 .lifecycle .eyebrow,
 .lifecycle .eyebrow.light{color:var(--muted)}
 
-/* Homepage chooser prompt */
+/* Homepage chooser: large answer panels */
+#partnership-lifecycles .lifecycle-head{max-width:none}
 .lc-prompt{margin:0 0 clamp(28px,4vw,48px)}
 .lc-prompt-q{
-  margin:0 0 22px;
+  margin:0 0 28px;
   font:500 clamp(2rem,5vw,3.4rem)/1.08 var(--sans);
   letter-spacing:-.045em;
   color:var(--ink);
 }
 .lc-choices{
-  display:flex;flex-wrap:wrap;gap:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(14px,2vw,24px);
+  width:100%;
+}
+@media (max-width:720px){
+  .lc-choices{grid-template-columns:1fr}
 }
 .lc-choices button{
   appearance:none;cursor:pointer;
-  border-radius:999px;
-  padding:14px 26px;
-  font:500 15px/1 var(--sans);
-  letter-spacing:.04em;
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  gap:12px;
+  box-sizing:border-box;
+  width:100%;
+  min-height:180px;
+  max-height:none;
+  padding:32px 36px;
+  border-radius:20px;
+  text-align:left;
   background:#fff;
   color:var(--ink);
-  border:1.5px solid var(--ink);
-  transition:background .2s,color .2s,border-color .2s,box-shadow .2s;
+  border:1.5px solid var(--line, #e4e0d8);
+  box-shadow:0 12px 28px rgba(13,13,12,.06);
+  transition:background .2s,color .2s,border-color .2s,box-shadow .2s,transform .2s;
+}
+@media (max-width:720px){
+  .lc-choices button{min-height:160px;padding:28px 26px}
 }
 .lc-choices button:hover{
   border-color:#c9a400;
-  box-shadow:0 0 0 3px rgba(255,215,0,.28);
+  box-shadow:0 14px 32px rgba(13,13,12,.08),0 0 0 3px rgba(255,215,0,.28);
 }
 .lc-choices button:focus-visible{
   outline:2px solid var(--ink);
@@ -80,8 +96,20 @@
   background:var(--gold);
   color:#0b0b0a;
   border-color:var(--gold);
-  box-shadow:0 8px 24px rgba(201,164,0,.28);
+  box-shadow:0 16px 36px rgba(201,164,0,.28),0 0 0 3px rgba(255,215,0,.35);
 }
+.lc-choice-title{
+  display:block;
+  font:600 clamp(1.65rem,2.6vw,2.2rem)/1.1 var(--sans);
+  letter-spacing:-.04em;
+  color:inherit;
+}
+.lc-choice-desc{
+  display:block;
+  font:400 16px/1.45 var(--sans);
+  color:#4a4844;
+}
+.lc-choices button[aria-pressed="true"] .lc-choice-desc{color:#0b0b0a}
 .lc-choice-hint{
   margin:18px 0 0;
   font:400 15px/1.45 var(--sans);

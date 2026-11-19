@@ -139,8 +139,14 @@ const partnershipLifecyclesChooser = () => `
       <div class="lc-prompt">
         <h2 class="lc-prompt-q" id="lc-prompt-q">Are you an influencer or a sponsor?</h2>
         <div class="lc-choices" role="group" aria-labelledby="lc-prompt-q">
-          <button type="button" data-lc-choice="creator" aria-pressed="false" aria-controls="lc-panel-creator">Influencer</button>
-          <button type="button" data-lc-choice="sponsor" aria-pressed="false" aria-controls="lc-panel-sponsor">Sponsor</button>
+          <button type="button" data-lc-choice="creator" aria-pressed="false" aria-controls="lc-panel-creator">
+            <span class="lc-choice-title">Influencer</span>
+            <span class="lc-choice-desc">See how we match you with sponsors and get you paid.</span>
+          </button>
+          <button type="button" data-lc-choice="sponsor" aria-pressed="false" aria-controls="lc-panel-sponsor">
+            <span class="lc-choice-title">Sponsor</span>
+            <span class="lc-choice-desc">See how we find, vet, and manage creators for your brand.</span>
+          </button>
         </div>
         <p class="lc-choice-hint">Choose a path to see how a SouthBridge Media partnership runs from your side.</p>
       </div>
