@@ -12,16 +12,14 @@ function assetV() {
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 const NAV = [
-  ['Media', '/media'],
-  ['Marketing', '/marketing', 'marketing'], // hidden while cfg.pages.marketing is false
+  ['Partnerships', '/#partnerships'],
   ['Creators', '/creators'],
-  ['Sponsorships', '/sponsorships'],
+  ['Media', '/media'],
   ['Legal', '/legal'],
-  ['About', '/about'],
-].filter(([, , key]) => !key || (cfg.pages || {})[key] !== false);
+];
 
 function layout({ title, path = '/', body, description, heroNav = false }) {
-  const fullTitle = title ? `${title} — ${cfg.brand}` : `${cfg.brand} — ${cfg.tagline}`;
+  const fullTitle = title ? `${title} - ${cfg.brand}` : `${cfg.brand} - ${cfg.tagline}`;
   const nav = NAV.map(([l, h]) => `<a href="${h}"${path.startsWith(h) ? ' aria-current="page"' : ''}>${l}</a>`).join('');
   return `<!doctype html>
 <html lang="en" class="no-js">
@@ -32,6 +30,7 @@ function layout({ title, path = '/', body, description, heroNav = false }) {
 <meta name="description" content="${esc(description || cfg.oneLiner)}">
 <link rel="preload" href="/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/site.css?v=${assetV()}">
+<link rel="stylesheet" href="/css/lifecycles.css?v=${assetV()}">
 </head>
 <body class="${heroNav ? 'has-hero' : ''}">
 <header class="site-header${heroNav ? ' on-hero' : ''}" data-header>
@@ -58,7 +57,7 @@ ${body}
       <a class="footer-big" href="/contact">Let's build something <span>→</span></a>
     </div>
     <div class="footer-cols">
-      <div><h4>Services</h4><a href="/media">Media</a>${(cfg.pages || {}).marketing !== false ? '<a href="/marketing">Marketing</a>' : ''}<a href="/creators">Creator Network</a><a href="/sponsorships">Events &amp; Sponsorships</a></div>
+      <div><h4>Services</h4><a href="/#partnerships">Partnerships</a><a href="/sponsorships">Events &amp; Sponsorships</a><a href="/creators">Creator Network</a><a href="/media">Media</a></div>
       <div><h4>Work with us</h4><a href="/contact?type=brand">I'm a Brand</a><a href="/contact?type=creator">I'm a Creator</a><a href="/contact?type=event">I'm an Event Organizer</a></div>
       <div><h4>Company</h4><a href="/about">About</a><a href="/legal">Legal</a><a href="/brands">Brands</a><a href="/services">All services</a></div>
       <div><h4>Studio</h4><span>${esc(cfg.location)}</span><a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>${cfg.phone ? `<a href="tel:${esc(cfg.phoneTel)}">${esc(cfg.phone)}</a>` : ''}${cfg.social.instagram ? `<a href="${esc(cfg.social.instagram)}" target="_blank" rel="noopener">Instagram</a>` : ''}</div>
@@ -67,6 +66,7 @@ ${body}
   </div>
 </footer>
 <script src="/js/site.js?v=${assetV()}" defer></script>
+<script src="/js/lifecycles-3d.js" defer></script>
 </body>
 </html>`;
 }
