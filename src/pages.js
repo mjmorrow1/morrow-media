@@ -108,14 +108,49 @@ ${rail}
 }
 
 const creatorLifecycleSection = () => `
-<section class="section lifecycle dark" id="lifecycle-creators">
+<section class="section lifecycle" id="lifecycle-creators">
   <div class="wrap">
     <div class="lifecycle-head reveal">
-      <p class="eyebrow light">For creators and organizers</p>
+      <p class="eyebrow">For creators and organizers</p>
       <h2 class="h2">The partnership, from your side.</h2>
       <p class="lede-sm">Apply or get discovered, get matched with a sponsor, create the work, and get paid. Affiliate links and reporting stay in the loop until renewal.</p>
     </div>
 ${lifecycleScene('creator', CREATOR_STEPS, 'Creator and organizer stages')}
+  </div>
+</section>`;
+
+const sponsorLifecycleSection = () => `
+<section class="section lifecycle" id="lifecycle-sponsors">
+  <div class="wrap">
+    <div class="lifecycle-head reveal">
+      <p class="eyebrow">For sponsor partners</p>
+      <h2 class="h2">The partnership, from the sponsor side.</h2>
+      <p class="lede-sm">Share a brief, review a shortlist, sign the contract, and launch. Tracking, affiliate sales, and a results report come with the campaign, then we scale or renew.</p>
+    </div>
+${lifecycleScene('sponsor', SPONSOR_STEPS, 'Sponsor stages')}
+  </div>
+</section>`;
+
+const partnershipLifecyclesChooser = () => `
+<section class="section lifecycle" id="partnership-lifecycles" data-lc-chooser>
+  <div class="wrap">
+    <div class="lifecycle-head reveal">
+      <p class="eyebrow">Partnerships</p>
+      <div class="lc-prompt">
+        <h2 class="lc-prompt-q" id="lc-prompt-q">Are you an influencer or a sponsor?</h2>
+        <div class="lc-choices" role="group" aria-labelledby="lc-prompt-q">
+          <button type="button" data-lc-choice="creator" aria-pressed="false" aria-controls="lc-panel-creator">Influencer</button>
+          <button type="button" data-lc-choice="sponsor" aria-pressed="false" aria-controls="lc-panel-sponsor">Sponsor</button>
+        </div>
+        <p class="lc-choice-hint">Choose a path to see how a SouthBridge Media partnership runs from your side.</p>
+      </div>
+    </div>
+    <div class="lc-panel" id="lc-panel-creator" data-panel="creator" role="region" aria-label="Influencer partnership lifecycle" hidden>
+${lifecycleScene('creator', CREATOR_STEPS, 'Creator and organizer stages')}
+    </div>
+    <div class="lc-panel" id="lc-panel-sponsor" data-panel="sponsor" role="region" aria-label="Sponsor partnership lifecycle" hidden>
+${lifecycleScene('sponsor', SPONSOR_STEPS, 'Sponsor stages')}
+    </div>
   </div>
 </section>`;
 
@@ -141,19 +176,6 @@ const packagesStatementRow = () => `
         <li><span class="pv-n">03</span>Websites</li>
       </ul>
     </div>
-  </div>
-</section>
-
-${creatorLifecycleSection()}
-
-<section class="section lifecycle sand" id="lifecycle-sponsors">
-  <div class="wrap">
-    <div class="lifecycle-head reveal">
-      <p class="eyebrow">For sponsor partners</p>
-      <h2 class="h2">The partnership, from the sponsor side.</h2>
-      <p class="lede-sm">Share a brief, review a shortlist, sign the contract, and launch. Tracking, affiliate sales, and a results report come with the campaign, then we scale or renew.</p>
-    </div>
-${lifecycleScene('sponsor', SPONSOR_STEPS, 'Sponsor stages')}
   </div>
 </section>`;
 
@@ -300,16 +322,17 @@ function home() {
   <div class="hero-shade"></div>
   <div class="wrap hero-inner">
     <p class="eyebrow light hero-eyebrow">${esc(cfg.brand)} · ${esc(cfg.location)}</p>
-    <h1 class="hero-title"><span>MEDIA.</span> <span>PARTNERSHIPS.</span> <span>SPONSORS.</span></h1>
-    <p class="hero-sub">Affiliate and sponsorship partnerships for creators, organizers, and brands. We match the sides, run the campaign, and keep tracking and reporting in the loop.</p>
-    <div class="hero-ctas"><a class="btn btn-light" href="/contact">Partner with us</a><a class="btn btn-ghost-light" href="#partnerships">See how it works</a></div>
+    <h1 class="hero-title"><span>MEDIA.</span> <span>INFLUENCERS.</span> <span>SPONSORS.</span></h1>
+    <p class="hero-sub">We create compelling content and connect brands, creators, and events to build campaigns that get noticed.</p>
+    <div class="hero-ctas"><a class="btn btn-light" href="/contact">Work with us</a><a class="btn btn-ghost-light" href="/media">View our work</a></div>
   </div>
-  <div class="hero-foot wrap"><span>Partnerships</span><span>Creators</span><span>Sponsors</span><span>Media</span></div>
+  <div class="hero-foot wrap"><span>Media</span><span>Marketing</span><span>Creators</span><span>Sponsorships</span></div>
   <a class="photo-credit" href="/credits">${esc(CREDITS.byKey.hero.short)}</a>
 </section>
 ${campaignTeaser()}
 
 ${packagesStatementRow()}
+${partnershipLifecyclesChooser()}
 ${websiteVertical()}
 <section class="section pt-0" id="web-examples">
   <div class="wrap">
@@ -542,6 +565,7 @@ ${ctaBand('Ready to be seen?', 'Start a campaign', '/contact?type=brand')}`;
 function sponsorships(preTier = '') {
   const events = ['Festivals', 'Concerts', 'Sporting events', 'Conferences', 'Charity events', 'Nightlife', 'Tourism events', 'Private events'];
   const body = `
+${sponsorLifecycleSection()}
 ${featuredCampaign(preTier)}
 <section class="section">
   <div class="wrap two-col reveal">

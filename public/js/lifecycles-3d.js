@@ -1,6 +1,5 @@
-/* SouthBridge Media  -  CSS 3D partnership lifecycles.
-   Lazy: only runs when a .lifecycle-stage is near the viewport.
-   Honors prefers-reduced-motion. No network calls, no stats. */
+/* SouthBridge Media - CSS 3D partnership lifecycles.
+   Lazy init, prefers-reduced-motion, influencer/sponsor chooser. */
 (function () {
   const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const INTERVAL = 2800;
@@ -39,7 +38,7 @@
   }
 
   function bind(stage) {
-    if (stage.dataset.bound) return;
+    if (!stage || stage.dataset.bound) return;
     stage.dataset.bound = '1';
     const cards = $all('.lc-card', stage);
     if (!cards.length) return;
@@ -53,6 +52,7 @@
     }
     function play() {
       if (REDUCE || paused || document.hidden) return;
+      if (stage.hidden || stage.closest('[hidden]')) return;
       stop();
       timer = setInterval(() => go(i + 1), INTERVAL);
     }
@@ -96,18 +96,68 @@
 
     stage._lc = { go, play, stop, get index() { return i; } };
     setStep(stage, i);
-    if (!REDUCE) {
-      // Wait until visible to start; IntersectionObserver handles it.
+  }
+
+  function bindChooser(root) {
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+    const buttons = $all('[data-lc-choice]', root);
+    const hint = $('.lc-choice-hint', root);
+
+    function choose(which, opts) {
+      const focusBtn = !opts || opts.focus !== false;
+      buttons.forEach((btn) => {
+        const on = btn.getAttribute('data-lc-choice') === which;
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        if (on && focusBtn) btn.focus({ preventScroll: true });
+      });
+      $all('.lc-panel', root).forEach((panel) => {
+        const on = panel.getAttribute('data-panel') === which;
+        if (on) {
+          panel.removeAttribute('hidden');
+          const stage = $('[data-lifecycle]', panel) || panel;
+          bind(stage);
+          if (stage._lc) stage._lc.play();
+        } else {
+          panel.setAttribute('hidden', '');
+          const stage = $('[data-lifecycle]', panel) || panel;
+          if (stage && stage._lc) stage._lc.stop();
+        }
+      });
+      if (hint) {
+        if (which) hint.setAttribute('hidden', '');
+        else hint.removeAttribute('hidden');
+      }
     }
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => choose(btn.getAttribute('data-lc-choice')));
+      btn.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        const i = buttons.indexOf(btn);
+        const next = e.key === 'ArrowRight' ? buttons[(i + 1) % buttons.length] : buttons[(i - 1 + buttons.length) % buttons.length];
+        choose(next.getAttribute('data-lc-choice'));
+      });
+    });
+
+    root._lcChoose = (which, opts) => choose(which, opts || { focus: false });
   }
 
   function init() {
-    $all('[data-lifecycle]').forEach(bind);
+    $all('[data-lifecycle]').forEach((stage) => {
+      // Chooser panels stay unbound until a choice is made, except those not in a chooser.
+      if (stage.closest('[data-lc-chooser]')) return;
+      bind(stage);
+    });
+    $all('[data-lc-chooser]').forEach(bindChooser);
   }
 
   window.__lcGoto = function (id, step) {
     const stage = document.querySelector('[data-lifecycle="' + id + '"]');
     if (!stage) return;
+    const chooser = stage.closest('[data-lc-chooser]');
+    if (chooser && chooser._lcChoose) chooser._lcChoose(id, { focus: false });
     bind(stage);
     if (stage._lc) {
       stage._lc.stop();
@@ -115,9 +165,15 @@
     }
   };
 
+  window.__lcChoice = function (which) {
+    const chooser = document.querySelector('[data-lc-chooser]');
+    if (!chooser) return;
+    bindChooser(chooser);
+    if (chooser._lcChoose) chooser._lcChoose(which || null, { focus: false });
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
-      // Lazy: bind when the first lifecycle section is close to view.
       const sections = $all('.lifecycle');
       if (!sections.length) return;
       if (REDUCE) { init(); return; }
