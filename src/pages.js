@@ -52,27 +52,135 @@ const pricingNote = () => `
 </section>`;
 
 // Home: Packages (left) + Creative media statement (right)
+const CREATOR_STEPS = [
+  ['01', 'Apply or get discovered', 'Tell us about your audience and the work you make, or we find you through the network.'],
+  ['02', 'Profile and audience vetting', 'We review your profile, content, and audience so the match is a fit.'],
+  ['03', 'Sponsor matching', 'We introduce you to a sponsor whose brief matches your audience.'],
+  ['04', 'Agreement signed', 'Terms are agreed in writing before any campaign work begins.'],
+  ['05', 'Campaign content created', 'You create the campaign content, with clear direction and review.'],
+  ['06', 'Affiliate links and tracking live', 'Affiliate links and tracking go live so referrals can be attributed.'],
+  ['07', 'Performance reporting', 'You see how the campaign performed, in plain language.'],
+  ['08', 'Payout', 'You are paid according to the agreement.'],
+  ['09', 'Renewal', 'If both sides want to continue, we plan the next campaign.'],
+];
+const SPONSOR_STEPS = [
+  ['01', 'Brief and goals', 'Share the brief, the product or offer, and what a successful campaign looks like.'],
+  ['02', 'Creator shortlist and vetting', 'We prepare a shortlist of creators and organizers and vet them against that brief.'],
+  ['03', 'Outreach and negotiation', 'We handle outreach and negotiate terms on your behalf.'],
+  ['04', 'Contract', 'The contract is signed before launch.'],
+  ['05', 'Campaign launch', 'The campaign goes live across the agreed channels.'],
+  ['06', 'Tracking and affiliate sales', 'Affiliate links and tracking record referrals and sales.'],
+  ['07', 'Results report', 'You receive a results report covering the activity you asked us to measure.'],
+  ['08', 'Scale or renew', 'We help you expand what worked or renew the partnership.'],
+];
+
+function lifecycleScene(kind, steps, label) {
+  const cards = steps.map(([num, title, blurb], i) => `
+      <article class="lc-card${i === 0 ? ' is-active' : ''}" data-i="${i}">
+        <span class="lc-num">${num}</span>
+        <h3>${esc(title)}</h3>
+        <p>${esc(blurb)}</p>
+      </article>`).join('');
+  const rail = steps.map(([num, title], i) => `
+      <li><button type="button"${i === 0 ? ' aria-current="step"' : ''}><span class="n">${num}</span><span>${esc(title)}</span></button></li>`).join('');
+  const fallback = steps.map(([num, title, blurb]) => `
+    <li><span class="n">${num}</span><div><h3>${esc(title)}</h3><p>${esc(blurb)}</p></div></li>`).join('');
+  return `
+  <div class="lifecycle-stage" data-lifecycle="${kind}">
+    <div class="lc-scene" aria-hidden="true">
+      <div class="lc-deck"></div>
+      <div class="lc-world">${cards}
+      </div>
+    </div>
+    <div>
+      <ol class="lc-rail" aria-label="${esc(label)}">
+${rail}
+      </ol>
+      <div class="lc-controls">
+        <button type="button" data-lc-prev>Previous</button>
+        <button type="button" data-lc-next>Next</button>
+      </div>
+    </div>
+    <p class="lc-status" aria-live="polite"></p>
+    <ol class="lc-fallback">${fallback}
+    </ol>
+  </div>`;
+}
+
+const creatorLifecycleSection = () => `
+<section class="section lifecycle" id="lifecycle-creators">
+  <div class="wrap">
+    <div class="lifecycle-head reveal">
+      <p class="eyebrow">For creators and organizers</p>
+      <h2 class="h2">The partnership, from your side.</h2>
+      <p class="lede-sm">Apply or get discovered, get matched with a sponsor, create the work, and get paid. Affiliate links and reporting stay in the loop until renewal.</p>
+    </div>
+${lifecycleScene('creator', CREATOR_STEPS, 'Creator and organizer stages')}
+  </div>
+</section>`;
+
+const sponsorLifecycleSection = () => `
+<section class="section lifecycle" id="lifecycle-sponsors">
+  <div class="wrap">
+    <div class="lifecycle-head reveal">
+      <p class="eyebrow">For sponsor partners</p>
+      <h2 class="h2">The partnership, from the sponsor side.</h2>
+      <p class="lede-sm">Share a brief, review a shortlist, sign the contract, and launch. Tracking, affiliate sales, and a results report come with the campaign, then we scale or renew.</p>
+    </div>
+${lifecycleScene('sponsor', SPONSOR_STEPS, 'Sponsor stages')}
+  </div>
+</section>`;
+
+const partnershipLifecyclesChooser = () => `
+<section class="section lifecycle" id="partnership-lifecycles" data-lc-chooser>
+  <div class="wrap">
+    <div class="lifecycle-head reveal">
+      <p class="eyebrow">Partnerships</p>
+      <div class="lc-prompt">
+        <h2 class="lc-prompt-q" id="lc-prompt-q">Are you an influencer, organization, or sponsor?</h2>
+        <div class="lc-choices" role="group" aria-labelledby="lc-prompt-q">
+          <button type="button" data-lc-choice="creator" aria-pressed="false" aria-controls="lc-panel-creator">
+            <span class="lc-choice-title">Influencer / Organization</span>
+            <span class="lc-choice-desc">See how we match you with sponsors and get you paid.</span>
+          </button>
+          <button type="button" data-lc-choice="sponsor" aria-pressed="false" aria-controls="lc-panel-sponsor">
+            <span class="lc-choice-title">Sponsor</span>
+            <span class="lc-choice-desc">See how we find, vet, and manage creators for your brand.</span>
+          </button>
+        </div>
+        <p class="lc-choice-hint">Choose a path to see how a SouthBridge Media partnership runs from your side.</p>
+      </div>
+    </div>
+    <div class="lc-panel" id="lc-panel-creator" data-panel="creator" role="region" aria-label="Influencer partnership lifecycle" hidden>
+${lifecycleScene('creator', CREATOR_STEPS, 'Creator and organizer stages')}
+    </div>
+    <div class="lc-panel" id="lc-panel-sponsor" data-panel="sponsor" role="region" aria-label="Sponsor partnership lifecycle" hidden>
+${lifecycleScene('sponsor', SPONSOR_STEPS, 'Sponsor stages')}
+    </div>
+  </div>
+</section>`;
+
 const packagesStatementRow = () => `
-<section class="section packages-statement" id="packages">
+<section class="section partnership-statement" id="partnerships">
   <div class="wrap">
     <div class="ps-panel reveal">
       <div class="packages-statement-row">
         <div class="ps-packages">
-          <p class="eyebrow">Packages</p>
-          <h2 class="h2">Every campaign is different. Let's build the right package for your goals.</h2>
-          <a class="btn btn-solid" href="/contact">Work with us</a>
+          <p class="eyebrow">Affiliate and sponsorship partnerships</p>
+          <h2 class="h2">We connect creators and organizers with the right sponsor partners.</h2>
+          <a class="btn btn-solid" href="/contact">Start a partnership</a>
         </div>
         <div class="ps-divider" aria-hidden="true"></div>
         <div class="ps-statement" id="statement">
           <p class="eyebrow">${esc(cfg.tagline)}</p>
-          <p class="statement-text">${esc(cfg.oneLiner)}</p>
+          <p class="statement-text">SouthBridge Media runs the lifecycle: matching, agreements, campaign content, affiliate tracking, reporting, payout, and renewal.</p>
         </div>
       </div>
-      <div class="package-verticals" aria-label="Service verticals">
-        <p class="package-vert"><span class="pv-n">01</span>Website Creation</p>
-        <p class="package-vert"><span class="pv-n">02</span>Photography and Media</p>
-        <p class="package-vert"><span class="pv-n">03</span>Sponsorship</p>
-      </div>
+      <ul class="package-lines">
+        <li><span class="pv-n">01</span>Partnerships</li>
+        <li><span class="pv-n">02</span>Media</li>
+        <li><span class="pv-n">03</span>Websites</li>
+      </ul>
     </div>
   </div>
 </section>`;
@@ -92,9 +200,8 @@ function photographyVertical() {
   return `<section class="section dark" id="photography-media">
   <div class="wrap two-col reveal">
     <div>
-      <p class="eyebrow light">Vertical</p>
       <h2 class="display-sm">Photography and Media</h2>
-      <p class="lede-sm">Photography, video, drone, and social-first content — shot and edited in-house so your brand looks the way it should on location and online.</p>
+      <p class="lede-sm">Photography, video, drone, and social-first content, shot and edited in-house so your brand looks the way it should on location and online.</p>
       <div class="vert-pills">
         <p class="badge">In-house photo + video</p>
         <p class="badge">FAA Part 107 drone</p>
@@ -108,12 +215,18 @@ function photographyVertical() {
 }
 
 function websiteVertical() {
-  return `<section class="section dark" id="website-creation">
+  return `<section class="section dark also-studio" id="website-creation">
+  <div class="wrap" style="margin-bottom:clamp(32px,4vw,56px)">
+    <div class="section-head reveal">
+      <p class="eyebrow light">Also from the studio</p>
+      <h2 class="h2">Media and web, when the campaign needs them.</h2>
+      <p class="lede-sm" style="color:rgba(244,242,238,.72)">Partnerships are the core offer. In-house photography, video, drone, and website builds sit alongside when a campaign or a brand needs them.</p>
+    </div>
+  </div>
   <div class="wrap two-col reveal">
     <div>
-      <p class="eyebrow light">Vertical</p>
       <h2 class="display-sm">Website Creation</h2>
-      <p class="lede-sm">Custom brand sites for companies that need more than a template — positioning, design, and build that match how they actually work.</p>
+      <p class="lede-sm">Custom brand sites for companies that need more than a template: positioning, design, and build that match how they actually work.</p>
       <p class="badge">Design + development in-house</p>
       <a class="btn btn-light" href="/contact?type=brand">Start a website project</a>
     </div>
@@ -215,7 +328,7 @@ function home() {
   <div class="hero-shade"></div>
   <div class="wrap hero-inner">
     <p class="eyebrow light hero-eyebrow">${esc(cfg.brand)} · ${esc(cfg.location)}</p>
-    <h1 class="hero-title"><span>MEDIA.</span> <span>MARKETING.</span> <span>PARTNERSHIPS.</span></h1>
+    <h1 class="hero-title"><span>MEDIA.</span> <span>INFLUENCERS.</span> <span>SPONSORS.</span></h1>
     <p class="hero-sub">We create compelling content and connect brands, creators, and events to build campaigns that get noticed.</p>
     <div class="hero-ctas"><a class="btn btn-light" href="/contact">Work with us</a><a class="btn btn-ghost-light" href="/media">View our work</a></div>
   </div>
@@ -225,6 +338,7 @@ function home() {
 ${campaignTeaser()}
 
 ${packagesStatementRow()}
+${partnershipLifecyclesChooser()}
 ${websiteVertical()}
 <section class="section pt-0" id="web-examples">
   <div class="wrap">
@@ -246,40 +360,17 @@ ${photographyVertical()}
   </div>
 </section>
 
-<section class="section pt-0">
-  <div class="wrap">
-    <a class="founder-strip reveal" href="/about#founder">
-      <img src="${C.images.founder}" alt="Matt Morrow" loading="lazy" decoding="async">
-      <p><span class="eyebrow">Founded by Matt Morrow</span><span class="founder-strip-line">The agent, the creator, and the developer, based in St. Pete.</span></p>
-      <span class="link">Meet Matt ${arrow}</span>
-    </a>
-  </div>
-</section>
-
 <section class="section soft">
   <div class="wrap">
     <div class="section-head reveal"><p class="eyebrow">Work with us</p><h2 class="h2">Start where you are.</h2></div>
     <div class="entry-grid">
-      <a class="entry reveal" href="/contact?type=brand"><p class="eyebrow">For brands &amp; businesses</p><h3>I'm a Brand</h3><p>Content, social, creators, and campaigns built around your goals.</p><span class="link">Start a campaign ${arrow}</span></a>
-      <a class="entry reveal" style="--d:80ms" href="/creators#apply"><p class="eyebrow">For creators</p><h3>I'm a Creator</h3><p>Join the network for sponsored, tourism, and hospitality campaigns.</p><span class="link">Join the network ${arrow}</span></a>
-      <a class="entry reveal" style="--d:160ms" href="/contact?type=event"><p class="eyebrow">For events</p><h3>I'm an Event Organizer</h3><p>Sponsors, media, and creator activation for your event.</p><span class="link">Talk about your event ${arrow}</span></a>
+      <a class="entry reveal" href="/contact?type=brand"><p class="eyebrow">For brands &amp; businesses</p><h3>I'm a Brand</h3><p>Brief a campaign, meet a shortlist, and run affiliate and sponsorship partnerships.</p><span class="link">Start a campaign ${arrow}</span></a>
+      <a class="entry reveal" style="--d:80ms" href="/creators#apply"><p class="eyebrow">For creators</p><h3>I'm a Creator</h3><p>Join the network to get matched with sponsor partners and run campaigns with tracking and payout.</p><span class="link">Join the network ${arrow}</span></a>
+      <a class="entry reveal" style="--d:160ms" href="/contact?type=event"><p class="eyebrow">For events</p><h3>I'm an Event Organizer</h3><p>Find sponsor partners and creator activation for your event, with agreements and reporting included.</p><span class="link">Talk about your event ${arrow}</span></a>
     </div>
   </div>
 </section>
-
-<section class="section pt-0" id="what-we-do">
-  <div class="wrap">
-    <div class="section-head reveal"><p class="eyebrow">What we do</p><h2 class="h2">Four ways we move a brand forward.</h2></div>
-    <div class="pillar-grid">${cards}</div>
-  </div>
-</section>
-
-<section class="section dark how" id="how-it-works">
-  <div class="wrap">
-    <div class="section-head reveal"><p class="eyebrow light">How it works</p><h2 class="h2">More than a shoot. A campaign.</h2></div>
-    <ol class="steps">${steps}</ol>
-  </div>
-</section>`;
+`;
   return layout({ path: '/', body, heroNav: true });
 }
 
@@ -324,9 +415,8 @@ ${websiteVertical()}
 <section class="section dark" id="real-estate">
   <div class="wrap two-col reveal">
     <div>
-      <p class="eyebrow light">Vertical</p>
       <h2 class="display-sm">Real Estate Media</h2>
-      <p class="lede-sm">Listing media for agents, brokerages, and developers — photography, aerials, and social-first video that sells the property and builds the agent's brand.</p>
+      <p class="lede-sm">Listing media for agents, brokerages, and developers: photography, aerials, and social-first video that sells the property and builds the agent's brand.</p>
       <p class="badge">FAA Part 107 certified drone services</p>
       <a class="btn btn-light" href="/contact?type=brand">Book a listing shoot</a>
     </div>
@@ -430,6 +520,7 @@ function creators() {
   </div>
   <p class="creator-hero-credit wrap">Photographs by Jakub Hałun, Rhododendrites, W.carter, Maria Eklind, and Christian Senger, via Wikimedia Commons. <a href="/credits">Photo credits and licenses</a></p>
 </section>
+${creatorLifecycleSection()}
 ${creatorNetwork()}
 <section class="section">
   <div class="wrap two-col reveal">
@@ -439,7 +530,7 @@ ${creatorNetwork()}
 </section>
 <section class="section soft apply" id="apply">
   <div class="wrap narrow">
-    <div class="section-head reveal"><p class="eyebrow">Application</p><h2 class="h2">Join the Creator Network</h2><p class="muted">Instagram, TikTok, and YouTube creators — travel, food, lifestyle, and local. Tell us about your audience and we'll reach out when there's a fit.</p></div>
+    <div class="section-head reveal"><p class="eyebrow">Application</p><h2 class="h2">Join the Creator Network</h2><p class="muted">Instagram, TikTok, and YouTube creators: travel, food, lifestyle, and local. Tell us about your audience and we'll reach out when there's a fit.</p></div>
     <button class="btn btn-solid apply-toggle" data-open-apply aria-controls="apply-panel" aria-expanded="false">Open application</button>
     <div class="apply-panel" id="apply-panel" data-apply-panel>${creatorForm()}</div>
   </div>
@@ -480,10 +571,11 @@ ${ctaBand('Ready to be seen?', 'Start a campaign', '/contact?type=brand')}`;
 function sponsorships(preTier = '') {
   const events = ['Festivals', 'Concerts', 'Sporting events', 'Conferences', 'Charity events', 'Nightlife', 'Tourism events', 'Private events'];
   const body = `
+${sponsorLifecycleSection()}
 ${featuredCampaign(preTier)}
 <section class="section">
   <div class="wrap two-col reveal">
-    <div><p class="eyebrow">For event organizers</p><h2 class="h2">From sponsor deck to signed partner — and the content after.</h2></div>
+    <div><p class="eyebrow">For event organizers</p><h2 class="h2">From sponsor deck to signed partner, and the content after.</h2></div>
     <div>${list(C.sponsorshipServices, 'svc-list big')}</div>
   </div>
 </section>
