@@ -1,17 +1,17 @@
 // ─────────────────────────────────────────────────────────────
-//  SITE CONFIG — change the brand name and contact details here.
+//  SITE CONFIG - change the brand name and contact details here.
 //  Every page, title, footer and the admin pull from this file.
 // ─────────────────────────────────────────────────────────────
 module.exports = {
   brand: 'Morrow Media',
   brandShort: 'Morrow',           // used in the compact logo mark
-  tagline: 'Media. Influencers. Sponsors.',
-  oneLiner: 'We create the content, build the campaigns, and connect brands, creators, and events.',
-  positioning: 'We create the media, build the campaigns, and connect the people behind them.',
+  tagline: 'Media. Partnerships. Sponsors.',
+  oneLiner: 'We match creators and organizers with sponsor partners, and run affiliate and sponsorship campaigns.',
+  positioning: 'Affiliate and sponsorship partnerships for creators, organizers, and brands.',
   location: 'St. Petersburg, Florida',
   region: 'Tampa Bay & the Gulf Coast',
   // Page switches. Set a page to true to show it again (nav, footer, links, and route).
-  // marketing: hidden for now — /marketing 302-redirects to /media while false.
+  // marketing: hidden for now: /marketing 302-redirects to /media while false.
   pages: { marketing: false },
   email: 'sponsors@morrowmediagroup.com',
   phone: '(908) 343-5744',          // shown on /contact and in the footer; leave '' to hide
