@@ -634,7 +634,7 @@ ${pageHero({ eyebrow: 'Credits', title: 'Photo credits.', sub: 'Third-party phot
 // ───────────── ABOUT ─────────────
 function about() {
   const A = C.about, F = C.founder;
-  const tc = (t) => esc(t).replace('Travelers Content', `<a class="inline" href="${esc(cfg.social.instagram)}" target="_blank" rel="noopener">Travelers Content</a>`);
+  const tc = (t) => esc(t).replace('Travelers Content', `<a class="inline" href="https://www.instagram.com/travelers.content/" target="_blank" rel="noopener">Travelers Content</a>`);
   const story = A.story.map((t, i) => `<p class="${i ? 'muted' : 'lede-sm'}">${i === 3 ? tc(t) : esc(t)}</p>`).join('');
   const does = A.does.map(([k, v], i) => `<div class="does-item reveal" style="--d:${(i % 3) * 80}ms"><h3>${esc(k)}</h3><p>${esc(v)}</p></div>`).join('');
   const body = `
@@ -686,7 +686,7 @@ ${pageHero({ eyebrow: 'Contact', title: 'Let\'s build something.', sub: 'Every c
   <div class="wrap">
     <div class="tabs" role="tablist">${tabs.map(([k, l, d]) => `<button role="tab" class="tab${k === type ? ' active' : ''}" aria-selected="${k === type}" data-tab="${k}"><strong>${l}</strong><span>${d}</span></button>`).join('')}</div>
     ${tabs.map(([k, l, , form]) => `<div class="tab-panel${k === type ? ' active' : ''}" role="tabpanel" data-panel="${k}"><h2 class="h3 panel-title">${l}</h2>${form}</div>`).join('')}
-    <p class="muted contact-alt">Prefer email or a call? <a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>${cfg.phone ? ` · <a href="tel:${esc(cfg.phoneTel)}">${esc(cfg.phone)}</a>` : ''} · ${esc(cfg.location)}</p>
+    <p class="muted contact-alt">Prefer email or a call? <a href="mailto:${esc(cfg.email)}">${esc(cfg.email)}</a>${cfg.phone ? ` · <a href="tel:${esc(cfg.phoneTel)}">${esc(cfg.phone)}</a>` : ''} · ${esc(cfg.location)} · <a href="${esc(cfg.social.instagram)}" target="_blank" rel="noopener" aria-label="SouthBridge Media on Instagram">@southbridgemedia</a></p>
   </div>
 </section>`;
   return layout({ title: 'Contact', path: '/contact', body });

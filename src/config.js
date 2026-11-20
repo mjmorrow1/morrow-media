@@ -17,7 +17,7 @@ module.exports = {
   phone: '(908) 343-5744',          // shown on /contact and in the footer; leave '' to hide
   phoneTel: '+19083435744',
   social: {
-    instagram: 'https://instagram.com/travelers.content', // swap for the agency handle when created
+    instagram: 'https://www.instagram.com/southbridgemedia/',
     youtube: '',
     tiktok: '',
   },
