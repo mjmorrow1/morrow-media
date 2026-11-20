@@ -428,6 +428,8 @@ body:not(.menu-open):has(.creator-hero) .site-header:not(.scrolled){background:v
 .footer-cols h4{font:500 11px/1 var(--sans);letter-spacing:.2em;text-transform:uppercase;color:rgba(244,242,238,.5);margin:0 0 18px}
 .footer-cols a,.footer-cols span{display:block;padding:5px 0;color:rgba(244,242,238,.85);font-size:.95rem}
 .footer-cols a:hover{color:#fff}
+.footer-cols a.footer-social{display:inline-flex;align-items:center;gap:8px;width:fit-content}
+.footer-social .ig-icon{width:15px;height:15px;flex:0 0 15px}
 .footer-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:12px;letter-spacing:.08em;color:rgba(244,242,238,.5);border-top:1px solid var(--line-light);padding-top:24px}
 
 /* ── reveal on scroll */
