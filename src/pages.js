@@ -480,6 +480,48 @@ ${ctaBand('Ready to be seen?', 'Start a campaign', '/contact?type=brand')}`;
 function sponsorships(preTier = '') {
   const events = ['Festivals', 'Concerts', 'Sporting events', 'Conferences', 'Charity events', 'Nightlife', 'Tourism events', 'Private events'];
   const body = `
+<section class="section hiw-section" id="how-it-works">
+  <div class="wrap">
+    <div class="hiw-head reveal">
+      <h2 class="h2">How It Works</h2>
+      <p class="lede-sm">From joining our network to collaborating with brands, here's what to expect.</p>
+    </div>
+    <ol class="hiw-grid">
+      <li class="hiw-card reveal">
+        <div class="hiw-card-top">
+          <svg class="hiw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="7.25" r="3"/><path d="M3.6 19c.2-3.1 2.7-5.5 5.4-5.5 1.1 0 2.2.4 3.1 1"/><path d="M14.2 15.4l2.2 2.2 4.2-4.2"/></svg>
+          <span class="hiw-num">01</span>
+        </div>
+        <h3>Apply &amp; Get Approved</h3>
+        <p>Share your profile and get considered for opportunities.</p>
+      </li>
+      <li class="hiw-card reveal" style="--d:80ms">
+        <div class="hiw-card-top">
+          <svg class="hiw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8.5 12.5l2-2a1.6 1.6 0 012.2 0l.6.6"/><path d="M13.2 13.2l1.1 1.1a1.6 1.6 0 002.2 0l1.7-1.7a2 2 0 000-2.8l-1-1"/><path d="M7.2 11.2l-1.3 1.3a2 2 0 000 2.8l1.6 1.6a1.6 1.6 0 002.2 0l.8-.8"/><path d="M8.2 8.2L7 7M16.8 15.8L18 17"/><path d="M4.5 14.2l1.8-1.2M19.5 9.8l-1.8 1.2"/></svg>
+          <span class="hiw-num">02</span>
+        </div>
+        <h3>Get Matched &amp; Create</h3>
+        <p>Partner with aligned brands and create meaningful content.</p>
+      </li>
+      <li class="hiw-card reveal" style="--d:160ms">
+        <div class="hiw-card-top">
+          <svg class="hiw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 19h16"/><path d="M7 19V11"/><path d="M12 19V6"/><path d="M17 19v-5"/></svg>
+          <span class="hiw-num">03</span>
+        </div>
+        <h3>Track &amp; Get Paid</h3>
+        <p>Track campaign results and receive agreed payments.</p>
+      </li>
+      <li class="hiw-card reveal" style="--d:240ms">
+        <div class="hiw-card-top">
+          <svg class="hiw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 17l6.5-6.5 3.5 3.5L20 8"/><path d="M14 8h6v6"/></svg>
+          <span class="hiw-num">04</span>
+        </div>
+        <h3>Grow Together</h3>
+        <p>Explore new opportunities and build lasting partnerships.</p>
+      </li>
+    </ol>
+  </div>
+</section>
 ${featuredCampaign(preTier)}
 <section class="section">
   <div class="wrap two-col reveal">
