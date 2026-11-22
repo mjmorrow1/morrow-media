@@ -829,3 +829,74 @@ body.lb-open{overflow:hidden}
 
 
 /* home: statement+how moved near footer (content-sized) */
+
+/* t223u: mangrove and sun yellow on public buttons only */
+.btn-solid,
+.btn-gold,
+.btn-light,
+.header-cta,
+.site-header .header-cta,
+.on-hero:not(.scrolled) .header-cta,
+.site-header.scrolled .header-cta,
+.hero-ctas .btn-light,
+.dark .btn-light,
+.cta-band .btn-light,
+.section.dark .btn-light,
+button.btn-solid[type="submit"]{
+  background:#F0D24A !important;
+  color:#143028 !important;
+  border-color:#F0D24A !important;
+}
+.btn-solid:hover,
+.btn-gold:hover,
+.btn-light:hover,
+.header-cta:hover,
+.site-header .header-cta:hover,
+.on-hero:not(.scrolled) .header-cta:hover,
+.site-header.scrolled .header-cta:hover,
+.hero-ctas .btn-light:hover,
+.dark .btn-light:hover,
+.cta-band .btn-light:hover,
+.section.dark .btn-light:hover,
+button.btn-solid[type="submit"]:hover{
+  background:#143028 !important;
+  color:#F0D24A !important;
+  border-color:#F0D24A !important;
+}
+/* Outline / secondary: Deep Mangrove on light, Sun Yellow on dark */
+.btn-ghost{
+  background:transparent !important;
+  color:#143028 !important;
+  border-color:#143028 !important;
+}
+.btn-ghost:hover{
+  background:#143028 !important;
+  color:#F0D24A !important;
+  border-color:#F0D24A !important;
+}
+.btn-ghost-light,
+.hero-ctas .btn-ghost-light,
+.dark .btn-ghost-light,
+.cta-band .btn-ghost-light,
+.section.dark .btn-ghost-light,
+.dark .btn-ghost,
+.hero-ctas .btn-ghost,
+.cta-band .btn-ghost,
+.section.dark .btn-ghost{
+  background:transparent !important;
+  color:#F0D24A !important;
+  border-color:#F0D24A !important;
+}
+.btn-ghost-light:hover,
+.hero-ctas .btn-ghost-light:hover,
+.dark .btn-ghost-light:hover,
+.cta-band .btn-ghost-light:hover,
+.section.dark .btn-ghost-light:hover,
+.dark .btn-ghost:hover,
+.hero-ctas .btn-ghost:hover,
+.cta-band .btn-ghost:hover,
+.section.dark .btn-ghost:hover{
+  background:#F0D24A !important;
+  color:#143028 !important;
+  border-color:#F0D24A !important;
+}
