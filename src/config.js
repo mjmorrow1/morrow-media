@@ -18,6 +18,7 @@ module.exports = {
   phoneTel: '+19083435744',
   social: {
     instagram: 'https://www.instagram.com/southbridgemedia/',
+    linkedin: 'https://www.linkedin.com/in/southbridge-media-49063b452/',
     youtube: '',
     tiktok: '',
   },
