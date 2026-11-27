@@ -8,7 +8,7 @@ const images = {
   media: P + 'card-media.jpg',
   marketing: P + 'card-marketing.jpg',
   creators: P + 'card-creators.jpg',
-  sponsorships: '/images/campaigns/st-pete-marathon/pillar.webp', // St. Pete Marathon campaign visual
+  sponsorships: '/images/placeholders/card-sponsorships.jpg',
   about: '/images/about/matt-camera.webp',      // REAL photo of Matt (data-src/about/matt-camera.jpg)
   founder: '/images/about/matt-portrait.webp', // REAL headshot, black phone bars cropped out
 };
@@ -134,18 +134,6 @@ const creatorAccounts = [
     images: [
       { src: '/images/about/matt-camera.webp', alt: 'Matt Morrow shooting with a Sony camera', wide: true, pos: 'top' },
       { src: '/images/listings/sea-horse/01.webp', alt: 'Drone aerial over a St. Pete lake with the downtown skyline', wide: true },
-    ],
-  },
-  {
-    handle: 'stpetemarathon', name: 'St. Pete Marathon™', url: 'https://www.instagram.com/stpetemarathon/',
-    tag: 'Running · Events · Waterfront',
-    desc: 'The inaugural St. Pete Marathon, home of the 2027 USATF Florida Marathon Championships, December 2027 in St. Petersburg.',
-    avatar: '/images/creators/stpetemarathon/avatar.webp', avatarRound: true,
-    images: [
-      { src: '/images/creators/stpetemarathon/03.webp', alt: 'Sailboat masts at a St. Pete marina at sunset' },
-      { src: '/images/creators/stpetemarathon/02.webp', alt: 'Waterfront park with oak trees in St. Pete' },
-      { src: '/images/creators/stpetemarathon/06.webp', alt: 'The pink Vinoy hotel framed by palm trees' },
-      { src: '/images/creators/stpetemarathon/05.webp', alt: 'The Dalí Museum with palm trees' },
     ],
   },
 ];

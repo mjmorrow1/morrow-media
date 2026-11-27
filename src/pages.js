@@ -394,7 +394,7 @@ function creatorNetwork() {
     </article>`).join('');
   return `<section class="section network" id="network">
   <div class="wrap">
-    <div class="net-head reveal"><p class="eyebrow">Our network</p><h2 class="h2">Featured accounts.</h2><p class="muted">Creators and partners already producing in St. Pete: underwater and wildlife work, local photo and drone, and the city's waterfront marathon.</p></div>
+    <div class="net-head reveal"><p class="eyebrow">Our network</p><h2 class="h2">Featured accounts.</h2><p class="muted">Creators and partners already producing in St. Pete: underwater and wildlife work, and local photo and drone.</p></div>
     <div class="net-list">${rows}
     </div>
   </div>

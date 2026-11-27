@@ -32,13 +32,13 @@ The public contact email is `sponsors@morrowmediagroup.com` (set in `src/config.
 
 | Route | Page |
 |---|---|
-| `/` | Home: full-screen hero (real St. Pete photo, credited), **Current campaign** teaser strip (St. Pete Marathon), 4 pillar cards, How It Works (Discover/Create/Connect/Amplify), selected work, 3 entry points, pricing statement |
+| `/` | Home: full-screen hero (real St. Pete photo, credited), 4 pillar cards, How It Works (Discover/Create/Connect/Amplify), selected work, 3 entry points, pricing statement |
 | `/services` | All four pillars with their full service lists |
 | `/media` | Media & Creative + **Real Estate Media** vertical (`/media#real-estate`), with the FAA Part 107 mention, followed by **Featured listings** (`#featured-listings`): two real case studies with lightbox galleries |
 | `/marketing` | **Hidden for now** (`pages.marketing: false` in `src/config.js`): 302 → `/media`. The page (Strategy / Content / Distribution / Partnerships) is still in `src/pages.js` → `marketing()` |
 | `/creators` | Creator Network: "Creators wanted." + JOIN THE CREATOR NETWORK, which opens the application |
 | `/brands` | "Need people to see your brand?": CREATE / CONNECT / ACTIVATE → START A CAMPAIGN |
-| `/sponsorships` | Events & Sponsorships: featured client campaign **St. Pete Marathon (Inaugural)** (`#st-pete-marathon`: hero, pitch, facts, 3 tier cards), sponsor inquiry form (`#sponsor-inquiry`, `?tier=founding-partner|inner-circle|stakeholder` preselects), then "Turn your audience into opportunity." → TALK ABOUT YOUR EVENT |
+| `/sponsorships` | Events & Sponsorships: "Turn your audience into opportunity." The featured St. Pete Marathon campaign block is disabled and is not rendered on the public site. |
 | `/legal` | Legal: services from an **independent attorney at law** (LLC formation & structure, sponsorship/partnership contracts, creator & talent agreements, event agreements, other matters), how it works, consultation form (`#consultation`), prominent disclaimer. See "Legal page" below |
 | `/about` | About: Matt's own copy (headline, lede, story, pull quote, founder block, "What Morrow Media does" six-item grid, closing statement), text in `about` in `src/content.js` |
 | `/credits` | Photo credits / licenses for the stock photos (linked from the footer and from each photo's credit line) |
@@ -58,7 +58,7 @@ The live site's `/admin` also has a contacts CRM, a follow-up calendar with an i
 **Add real auth before putting this on the internet.**
 
 - Tables: **Creators, Brands, Events, Campaigns, Sponsors** (schema in `src/db.js`, which drives both the DB and the admin UI).
-- Website forms write to: Brand form → `brands`, Creator application → `creators`, Event form → `events`, St. Pete Marathon sponsor form → `sponsors` (with `campaign`, `tier`, `notes`, status `Prospect`).
+- Website forms write to: Brand form → `brands`, Creator application → `creators`, Event form → `events`. The St. Pete Marathon sponsor form is disabled with the campaign.
 - Campaigns are internal and get added from the admin (plus the seeded St. Pete Marathon campaign, below). Sponsors come from the admin or the sponsor form. Every table supports add, status change, delete, and CSV export (`/admin/<table>.csv`).
 - `/admin/packages` holds the **internal standard packages** (Content Session, Social Content, Real Estate Media, Event Media, Creator Campaign, Sponsorship Campaign) and the revenue model. These are never shown on the public site. Edit them in `src/content.js`. Prices are TBD.
 
@@ -99,13 +99,15 @@ The AI home hero (`hero-st-pete-waterfront.jpg`, now in `data-src/unused-placeho
 | Site file | Used on | Source | Author | License |
 |---|---|---|---|---|
 | `public/images/stpete/hero-demens-landing-sunset.webp` (2400w) + `-1280.webp` | Home hero | [Wikimedia Commons: Sitting by the dock on the bay. (28240365509).jpg](https://commons.wikimedia.org/wiki/File:Sitting_by_the_dock_on_the_bay._(28240365509).jpg). Downtown St. Pete from Demens Landing Park at sunset | Gregory Urbano | CC BY 2.0 |
-| `public/images/stpete/skyline-sunrise.webp` (2400w) + `-1280.webp` | St. Pete Marathon campaign hero (`/sponsorships`) | [Wikimedia Commons: St. Petersburg Florida skyline at sunrise 1.jpg](https://commons.wikimedia.org/wiki/File:St._Petersburg_Florida_skyline_at_sunrise_1.jpg) | Andrew Heneen | CC BY 4.0 |
+| `public/images/stpete/skyline-sunrise.webp` (2400w) + `-1280.webp` | Unused (was the featured campaign hero; campaign is disabled) | [Wikimedia Commons: St. Petersburg Florida skyline at sunrise 1.jpg](https://commons.wikimedia.org/wiki/File:St._Petersburg_Florida_skyline_at_sunrise_1.jpg) | Andrew Heneen | CC BY 4.0 |
 
 - Changes: resized/cropped and converted to WebP. The home hero gets a darker overlay (`.hero-shade`) so the white headline stays readable. Originals and metadata are in `data-src/stock/` (`credits.json`).
 - CC BY requires credit with the author, license, and a link. Keep the credit lines and the `/credits` page if you swap the layout.
 - The other Home images (pillar cards, Events/Brands showcase) are people and event scenes, not St. Pete scenery, so they're still AI placeholders (listed below). `pf-event-regatta.jpg` (sailboats in front of an AI-made St. Pete-style skyline) is no longer used anywhere and sits in `data-src/unused-placeholders/`.
 
-## Featured client campaign: St. Pete Marathon (Inaugural)
+## Featured client campaign: St. Pete Marathon (Inaugural) — disabled
+
+This campaign is **disabled** as of 2026-11-27 (`enabled: false` in the JSON). It is not shown on the public site. The notes below are kept for internal reference only.
 
 - **One config file:** `src/campaigns/st-pete-marathon.json` contains all event data, the pitch, facts, and tiers, plus these flags:
   - `enabled` (false hides the campaign block and the Home teaser)

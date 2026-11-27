@@ -9,7 +9,6 @@ The Instagram, TikTok, and YouTube icons on that hero are the standard brand gly
 | Image file | Shows | Used on | Author | License | Source |
 |---|---|---|---|---|---|
 | `public/images/stpete/hero-demens-landing-sunset.webp` (+ `-1280`) | Long-exposure sunset of the downtown St. Petersburg, FL skyline from Demens Landing Park | Home hero | Gregory Urbano | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) | https://commons.wikimedia.org/wiki/File:Sitting_by_the_dock_on_the_bay._(28240365509).jpg |
-| `public/images/stpete/skyline-sunrise.webp` (+ `-1280`) | St. Petersburg, Florida skyline just before sunrise, reflected in the water | Sponsorships → St. Pete Marathon campaign | Andrew Heneen | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) | https://commons.wikimedia.org/wiki/File:St._Petersburg_Florida_skyline_at_sunrise_1.jpg |
 | `public/images/creators/collage/travel.webp` | Hikers on the Babia Góra trail | Creator Network hero, category Travel | Jakub Hałun | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | https://commons.wikimedia.org/wiki/File:Babia_G%C3%B3ra,_20230304_0651_3162.jpg |
 | `public/images/creators/collage/food.webp` | Strawberries in a crystal bowl | Creator Network hero, category Food | W.carter | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | https://commons.wikimedia.org/wiki/File:Still_life_with_strawberries_in_a_crystal_bowl.jpg |
 | `public/images/creators/collage/fitness.webp` | Outdoor yoga in Bryant Park | Creator Network hero, category Fitness | Rhododendrites | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | https://commons.wikimedia.org/wiki/File:Yoga_in_Bryant_Park_(01194).jpg |
@@ -18,4 +17,3 @@ The Instagram, TikTok, and YouTube icons on that hero are the standard brand gly
 
 The St. Petersburg files were resized (2400px and 1280px long edge) and converted to WebP. Downloaded copies (3840px) are in `data-src/stock/`, with metadata in `data-src/stock/credits.json`. The Creator Network collage files were cropped to the size shown in the hero and encoded as WebP: travel 550×538, food 292×270, fitness 230×538, video 242×270, art 230×270.
 
-The St. Pete Marathon logo is the client's own mark (from stpetemarathon.com), taken from the client's own public site for their sponsorship campaign. Confirm the client approves this use of the logo.
