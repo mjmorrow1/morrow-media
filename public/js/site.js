@@ -67,6 +67,38 @@
   document.querySelectorAll('[data-open-apply]').forEach((b) => b.addEventListener('click', openApply));
   if (location.hash === '#apply') setTimeout(openApply, 200);
 
+  // Optional follow-up text fields: show only when the matching dropdown value is selected.
+  // Without JS the fields stay visible and optional.
+  const syncOtherField = (form, selSel, wrapSel, inputName, matchVal) => {
+    const sel = form.querySelector(selSel);
+    const wrap = form.querySelector(wrapSel);
+    const input = wrap && wrap.querySelector('input[name="' + inputName + '"]');
+    if (!sel || !wrap || !input) return;
+    const show = sel.type === 'checkbox' ? sel.checked : sel.value === (matchVal || 'Other');
+    wrap.hidden = !show;
+    wrap.style.display = show ? '' : 'none';
+    input.disabled = !show;
+    if (!show) input.value = '';
+  };
+  const syncLeadOthers = (form) => {
+    syncOtherField(form, '[data-referral-source]', '[data-referral-other-wrap]', 'referral_other');
+    syncOtherField(form, '[data-referral-source]', '[data-referrer-wrap]', 'referrer', 'Referral from a friend or client');
+    syncOtherField(form, '[data-industry-source]', '[data-industry-other-wrap]', 'industry_other');
+    syncOtherField(form, '[data-property-type-source]', '[data-property-type-other-wrap]', 'property_type_other');
+    syncOtherField(form, '[data-services-other-source]', '[data-services-other-wrap]', 'services_other');
+    const sel = form.querySelector('[data-referral-source]');
+    if (sel) {
+      const open = sel.value === 'Other' || sel.value === 'Referral from a friend or client';
+      sel.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+  };
+  document.querySelectorAll('[data-lead-form]').forEach((form) => {
+    const sels = form.querySelectorAll('[data-referral-source], [data-industry-source], [data-property-type-source], [data-services-other-source]');
+    if (!sels.length) return;
+    syncLeadOthers(form);
+    sels.forEach((sel) => sel.addEventListener('change', () => syncLeadOthers(form)));
+  });
+
   // Lead forms → JSON POST
   document.querySelectorAll('[data-lead-form]').forEach((form) => form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -79,7 +111,7 @@
       const r = await fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
       const j = await r.json();
       if (!j.ok) throw new Error(j.error || 'Something went wrong');
-      form.classList.add('done'); msg.classList.add('ok'); msg.textContent = 'Thank you — we\'ll be in touch shortly.';
+      form.classList.add('done'); msg.classList.add('ok'); msg.textContent = 'Thank you. We\'ll be in touch shortly.';
     } catch (err) {
       msg.classList.add('err'); msg.textContent = err.message; btn.disabled = false;
     }
